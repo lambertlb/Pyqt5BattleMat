@@ -17,6 +17,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 
 	def __init__(self, splitter):
 		super(BattleMatScene, self).__init__()
+		self.pixelMapLoaded = False
 		self.splitter = splitter
 		self.pixelMap = QtGui.QPixmap()
 		self.pixMapItem = self.addPixmap(self.pixelMap)
@@ -56,6 +57,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		:return: None
 		"""
 		image = asynchReturn.getData()
+		self.pixelMapLoaded = True
 		self.updateImage(QtGui.QPixmap.fromImage(image))
 
 	@QtCore.pyqtSlot(AsynchReturn)
@@ -82,11 +84,16 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.view.fitInView(0, 0, self.pixelMap.width(), self.pixelMap.height(), QtCore.Qt.KeepAspectRatio)
 
 	def computeInitialZoom(self):
-		pw = self.pixelMap.width()
-		sz = self.splitter.sizes()[0]
+		if self.pixelMapLoaded:
+			if self.pixelMap.width() > self.pixelMap.height():
+				pw = self.pixelMap.width()
+				sz = self.splitter.sizes()[0]
+			else:
+				pw = self.pixelMap.height()
+				sz = self.splitter.height()
 
-		newZoom = sz / pw
-		self.view.setZoom(newZoom)
+			newZoom = sz / pw
+			self.view.setZoom(newZoom)
 
 	def resetScroll(self):
 		self.view.verticalScrollBar().setValue(0)

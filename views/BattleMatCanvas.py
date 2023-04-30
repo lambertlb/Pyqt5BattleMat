@@ -13,6 +13,7 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 	def __init__(self, scene, parent):
 		super(BattleMatCanvas, self).__init__(scene, parent)
 		self.zoom = 1
+		self.scene = scene
 		# self.setAcceptDrops(True)
 
 	def wheelEvent(self, event):
@@ -33,3 +34,7 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 	def setZoom(self, newZoom):
 		self.zoom = newZoom
 		self.transform()
+
+	def resizeEvent(self, event):
+		self.scene.computeInitialZoom()
+		pass
