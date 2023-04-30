@@ -4,121 +4,13 @@ GPL 3 file header
 import sys
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import Qt, QMimeData
-from PyQt5.QtGui import QPixmap, QTransform, QDrag
-from PyQt5.QtWidgets import QMainWindow, QGraphicsScene, QGraphicsView, QGraphicsProxyWidget, QPushButton
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QMainWindow, QGraphicsView
 
 from services.AsyncTasks import AsynchReturn, AsyncImage
-
-mainWindow = None
-
-
-class MyScene(QGraphicsScene):
-	"""
-	Subclass QGraphicsScene to manage drag and drop
-	"""
-	def dragEnterEvent(self, e):
-		e.acceptProposedAction()
-
-	def dropEvent(self, e):
-		"""
-		Item was dropped here.
-		If is had a proxy it means it was already here so just move it.
-		If no proxy then create a new item
-		:param e: event
-		:return:None
-		"""
-		src = e.source()
-		if src.getProxy() is not None:
-			src.getProxy().setPos(e.scenePos())
-		else:
-			pos = e.scenePos()
-			self.addButtonToScent(pos.x(), pos.y())
-
-	def dragMoveEvent(self, e):
-		e.acceptProposedAction()
-
-	def addButtonToScent(self, x, y):
-		"""
-		add a button to scene
-		:param x:
-		:param y:
-		:return: None
-		"""
-		pw = QGraphicsProxyWidget()
-		db = DragButton('push me')
-		db.clicked.connect(mainWindow.loadAnImage)
-		pw.setWidget(db)
-		db.setProxy(pw)
-		self.addItem(pw)
-		pw.setPos(x, y)
-		pw.setZValue(100)
-
-
-class DragButton(QPushButton):
-	"""
-	Make a draggable button
-	"""
-	def __init__(self, *args):
-		super(DragButton, self).__init__(*args)
-		self.proxy = None
-
-	def mouseMoveEvent(self, e):
-		"""
-		Move moved one me so start dragging
-		:param e: event
-		:return: None
-		"""
-		if e.buttons() == Qt.LeftButton:
-			drag = QDrag(self)
-			mime = QMimeData()
-			drag.setMimeData(mime)
-			drag.setPixmap(self.grab())
-			drag.exec_(Qt.MoveAction)
-
-	def setProxy(self, proxy):
-		"""
-		Set scene proxy if in a scene
-		:param proxy:
-		:return:
-		"""
-		self.proxy = proxy
-
-	def getProxy(self):
-		"""
-		:return: proxy else None if not in scene
-		"""
-		return self.proxy
-
-
-class CanvasTestView(QGraphicsView):
-	"""
-	Override QGraphicsView so we can get at mouse wheel to set scaling
-	"""
-
-	def __init__(self, scene, parent):
-		super(CanvasTestView, self).__init__(scene, parent)
-		self.zoom = 1
-		# self.setAcceptDrops(True)
-
-	def wheelEvent(self, event):
-		delta = event.angleDelta().y() / 120
-		if delta > 0:
-			self.zoom *= 1.05
-		elif delta < 0:
-			self.zoom /= 1.05
-		self.transform()
-
-	def transform(self):
-		self.setTransform(QTransform().scale(self.zoom, self.zoom))
-
-	def zoomReset(self):
-		self.zoom = 1
-		self.transform()
-
-	def setZoom(self, newZoom):
-		self.zoom = newZoom
-		self.transform()
+from views.BattleMatCanvas import BattleMatCanvas
+from views.BattleMatScene import BattleMatScene
+from views.DragButton import DragButton
 
 
 class MainWindow(QMainWindow):
@@ -162,10 +54,10 @@ class MainWindow(QMainWindow):
 		self.splitter.setOrientation(QtCore.Qt.Horizontal)
 		self.splitter.setObjectName("splitter")
 
-		self.scene = MyScene()
+		self.scene = BattleMatScene()
 		self.pixelMap = QPixmap()
 		self.pixMapItem = self.scene.addPixmap(self.pixelMap)
-		self.view = CanvasTestView(self.scene, self.splitter)
+		self.view = BattleMatCanvas(self.scene, self.splitter)
 		self.view.setDragMode(QGraphicsView.ScrollHandDrag)
 		self.view.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
 		self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -190,9 +82,7 @@ class MainWindow(QMainWindow):
 		self.splitter.setSizes([600, 200])
 		self.localize()
 		self.loadAnImage()
-		global mainWindow
-		mainWindow = self
-		self.scene.addButtonToScent(100, 100)
+		self.scene.addButtonToScene(100, 100)
 
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
@@ -273,6 +163,6 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
-	mainWindow = MainWindow()
-	mainWindow.show()
+	app.mainWindow = MainWindow()
+	app.mainWindow.show()
 	sys.exit(app.exec_())
