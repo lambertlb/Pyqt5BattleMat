@@ -4,6 +4,7 @@ GPL 3 file header
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from services.AsyncTasks import AsyncImage, AsynchReturn
+from services.ServicesManager import ServicesManager
 from views.BattleMatCanvas import BattleMatCanvas
 from views.DragButton import DragButton
 
@@ -25,6 +26,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.view.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
 		self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 		self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
 	def dragEnterEvent(self, e):
 		e.acceptProposedAction()
@@ -102,6 +104,13 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	def resetScroll(self):
 		self.view.verticalScrollBar().setValue(0)
 		self.view.horizontalScrollBar().setValue(0)
+
+	def eventFired(self, eventData):
+		# if eventData.eventReason == ReasonForEvent.LOGGED_IN:
+		# 	if (eventData.eventData):
+		# 		self.loginWindow.dismiss()
+		#
+		pass
 
 	def addButtonToScene(self, x, y):
 		"""

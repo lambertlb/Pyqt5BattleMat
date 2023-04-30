@@ -6,6 +6,10 @@ import sys
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow
 
+from services.DungeonManager import DungeonManager
+from services.EventManager import EventManager
+from services.ServicesManager import ServicesManager
+from services.Utilities import MyConfigManager
 from views.BattleMatScene import BattleMatScene
 from views.DragButton import DragButton
 
@@ -91,6 +95,9 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
+	ServicesManager.setEventManager(EventManager())
+	ServicesManager.setConfigManager(MyConfigManager())
+	ServicesManager.setDungeonManager(DungeonManager())
 	app.mainWindow = MainWindow()
 	app.mainWindow.show()
 	sys.exit(app.exec_())
