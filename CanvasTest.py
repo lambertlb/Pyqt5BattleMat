@@ -39,15 +39,12 @@ class MainWindow(QMainWindow):
 
 		self.button3 = DragButton('http://static4.paizo.com/image/content/PathfinderTales/PZO8500-CrisisOfFaith-Corogan.jpg', self.windowFrame)
 		self.button3.setObjectName("button3")
-		# self.button3.clicked.connect(self.scene.loadAnImage)
 		self.ribbonBar.addWidget(self.button3)
 		self.button2 = DragButton('image/FallPanorama.jpg', self.windowFrame)
 		self.button2.setObjectName("button2")
-		# self.button2.clicked.connect(self.scene.loadAnImage)
 		self.ribbonBar.addWidget(self.button2)
 		self.button1 = DragButton('image/level1.jpg', self.windowFrame)
 		self.button1.setObjectName("button1")
-		# self.button1.clicked.connect(self.scene.loadAnImage)
 		self.ribbonBar.addWidget(self.button1)
 		self.gridLayout.addLayout(self.ribbonBar, 0, 0, 1, 1)
 
@@ -69,7 +66,7 @@ class MainWindow(QMainWindow):
 
 		self.splitter.setSizes([600, 200])
 		self.localize()
-		self.scene.loadAnImage()
+		self.scene.loadImage('image/level1.jpg')
 		self.scene.addButtonToScene(100, 100)
 
 	def localize(self):
@@ -80,14 +77,6 @@ class MainWindow(QMainWindow):
 		self.button1.setText("PushButton")
 		self.assetHolder.setTabText(self.assetHolder.indexOf(self.tab), "Tab 1")
 		self.assetHolder.setTabText(self.assetHolder.indexOf(self.tab_2), "Tab 2")
-
-	def keyPressEvent(self, event):
-		"""
-		Update picture when a key is pressed
-		:param event:
-		:return:
-		"""
-		self.scene.loadAnImage()
 
 	def mouseDoubleClickEvent(self, event):
 		self.scene.computeInitialZoom()

@@ -16,8 +16,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	"""
 
 	def __init__(self, splitter):
-		self.runOnce = True
-
 		super(BattleMatScene, self).__init__()
 		self.splitter = splitter
 		self.pixelMap = QtGui.QPixmap()
@@ -49,18 +47,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 
 	def dragMoveEvent(self, e):
 		e.acceptProposedAction()
-
-	def loadAnImage(self):
-		"""
-		Load images in background
-		:return: None
-		"""
-		if not self.runOnce:
-			AsyncImage('image/FallPanorama.jpg', self.imageLoaded, self.failedLoad)
-			self.runOnce = True
-		else:
-			AsyncImage('image/level1.jpg', self.imageLoaded, self.failedLoad)
-			self.runOnce = False
 
 	@QtCore.pyqtSlot(AsynchReturn)
 	def imageLoaded(self, asynchReturn):
@@ -109,8 +95,11 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	def eventFired(self, eventData):
 		if eventData.eventReason == ReasonForEvent.LOAD_IMAGE:
 			if eventData.eventData is not None:
-				AsyncImage(eventData.eventData, self.imageLoaded, self.failedLoad)
+				self.loadImage(eventData.eventData)
 		pass
+
+	def loadImage(self, imageName):
+		AsyncImage(imageName, self.imageLoaded, self.failedLoad)
 
 	def addButtonToScene(self, x, y):
 		"""
