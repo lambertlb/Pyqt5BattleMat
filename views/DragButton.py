@@ -3,14 +3,19 @@ GPL 3 file header
 """
 from PyQt5 import QtWidgets, QtGui, QtCore
 
+from services.ReasonForEvent import ReasonForEvent
+from services.ServicesManager import ServicesManager
+
 
 class DragButton(QtWidgets.QPushButton):
 	"""
 	Make a draggable button
 	"""
-	def __init__(self, *args):
+	def __init__(self, imageName, *args):
 		super(DragButton, self).__init__(*args)
+		self.imageName = imageName
 		self.proxy = None
+		self.clicked.connect(self.pressed)
 
 	def mouseMoveEvent(self, e):
 		"""
@@ -38,3 +43,6 @@ class DragButton(QtWidgets.QPushButton):
 		:return: proxy else None if not in scene
 		"""
 		return self.proxy
+
+	def pressed(self):
+		ServicesManager.getEventManager().fireEvent(ReasonForEvent.LOAD_IMAGE, self.imageName)

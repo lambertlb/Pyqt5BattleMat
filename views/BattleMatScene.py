@@ -4,6 +4,7 @@ GPL 3 file header
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from services.AsyncTasks import AsyncImage, AsynchReturn
+from services.ReasonForEvent import ReasonForEvent
 from services.ServicesManager import ServicesManager
 from views.BattleMatCanvas import BattleMatCanvas
 from views.DragButton import DragButton
@@ -106,10 +107,9 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.view.horizontalScrollBar().setValue(0)
 
 	def eventFired(self, eventData):
-		# if eventData.eventReason == ReasonForEvent.LOGGED_IN:
-		# 	if (eventData.eventData):
-		# 		self.loginWindow.dismiss()
-		#
+		if eventData.eventReason == ReasonForEvent.LOAD_IMAGE:
+			if eventData.eventData is not None:
+				AsyncImage(eventData.eventData, self.imageLoaded, self.failedLoad)
 		pass
 
 	def addButtonToScene(self, x, y):
@@ -120,8 +120,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		:return: None
 		"""
 		pw = QtWidgets.QGraphicsProxyWidget()
-		db = DragButton('push me')
-		# db.clicked.connect(mainWindow.loadAnImage)
+		db = DragButton('image/level1.jpg', 'push me')
 		pw.setWidget(db)
 		db.setProxy(pw)
 		self.addItem(pw)
