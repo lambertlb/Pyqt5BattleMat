@@ -1,8 +1,10 @@
 """
 GPL 3 file header
 """
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui
 
+from services.AsyncTasks import AsyncImage, AsynchReturn
+from views.BattleMatCanvas import BattleMatCanvas
 from views.DragButton import DragButton
 
 
@@ -11,8 +13,18 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	Subclass QGraphicsScene to manage drag and drop
 	"""
 
-	def __init__(self):
+	def __init__(self, splitter):
+		self.runOnce = True
+
 		super(BattleMatScene, self).__init__()
+		self.splitter = splitter
+		self.pixelMap = QtGui.QPixmap()
+		self.pixMapItem = self.addPixmap(self.pixelMap)
+		self.view = BattleMatCanvas(self, splitter)
+		self.view.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
+		self.view.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
+		self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+		self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
 	def dragEnterEvent(self, e):
 		e.acceptProposedAction()
@@ -34,6 +46,62 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 
 	def dragMoveEvent(self, e):
 		e.acceptProposedAction()
+
+	def loadAnImage(self):
+		"""
+		Load images in background
+		:return: None
+		"""
+		if not self.runOnce:
+			AsyncImage('image/FallPanorama.jpg', self.imageLoaded, self.failedLoad)
+			self.runOnce = True
+		else:
+			AsyncImage('image/level1.jpg', self.imageLoaded, self.failedLoad)
+			self.runOnce = False
+
+	@QtCore.pyqtSlot(AsynchReturn)
+	def imageLoaded(self, asynchReturn):
+		"""
+		Callback from background task when image loaded
+		:param asynchReturn: Image that was loaded
+		:return: None
+		"""
+		image = asynchReturn.getData()
+		self.updateImage(QtGui.QPixmap.fromImage(image))
+
+	@QtCore.pyqtSlot(AsynchReturn)
+	def failedLoad(self, asynchReturn):
+		"""
+		Image loading failed
+		:param asynchReturn: return data from task
+		:return: None
+		"""
+		pass
+
+	def updateImage(self, newPixmap):
+		"""
+		new image loaded so update old pixel map
+		:param newPixmap:
+		:return: None
+		"""
+		self.removeItem(self.pixMapItem)
+		self.pixelMap = newPixmap
+		self.pixMapItem = self.addPixmap(self.pixelMap)
+		self.computeInitialZoom()
+		self.resetScroll()
+		self.view.setSceneRect(0, 0, self.pixelMap.width(), self.pixelMap.height())
+		self.view.fitInView(0, 0, self.pixelMap.width(), self.pixelMap.height(), QtCore.Qt.KeepAspectRatio)
+
+	def computeInitialZoom(self):
+		pw = self.pixelMap.width()
+		sz = self.splitter.sizes()[0]
+
+		newZoom = sz / pw
+		self.view.setZoom(newZoom)
+
+	def resetScroll(self):
+		self.view.verticalScrollBar().setValue(0)
+		self.view.horizontalScrollBar().setValue(0)
 
 	def addButtonToScene(self, x, y):
 		"""
