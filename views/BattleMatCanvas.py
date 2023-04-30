@@ -37,4 +37,3 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 
 	def resizeEvent(self, event):
 		self.scene.computeInitialZoom()
-		pass

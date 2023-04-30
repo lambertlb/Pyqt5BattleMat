@@ -103,7 +103,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		if eventData.eventReason == ReasonForEvent.LOAD_IMAGE:
 			if eventData.eventData is not None:
 				self.loadImage(eventData.eventData)
-		pass
 
 	def loadImage(self, imageName):
 		AsyncImage(imageName, self.imageLoaded, self.failedLoad)

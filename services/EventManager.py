@@ -30,4 +30,3 @@ class EventManager:
 		:return: None
 		"""
 		_eventBus.emit(self.eventName, EventData(eventReason, eventData))
-		pass

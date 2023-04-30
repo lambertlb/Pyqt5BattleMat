@@ -16,8 +16,6 @@ class ServicesManager:
 	_configManager = None
 	# static singleton of Dungeon manager
 	_dungeonManager = None
-	# static singleton of Data Requester
-	_dataRequester = None
 
 	@staticmethod
 	def getEventManager():
@@ -62,23 +60,7 @@ class ServicesManager:
 	@staticmethod
 	def setDungeonManager(dungeonManager):
 		"""
-		allow programmer to set their own Dungeon Manager manager for things like unit test
+		allow programmer to set their own Dungeon Manager for things like unit test
 		:return: None
 		"""
 		ServicesManager._dungeonManager = dungeonManager
-
-	@staticmethod
-	def getDataRequester():
-		"""
-		Get Data Requester
-		:return: Data Requester
-		"""
-		return ServicesManager._dataRequester
-
-	@staticmethod
-	def setDataRequester(dataRequester):
-		"""
-		allow programmer to set their own Data Requester for things like unit test
-		:return: None
-		"""
-		ServicesManager._dataRequester = dataRequester

@@ -37,7 +37,8 @@ class MainWindow(QMainWindow):
 		self.splitter.setObjectName("splitter")
 		self.scene = BattleMatScene(self.splitter)
 
-		self.button3 = DragButton('http://static4.paizo.com/image/content/PathfinderTales/PZO8500-CrisisOfFaith-Corogan.jpg', self.windowFrame)
+		self.button3 = DragButton('http://static4.paizo.com/image/content/PathfinderTales/PZO8500-CrisisOfFaith-Corogan.jpg',
+								self.windowFrame)
 		self.button3.setObjectName("button3")
 		self.ribbonBar.addWidget(self.button3)
 		self.button2 = DragButton('image/FallPanorama.jpg', self.windowFrame)
