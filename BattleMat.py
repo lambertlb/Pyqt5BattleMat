@@ -10,8 +10,8 @@ from services.DungeonManager import DungeonManager
 from services.EventManager import EventManager
 from services.ServicesManager import ServicesManager
 from services.Utilities import MyConfigManager
+from views.AssetManagement import AssetManagement
 from views.BattleMatScene import BattleMatScene
-from views.DragButton import DragButton
 from views.LoginDialog import LoginDialog
 from views.RibbonBar import RibbonBar
 
@@ -19,41 +19,24 @@ from views.RibbonBar import RibbonBar
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super(MainWindow, self).__init__()
-		self.setObjectName("MainWindow")
 		self.resize(800, 600)
 		self.centralWidget = QtWidgets.QWidget()
-		self.centralWidget.setObjectName("centralWidget")
 		self.gridLayout_2 = QtWidgets.QGridLayout(self.centralWidget)
-		self.gridLayout_2.setObjectName("gridLayout_2")
 		self.windowFrame = QtWidgets.QFrame(self.centralWidget)
 		self.windowFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
 		self.windowFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-		self.windowFrame.setObjectName("windowFrame")
 		self.gridLayout = QtWidgets.QGridLayout(self.windowFrame)
 		self.gridLayout.setContentsMargins(0, 0, 0, 0)
-		self.gridLayout.setObjectName("gridLayout")
 		self.ribbonBar = RibbonBar(self.windowFrame)
 		self.splitter = QtWidgets.QSplitter(self.windowFrame)
 		self.splitter.setOrientation(QtCore.Qt.Horizontal)
-		self.splitter.setObjectName("splitter")
 		self.scene = BattleMatScene(self.splitter)
-
 		self.gridLayout.addLayout(self.ribbonBar, 0, 0, 1, 1)
-
-		self.assetHolder = QtWidgets.QTabWidget(self.splitter)
-		self.assetHolder.setObjectName("assetHolder")
-		self.tab = QtWidgets.QWidget()
-		self.tab.setObjectName("tab")
-		self.assetHolder.addTab(self.tab, "")
-		self.tab_2 = QtWidgets.QWidget()
-		self.tab_2.setObjectName("tab_2")
-		self.assetHolder.addTab(self.tab_2, "")
-
+		self.assetHolder = AssetManagement(self.splitter)
 		self.gridLayout.addWidget(self.splitter, 1, 0, 1, 1)
 		self.gridLayout_2.addWidget(self.windowFrame, 0, 0, 1, 1)
 		self.setCentralWidget(self.centralWidget)
 		self.statusbar = QtWidgets.QStatusBar(self)
-		self.statusbar.setObjectName("statusbar")
 		self.setStatusBar(self.statusbar)
 
 		self.splitter.setSizes([600, 200])
@@ -65,15 +48,14 @@ class MainWindow(QMainWindow):
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
 		self.setWindowTitle("MainWindow")
-		self.assetHolder.setTabText(self.assetHolder.indexOf(self.tab), "Tab 1")
-		self.assetHolder.setTabText(self.assetHolder.indexOf(self.tab_2), "Tab 2")
 
 	def mouseDoubleClickEvent(self, event):
 		self.scene.computeInitialZoom()
 
-	def	show(self):
+	def show(self):
 		super(MainWindow, self).show()
 		self.loginDialog.show()
+
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
