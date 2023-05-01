@@ -13,6 +13,7 @@ from services.Utilities import MyConfigManager
 from views.BattleMatScene import BattleMatScene
 from views.DragButton import DragButton
 from views.LoginDialog import LoginDialog
+from views.RibbonBar import RibbonBar
 
 
 class MainWindow(QMainWindow):
@@ -31,23 +32,12 @@ class MainWindow(QMainWindow):
 		self.gridLayout = QtWidgets.QGridLayout(self.windowFrame)
 		self.gridLayout.setContentsMargins(0, 0, 0, 0)
 		self.gridLayout.setObjectName("gridLayout")
-		self.ribbonBar = QtWidgets.QHBoxLayout()
-		self.ribbonBar.setObjectName("ribbonBar")
+		self.ribbonBar = RibbonBar(self.windowFrame)
 		self.splitter = QtWidgets.QSplitter(self.windowFrame)
 		self.splitter.setOrientation(QtCore.Qt.Horizontal)
 		self.splitter.setObjectName("splitter")
 		self.scene = BattleMatScene(self.splitter)
 
-		self.button3 = DragButton('http://static4.paizo.com/image/content/PathfinderTales/PZO8500-CrisisOfFaith-Corogan.jpg',
-								self.windowFrame)
-		self.button3.setObjectName("button3")
-		self.ribbonBar.addWidget(self.button3)
-		self.button2 = DragButton('image/FallPanorama.jpg', self.windowFrame)
-		self.button2.setObjectName("button2")
-		self.ribbonBar.addWidget(self.button2)
-		self.button1 = DragButton('image/level1.jpg', self.windowFrame)
-		self.button1.setObjectName("button1")
-		self.ribbonBar.addWidget(self.button1)
 		self.gridLayout.addLayout(self.ribbonBar, 0, 0, 1, 1)
 
 		self.assetHolder = QtWidgets.QTabWidget(self.splitter)
@@ -75,9 +65,6 @@ class MainWindow(QMainWindow):
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
 		self.setWindowTitle("MainWindow")
-		self.button3.setText("PushButton")
-		self.button2.setText("PushButton")
-		self.button1.setText("PushButton")
 		self.assetHolder.setTabText(self.assetHolder.indexOf(self.tab), "Tab 1")
 		self.assetHolder.setTabText(self.assetHolder.indexOf(self.tab_2), "Tab 2")
 
