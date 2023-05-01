@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMainWindow
 
 from services.DungeonManager import DungeonManager
 from services.EventManager import EventManager
+from services.ReasonForEvent import ReasonForEvent
 from services.ServicesManager import ServicesManager
 from services.Utilities import MyConfigManager
 from views.AssetManagement import AssetManagement
@@ -41,9 +42,8 @@ class MainWindow(QMainWindow):
 
 		self.splitter.setSizes([600, 200])
 		self.localize()
-		# self.scene.loadImage('image/level1.jpg')
-		# self.scene.addButtonToScene(100, 100)
 		self.loginDialog = LoginDialog()
+		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
@@ -54,7 +54,17 @@ class MainWindow(QMainWindow):
 
 	def show(self):
 		super(MainWindow, self).show()
+
+	def appStarted(self):
 		self.loginDialog.show()
+
+	def eventFired(self, eventData):
+		if eventData.eventReason == ReasonForEvent.LOGGED_IN:
+			self.loggedIn()
+
+	def loggedIn(self):
+		self.scene.loadImage('image/level1.jpg')
+		self.scene.addButtonToScene(100, 100)
 
 
 if __name__ == "__main__":
@@ -64,4 +74,5 @@ if __name__ == "__main__":
 	ServicesManager.setDungeonManager(DungeonManager())
 	app.mainWindow = MainWindow()
 	app.mainWindow.show()
+	app.mainWindow.appStarted()
 	sys.exit(app.exec_())

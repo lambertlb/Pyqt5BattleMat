@@ -49,6 +49,7 @@ class LoginDialog(QtWidgets.QDialog, Ui_Dialog):
 		self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(disabled)
 
 	def onSuccess(self, data):
+		self.done(0)
 		pass
 
 	def onFailure(self, data):

@@ -6,3 +6,6 @@ class   Constants:
     Login_Url = 'Login_Url'
     Login_USERNAME = 'Login_USERNAME'
     Login_PASSWORD = 'Login_PASSWORD'
+
+# requests to dungeon server
+    Login_Request = 'LOGIN'

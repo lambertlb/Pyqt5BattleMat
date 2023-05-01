@@ -3,9 +3,10 @@ GPL 3 file header
 """
 from PyQt5 import QtWidgets, QtCore, QtGui
 
-from services.AsyncTasks import AsyncImage, AsynchReturn
+from services.AsyncTasks import AsyncImage
 from services.ReasonForEvent import ReasonForEvent
 from services.ServicesManager import ServicesManager
+from services.serviceData.DataRequesterResponse import DataRequesterResponse
 from views.BattleMatCanvas import BattleMatCanvas
 from views.DragButton import DragButton
 
@@ -49,7 +50,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	def dragMoveEvent(self, e):
 		e.acceptProposedAction()
 
-	@QtCore.pyqtSlot(AsynchReturn)
+	@QtCore.pyqtSlot(DataRequesterResponse)
 	def imageLoaded(self, asynchReturn):
 		"""
 		Callback from background task when image loaded
@@ -59,14 +60,16 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		image = asynchReturn.getData()
 		self.pixelMapLoaded = True
 		self.updateImage(QtGui.QPixmap.fromImage(image))
+		asynchReturn.cleanUp()
 
-	@QtCore.pyqtSlot(AsynchReturn)
+	@QtCore.pyqtSlot(DataRequesterResponse)
 	def failedLoad(self, asynchReturn):
 		"""
 		Image loading failed
 		:param asynchReturn: return data from task
 		:return: None
 		"""
+		asynchReturn.cleanUp()
 		pass
 
 	def updateImage(self, newPixmap):
