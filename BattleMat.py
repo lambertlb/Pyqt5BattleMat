@@ -12,6 +12,7 @@ from services.ServicesManager import ServicesManager
 from services.Utilities import MyConfigManager
 from views.BattleMatScene import BattleMatScene
 from views.DragButton import DragButton
+from views.LoginDialog import LoginDialog
 
 
 class MainWindow(QMainWindow):
@@ -67,8 +68,9 @@ class MainWindow(QMainWindow):
 
 		self.splitter.setSizes([600, 200])
 		self.localize()
-		self.scene.loadImage('image/level1.jpg')
-		self.scene.addButtonToScene(100, 100)
+		# self.scene.loadImage('image/level1.jpg')
+		# self.scene.addButtonToScene(100, 100)
+		self.loginDialog = LoginDialog()
 
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
@@ -82,6 +84,9 @@ class MainWindow(QMainWindow):
 	def mouseDoubleClickEvent(self, event):
 		self.scene.computeInitialZoom()
 
+	def	show(self):
+		super(MainWindow, self).show()
+		self.loginDialog.show()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

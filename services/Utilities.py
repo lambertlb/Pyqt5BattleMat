@@ -3,6 +3,8 @@ GPL 3 file header
 """
 from PyQt5.QtCore import QSettings
 
+from services.Constants import Constants
+
 
 class MyConfigManager:
 	"""
@@ -15,13 +17,13 @@ class MyConfigManager:
 
 	def setDefaultsIfNeeded(self):
 		if not self.config.contains('Login_Url'):
-			self.config.setValue('Login_Url', 'My url')
-			self.config.setValue('Login_USERNAME', 'My Username')
-			self.config.setValue('Login_PASSWORD', 'My Password')
+			self.config.setValue(Constants.Login_Url, 'My url')
+			self.config.setValue(Constants.Login_USERNAME, 'My Username')
+			self.config.setValue(Constants.Login_PASSWORD, 'My Password')
 		pass
 
 	def setValue(self, key, value):
 		self.config.setValue(key, value)
 
-	def getValue(self, key):
-		return self.config.value(key)
+	def getValue(self, key, default):
+		return self.config.value(key, default)
