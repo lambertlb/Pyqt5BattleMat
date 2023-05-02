@@ -13,11 +13,15 @@ from services.ServicesManager import ServicesManager
 from services.Utilities import MyConfigManager
 from views.AssetManagement import AssetManagement
 from views.BattleMatScene import BattleMatScene
+from views.DungeonManagerDialog import DungeonManagerDialog
 from views.LoginDialog import LoginDialog
 from views.RibbonBar import RibbonBar
 
 
 class MainWindow(QMainWindow):
+	dungeonManagerDialog = None
+	loginDialog = None
+
 	def __init__(self):
 		super(MainWindow, self).__init__()
 		self.resize(800, 600)
@@ -39,10 +43,8 @@ class MainWindow(QMainWindow):
 		self.setCentralWidget(self.centralWidget)
 		self.statusbar = QtWidgets.QStatusBar(self)
 		self.setStatusBar(self.statusbar)
-
 		self.splitter.setSizes([600, 200])
 		self.localize()
-		self.loginDialog = LoginDialog()
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
 	def localize(self):
@@ -56,6 +58,7 @@ class MainWindow(QMainWindow):
 		super(MainWindow, self).show()
 
 	def appStarted(self):
+		self.loginDialog = LoginDialog()
 		self.loginDialog.show()
 		pass
 
@@ -65,8 +68,9 @@ class MainWindow(QMainWindow):
 
 	def loggedIn(self, succeeded):
 		if succeeded:
-			self.scene.loadImage('image/level1.jpg')
-			self.scene.addButtonToScene(100, 100)
+			self.loginDialog = None
+			self.dungeonManagerDialog = DungeonManagerDialog()
+			self.dungeonManagerDialog.show()
 
 
 if __name__ == "__main__":
