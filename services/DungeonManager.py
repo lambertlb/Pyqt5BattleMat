@@ -8,6 +8,7 @@ from services.Constants import Constants
 from services.ReasonForEvent import ReasonForEvent
 from services.ServicesManager import ServicesManager
 from services.serviceData.DataRequesterResponse import DataRequesterResponse
+from services.serviceData.DungeonListData import DungeonListData
 from services.serviceData.RequestData import RequestData
 
 
@@ -16,13 +17,17 @@ class DungeonManager:
 	This will manage all dungeon related data
 	"""
 
+	dungeonToUUIDMap = dict()
+	uuidTemplatePathMap = dict()
+	uuidOfMasterTemplate = 'template-dungeon'
+
 	def isValidLoginData(self, serverURL, username, password):
 		return len(serverURL) != 0 and len(username) != 0 and len(password) != 0
 
 	def login(self, username, password, onSuccess, onFailure):
 		url = ServicesManager.getConfigManager().getValue(Constants.Login_Url, 'URL')
 		if self.isValidLoginData(url, username, password):
-			request = RequestData(Constants.Login_Request)
+			request = RequestData(Constants.LoginRequest)
 			request.username = username
 			request.password = password
 			dataResponse = DataRequesterResponse()
@@ -41,11 +46,38 @@ class DungeonManager:
 			self.handleFailedLogin(dataRequestResponse)
 			return
 		RequestData.setToken(int(loginResponse['token']))
-		dataRequestResponse.userOnSuccess('')
-		ServicesManager.getEventManager().fireEvent(ReasonForEvent.LOGGED_IN, True)
+		self.getDungeonList(dataRequestResponse.userOnSuccess, dataRequestResponse.userOnFailure)
 		pass
 
 	def handleFailedLogin(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure('')
 		ServicesManager.getEventManager().fireEvent(ReasonForEvent.LOGGED_IN, False)
+		pass
+
+	def getDungeonList(self, onSuccess, onFailure):
+		url = ServicesManager.getConfigManager().getValue(Constants.Login_Url, 'URL')
+		request = RequestData(Constants.DungeonListRequest)
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulDungeonList
+		dataResponse.onFailure = self.handleFailedDungeonList
+		dataResponse.userOnSuccess = onSuccess
+		dataResponse.userOnFailure = onFailure
+		AsyncJsonData(url, request, dataResponse, None).submit()
+
+	def handleSuccessfulDungeonList(self, dataRequestResponse):
+		data = DungeonListData()
+		data.__dict__ = json.loads(dataRequestResponse.data.text)
+		self.dungeonToUUIDMap.clear()
+		self.uuidTemplatePathMap.clear()
+		self.uuidOfMasterTemplate = None
+		amountInList = len(data.dungeonNames)
+		for i in range(amountInList):
+			self.dungeonToUUIDMap[data.dungeonNames[i]] = data.dungeonUUIDS[i]
+			self.uuidTemplatePathMap[data.dungeonUUIDS[i]] = data.dungeonDirectories[i]
+
+		dataRequestResponse.userOnSuccess('')
+		ServicesManager.getEventManager().fireEvent(ReasonForEvent.LOGGED_IN, True)
+		pass
+
+	def handleFailedDungeonList(self, dataRequestResponse):
 		pass

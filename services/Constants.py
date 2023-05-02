@@ -8,4 +8,5 @@ class   Constants:
     Login_PASSWORD = 'Login_PASSWORD'
 
 # requests to dungeon server
-    Login_Request = 'LOGIN'
+    LoginRequest = 'LOGIN'
+    DungeonListRequest = 'GETDUNGEONLIST'
