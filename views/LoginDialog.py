@@ -6,7 +6,6 @@ from PyQt5 import QtWidgets
 from generated.loginDialog import Ui_Dialog
 from services.Constants import Constants
 from services.ServicesManager import ServicesManager
-from services.UserCallback import UserCallback
 
 
 class LoginDialog(QtWidgets.QDialog, Ui_Dialog):
@@ -36,7 +35,7 @@ class LoginDialog(QtWidgets.QDialog, Ui_Dialog):
 		config.setValue(Constants.Login_USERNAME, self.username.text())
 		config.setValue(Constants.Login_PASSWORD, self.password.text())
 		ServicesManager.getDungeonManager().login(self.username.text(), self.password.text(),
-												UserCallback(self.onSuccess, self.onFailure))
+												self.onSuccess, self.onFailure)
 		pass
 
 	def reject(self):

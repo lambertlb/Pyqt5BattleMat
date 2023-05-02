@@ -5,15 +5,13 @@ GPL 3 file header
 
 class DataRequesterResponse:
 
-	def __init__(self, userCallback):
-		self.userCallback = userCallback
+	def __init__(self):
 		self.hadException = False
 		self.data = None
 		self.task = None
+		self.userOnSuccess = None
+		self.userOnFailure = None
 		pass
-
-	def getUserCallback(self):
-		return self.userCallback
 
 	def getData(self):
 		"""
@@ -28,6 +26,3 @@ class DataRequesterResponse:
 		:return: True if was error
 		"""
 		return self.hadException
-
-	def cleanUp(self):
-		self.task.disconnectAll()

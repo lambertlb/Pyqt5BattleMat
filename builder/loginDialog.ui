@@ -26,7 +26,7 @@
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -38,7 +38,7 @@
       <widget class="QLineEdit" name="serverURL">
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
       </widget>
@@ -47,11 +47,11 @@
       <widget class="QLabel" name="label_2">
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>User Name</string>
+        <string>Username:</string>
        </property>
       </widget>
      </item>
@@ -59,7 +59,7 @@
       <widget class="QLineEdit" name="username">
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
       </widget>
@@ -68,11 +68,11 @@
       <widget class="QLabel" name="label_3">
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>Password</string>
+        <string>Password:</string>
        </property>
       </widget>
      </item>
@@ -80,7 +80,7 @@
       <widget class="QLineEdit" name="password">
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="echoMode">
@@ -146,7 +146,7 @@
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="font">
       <font>
-       <pointsize>16</pointsize>
+       <pointsize>12</pointsize>
       </font>
      </property>
      <property name="orientation">

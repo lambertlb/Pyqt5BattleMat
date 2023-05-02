@@ -17,8 +17,7 @@ class AsyncSignal(QObject):
 	"""
 	Small worker class so QRunnable can call signals
 	"""
-	success = QtCore.pyqtSignal(DataRequesterResponse)
-	failure = QtCore.pyqtSignal(DataRequesterResponse)
+	finished = QtCore.pyqtSignal(DataRequesterResponse)
 
 
 # global reference to thread pool
@@ -36,12 +35,14 @@ class AsynchBase(QRunnable):
 		super().__init__()
 		self.onSuccess = onSuccess
 		self.onFailure = onFailure
-		self.signaler = AsyncSignal()  # so we can call signals
-		self.signaler.success.connect(onSuccess)
-		self.signaler.failure.connect(onFailure)
 		if self.returnData is None:
-			self.returnData = DataRequesterResponse(None)
+			self.returnData = DataRequesterResponse()
 		self.returnData.task = self
+		self.connectToken = None
+
+	def submit(self):
+		self.signaler = AsyncSignal()  # so we can call signals
+		self.connectToken = self.signaler.finished.connect(taskDone)
 		global asyncPool
 		if asyncPool is None:
 			asyncPool = QThreadPool.globalInstance()
@@ -59,18 +60,11 @@ class AsynchBase(QRunnable):
 		except (Exception,):
 			self.returnData.hadException = True
 			traceback.print_exc()
-		self.taskFinished()
+		self.signaler.finished.emit(self.returnData)
 
 	def runTask(self):
 		"""
 		Subclasses need to override this method to do their work
-		:return: None
-		"""
-		pass
-
-	def taskFinished(self):
-		"""
-		Subclasses need to override this method to handle things after task is finished
 		:return: None
 		"""
 		pass
@@ -82,9 +76,18 @@ class AsynchBase(QRunnable):
 		"""
 		return self.returnData.hadException
 
-	def	disconnectAll(self):
-		self.signaler.success.disconnect(self.onSuccess)
-		self.signaler.failure.disconnect(self.onFailure)
+
+@QtCore.pyqtSlot(DataRequesterResponse)
+def taskDone(dataRequesterResponse):
+	"""
+	target for signal and is run after task is finished
+	"""
+	task = dataRequesterResponse.task
+	if task.hadError():
+		task.onFailure(task.returnData)
+	else:
+		task.onSuccess(task.returnData)
+	task.signaler.finished.disconnect(task.connectToken)
 
 
 class AsyncImage(AsynchBase):
@@ -111,16 +114,6 @@ class AsyncImage(AsynchBase):
 		else:
 			self.returnData.data = QImage(self.url)
 
-	def taskFinished(self):
-		"""
-		Task is finished need to signal to originator
-		:return: None
-		"""
-		if self.hadError():
-			self.signaler.failure.emit(self.returnData)
-		else:
-			self.signaler.success.emit(self.returnData)
-
 	def hadError(self):
 		"""
 		Was there and error
@@ -140,11 +133,12 @@ class AsyncJsonData(AsynchBase):
 	"""
 	Task to asynchronously load json.
 	"""
-	def __init__(self, url, requestData, dataResponse):
+	def __init__(self, url, requestData, dataResponse, data):
 		self.url = url
 		self.requestData = requestData
 		self.returnData = dataResponse
 		self.reply = None
+		self.data = data
 		super(AsyncJsonData, self).__init__(dataResponse.onSuccess, dataResponse.onFailure)
 
 	def runTask(self):
@@ -158,20 +152,12 @@ class AsyncJsonData(AsynchBase):
 		url += self.requestData.__dict__
 		urlStr = str(url)
 		headers = {'Content-type': 'text/plain', 'Accept': 'text/plain'}
-		data = data=json.dumps(self.requestData, default=vars)
-		self.reply = requests.post(urlStr, '', headers=headers)
+		sendData = ''
+		if self.data is not None:
+			sendData = json.dumps(self.data, default=vars)
+		self.reply = requests.post(urlStr, sendData, headers=headers)
 		if self.reply.status_code == 200:
 			self.returnData.data = self.reply
-
-	def taskFinished(self):
-		"""
-		Task is finished need to signal to originator
-		:return: None
-		"""
-		if self.hadError():
-			self.signaler.failure.emit(self.returnData)
-		else:
-			self.signaler.success.emit(self.returnData)
 
 	def hadError(self):
 		"""

@@ -57,14 +57,16 @@ class MainWindow(QMainWindow):
 
 	def appStarted(self):
 		self.loginDialog.show()
+		pass
 
 	def eventFired(self, eventData):
 		if eventData.eventReason == ReasonForEvent.LOGGED_IN:
-			self.loggedIn()
+			self.loggedIn(eventData.eventData)
 
-	def loggedIn(self):
-		self.scene.loadImage('image/level1.jpg')
-		self.scene.addButtonToScene(100, 100)
+	def loggedIn(self, succeeded):
+		if succeeded:
+			self.scene.loadImage('image/level1.jpg')
+			self.scene.addButtonToScene(100, 100)
 
 
 if __name__ == "__main__":
