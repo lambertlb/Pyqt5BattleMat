@@ -60,6 +60,7 @@ class MainWindow(QMainWindow):
 	def appStarted(self):
 		self.loginDialog = LoginDialog()
 		self.loginDialog.show()
+		self.dungeonManagerDialog = DungeonManagerDialog()
 		pass
 
 	def eventFired(self, eventData):
@@ -67,10 +68,8 @@ class MainWindow(QMainWindow):
 			self.loggedIn(eventData.eventData)
 
 	def loggedIn(self, succeeded):
-		if succeeded:
-			self.loginDialog = None
-			self.dungeonManagerDialog = DungeonManagerDialog()
-			self.dungeonManagerDialog.show()
+		self.loginDialog = None
+		self.dungeonManagerDialog.show()
 
 
 if __name__ == "__main__":

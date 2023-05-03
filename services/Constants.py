@@ -19,3 +19,4 @@ class Constants:
 # requests to dungeon server
 	LoginRequest = 'LOGIN'
 	DungeonListRequest = 'GETDUNGEONLIST'
+	SessionListRequest = 'GETSESSIONLIST'

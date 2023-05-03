@@ -10,6 +10,7 @@ from services.ServicesManager import ServicesManager
 from services.serviceData.DataRequesterResponse import DataRequesterResponse
 from services.serviceData.DungeonListData import DungeonListData
 from services.serviceData.RequestData import RequestData
+from services.serviceData.SessionListData import SessionListData
 
 
 class DungeonManager:
@@ -20,9 +21,19 @@ class DungeonManager:
 	dungeonToUUIDMap = dict()
 	uuidTemplatePathMap = dict()
 	uuidOfMasterTemplate = 'template-dungeon'
+	sessionListData = None
 
 	def isValidLoginData(self, serverURL, username, password):
 		return len(serverURL) != 0 and len(username) != 0 and len(password) != 0
+
+	def getDungeonToUUIDMap(self):
+		return self.dungeonToUUIDMap
+
+	def getSessionListData(self):
+		return self.sessionListData
+
+	def okToDeleteThisTemplate(self, uuid):
+		return uuid != self.uuidOfMasterTemplate
 
 	def makeURL(self, additions):
 		if self.baseURL is None:
@@ -56,7 +67,6 @@ class DungeonManager:
 
 	def handleFailedLogin(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure('')
-		ServicesManager.getEventManager().fireEvent(ReasonForEvent.LOGGED_IN, False)
 		pass
 
 	def getDungeonList(self, onSuccess, onFailure):
@@ -84,4 +94,21 @@ class DungeonManager:
 		pass
 
 	def handleFailedDungeonList(self, dataRequestResponse):
+		pass
+
+	def getSessionList(self, uuid):
+		request = RequestData(Constants.SessionListRequest)
+		request.dungeonUUID = uuid
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulSessionList
+		dataResponse.onFailure = self.handleFailedSessionList
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
+
+	def handleSuccessfulSessionList(self, dataRequestResponse):
+		self.sessionListData = SessionListData()
+		self.sessionListData.__dict__ = json.loads(dataRequestResponse.data.text)
+		ServicesManager.getEventManager().fireEvent(ReasonForEvent.SessionListChanged, None)
+		pass
+
+	def handleFailedSessionList(self, dataRequestResponse):
 		pass
