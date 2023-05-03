@@ -16,7 +16,7 @@ class DungeonManager:
 	"""
 	This will manage all dungeon related data
 	"""
-
+	baseURL = None
 	dungeonToUUIDMap = dict()
 	uuidTemplatePathMap = dict()
 	uuidOfMasterTemplate = 'template-dungeon'
@@ -24,8 +24,13 @@ class DungeonManager:
 	def isValidLoginData(self, serverURL, username, password):
 		return len(serverURL) != 0 and len(username) != 0 and len(password) != 0
 
+	def makeURL(self, additions):
+		if self.baseURL is None:
+			self.baseURL = ServicesManager.getConfigManager().getValue(Constants.Login_Url, 'URL')
+		return self.baseURL + additions
+
 	def login(self, username, password, onSuccess, onFailure):
-		url = ServicesManager.getConfigManager().getValue(Constants.Login_Url, 'URL')
+		url = self.makeURL(Constants.ServicePath)
 		if self.isValidLoginData(url, username, password):
 			request = RequestData(Constants.LoginRequest)
 			request.username = username
@@ -55,14 +60,13 @@ class DungeonManager:
 		pass
 
 	def getDungeonList(self, onSuccess, onFailure):
-		url = ServicesManager.getConfigManager().getValue(Constants.Login_Url, 'URL')
 		request = RequestData(Constants.DungeonListRequest)
 		dataResponse = DataRequesterResponse()
 		dataResponse.onSuccess = self.handleSuccessfulDungeonList
 		dataResponse.onFailure = self.handleFailedDungeonList
 		dataResponse.userOnSuccess = onSuccess
 		dataResponse.userOnFailure = onFailure
-		AsyncJsonData(url, request, dataResponse, None).submit()
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
 
 	def handleSuccessfulDungeonList(self, dataRequestResponse):
 		data = DungeonListData()

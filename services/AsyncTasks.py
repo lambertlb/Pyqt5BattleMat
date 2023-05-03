@@ -8,7 +8,6 @@ import requests
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, QThreadPool, QObject
 from PyQt5.QtGui import QImage
-from buildurl import BuildURL
 
 from services.serviceData.DataRequesterResponse import DataRequesterResponse
 
@@ -146,16 +145,11 @@ class AsyncJsonData(AsynchBase):
 		Runs in background thread to load image
 		:return: None
 		"""
-		url = BuildURL(self.url)
-		# if self.token is not None:
-		# 	parameters.token = self.token
-		url += self.requestData.__dict__
-		urlStr = str(url)
 		headers = {'Content-type': 'text/plain', 'Accept': 'text/plain'}
 		sendData = ''
 		if self.data is not None:
 			sendData = json.dumps(self.data, default=vars)
-		self.reply = requests.post(urlStr, sendData, headers=headers)
+		self.reply = requests.post(self.url, sendData, headers=headers, params=self.requestData.__dict__)
 		if self.reply.status_code == 200:
 			self.returnData.data = self.reply
 
