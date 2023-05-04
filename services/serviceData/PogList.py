@@ -6,7 +6,7 @@ from services.serviceData.PogData import PogData
 
 class PogList:
 	pogList = []
-	listVersion = -1
+	listVersion = 0
 
 	def construct(self):
 		dl = PogList()
