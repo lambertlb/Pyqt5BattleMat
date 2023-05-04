@@ -20,3 +20,4 @@ class Constants:
 	LoginRequest = 'LOGIN'
 	DungeonListRequest = 'GETDUNGEONLIST'
 	SessionListRequest = 'GETSESSIONLIST'
+	LoadJsonFileRequest = 'LOADJSONFILE'

@@ -4,7 +4,7 @@ GPL 3 file header
 from PyQt5 import QtWidgets, QtCore
 
 from generated.dungeonManagerDialog import Ui_DungeonSelectDialog
-from services.ReasonForEvent import ReasonForEvent
+from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 
 
@@ -90,24 +90,6 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.isDM = state
 		self.intialize()
 
-	def editDungeon(self):
-		pass
-
-	def deleteDungeon(self):
-		pass
-
-	def deleteSession(self):
-		pass
-
-	def createDungeon(self):
-		pass
-
-	def createSession(self):
-		pass
-
-	def dmSession(self):
-		pass
-
 	def templateSelected(self, selectedText):
 		self.resetSessionLogic()
 		self.resetDungeonLogic()
@@ -124,23 +106,14 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 	def isValidDungeonTemplateForSessions(self, dungeonName):
 		self.isValidDungeonForSessions = not dungeonName.startswith("Select ") and not dungeonName.startswith("Template ")
 
-	def newDungeonNameText(self, newName):
-		pass
-
-	def sessionSelected(self, selectedText):
-		pass
-
-	def newSessionNameText(self, newSession):
-		pass
-
 	def eventFired(self, eventData):
-		if eventData.eventReason == ReasonForEvent.DungeonDataDeleted:
+		if eventData.eventReason == ReasonForAction.DungeonDataDeleted:
 			self.refreshView()
-		elif eventData.eventReason == ReasonForEvent.DungeonDataLoaded:
+		elif eventData.eventReason == ReasonForAction.DungeonDataLoaded:
 			self.refreshView()
-		elif eventData.eventReason == ReasonForEvent.DungeonDataCreated:
+		elif eventData.eventReason == ReasonForAction.DungeonDataCreated:
 			self.refreshView()
-		elif eventData.eventReason == ReasonForEvent.SessionListChanged:
+		elif eventData.eventReason == ReasonForAction.SessionListChanged:
 			self.refreshSessionData()
 
 	def refreshView(self):
@@ -194,3 +167,32 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 
 	def isOkToShowSessions(self):
 		return self.isValidDungeonForSessions and ServicesManager.getDungeonManager().getSessionListData() is not None
+
+	def editDungeon(self):
+		ServicesManager.getDungeonManager().editSelectedDungeonUUID(self.selectedDungeonUUID)
+		self.done(0)
+		pass
+
+	def deleteDungeon(self):
+		pass
+
+	def deleteSession(self):
+		pass
+
+	def createDungeon(self):
+		pass
+
+	def createSession(self):
+		pass
+
+	def dmSession(self):
+		pass
+
+	def newDungeonNameText(self, newName):
+		pass
+
+	def sessionSelected(self, selectedText):
+		pass
+
+	def newSessionNameText(self, newSession):
+		pass

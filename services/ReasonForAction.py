@@ -5,10 +5,15 @@ from enum import Enum
 from enum import auto
 
 
-class ReasonForEvent(Enum):
+class ReasonForAction(Enum):
 	LOGGED_IN = auto()
 	LOAD_IMAGE = auto()
 	DungeonDataDeleted = auto()
 	DungeonDataLoaded = auto()
 	DungeonDataCreated = auto()
 	SessionListChanged = auto()
+	DMStateChange = auto()
+	MonsterPogsLoaded = auto()
+	RoomObjectPogsLoaded = auto()
+
+	LastReason = auto()

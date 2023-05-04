@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QMainWindow
 
 from services.DungeonManager import DungeonManager
 from services.EventManager import EventManager
-from services.ReasonForEvent import ReasonForEvent
+from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 from services.Utilities import MyConfigManager
 from views.AssetManagement import AssetManagement
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
 		pass
 
 	def eventFired(self, eventData):
-		if eventData.eventReason == ReasonForEvent.LOGGED_IN:
+		if eventData.eventReason == ReasonForAction.LOGGED_IN:
 			self.loggedIn(eventData.eventData)
 
 	def loggedIn(self, succeeded):

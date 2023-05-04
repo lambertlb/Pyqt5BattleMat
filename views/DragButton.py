@@ -3,7 +3,7 @@ GPL 3 file header
 """
 from PyQt5 import QtWidgets, QtGui, QtCore
 
-from services.ReasonForEvent import ReasonForEvent
+from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 
 
@@ -45,4 +45,4 @@ class DragButton(QtWidgets.QPushButton):
 		return self.proxy
 
 	def pressed(self):
-		ServicesManager.getEventManager().fireEvent(ReasonForEvent.LOAD_IMAGE, self.imageName)
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.LOAD_IMAGE, self.imageName)

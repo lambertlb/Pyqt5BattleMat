@@ -6,7 +6,7 @@ import gc
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from services.AsyncTasks import AsyncImage
-from services.ReasonForEvent import ReasonForEvent
+from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 from services.serviceData.DataRequesterResponse import DataRequesterResponse
 from views.BattleMatCanvas import BattleMatCanvas
@@ -101,7 +101,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.view.horizontalScrollBar().setValue(0)
 
 	def eventFired(self, eventData):
-		if eventData.eventReason == ReasonForEvent.LOAD_IMAGE:
+		if eventData.eventReason == ReasonForAction.LOAD_IMAGE:
 			if eventData.eventData is not None:
 				self.loadImage(eventData.eventData)
 
