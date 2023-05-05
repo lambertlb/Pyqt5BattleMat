@@ -5,8 +5,8 @@ GPL 3 file header
 
 class SessionListData:
 	dungeonUUID = None
-	sessionNames = None
-	sessionUUIDs = None
+	sessionNames = []
+	sessionUUIDs = []
 
 	def getDungeonUUID(self):
 		return self.dungeonUUID

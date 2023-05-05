@@ -12,8 +12,8 @@ class Constants:
 	ServicePath = '/electronicbattlemat/dungeons'
 	DungeonData = ServicePath + '/dungeonData'
 	Dungeons = DungeonData + '/dungeons/'
-	Monsters = DungeonData + '/resources/monsters/'
-	RoomObjects = DungeonData + '/resources/roomObjects/'
+	Monsters = 'resources/monsters/'
+	RoomObjects = 'resources/roomObjects/'
 	SessionFolder = 'sessions/'
 
 # requests to dungeon server
@@ -21,3 +21,5 @@ class Constants:
 	DungeonListRequest = 'GETDUNGEONLIST'
 	SessionListRequest = 'GETSESSIONLIST'
 	LoadJsonFileRequest = 'LOADJSONFILE'
+	CreateNewDungeonRequest = 'CREATENEWDUNGEON'
+	DeleteDungeonRequest = 'DELETEDUNGEON'

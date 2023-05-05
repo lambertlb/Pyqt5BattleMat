@@ -20,6 +20,8 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 	isValidDungeonForSessions = False
 	isSessionSelected = False
 	selectedDungeonUUID = ''
+	templateListDisabled = False
+	dungeonToCreate = ''
 
 	def __init__(self, *args):
 		super(DungeonManagerDialog, self).__init__(*args)
@@ -91,6 +93,8 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.intialize()
 
 	def templateSelected(self, selectedText):
+		if self.templateListDisabled:
+			return
 		self.resetSessionLogic()
 		self.resetDungeonLogic()
 		self.isTemplateSelected = not selectedText.startswith('Select ')
@@ -130,12 +134,15 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.selectedDungeonUUID = ''
 
 	def loadDungeonList(self):
+		self.templateListDisabled = True
 		self.templateList.clear()
 		self.templateList.addItem('Select a Dungeon for Operations')
 		uuidMap = ServicesManager.getDungeonManager().getDungeonToUUIDMap()
 		sortedMap = sorted(uuidMap.keys())
 		for dungeonName in sortedMap:
 			self.templateList.addItem(dungeonName)
+		self.templateListDisabled = False
+		self.templateList.setCurrentIndex(0)
 
 	def refreshSession(self):
 		self.resetSessionLogic()
@@ -173,22 +180,28 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.done(0)
 		pass
 
-	def deleteDungeon(self):
-		pass
-
-	def deleteSession(self):
+	def newDungeonNameText(self, newName):
+		self.isOkToCreateDungeon = not newName.startswith("Enter ") and len(newName) > 4
+		self.dungeonToCreate = newName
+		self.setStates()
 		pass
 
 	def createDungeon(self):
+		ServicesManager.getDungeonManager().createNewDungeon(self.dungeonToCreate)
+		self.newDungeonName.setText("Enter Dungeon Name")
+		pass
+
+	def deleteDungeon(self):
+		ServicesManager.getDungeonManager().deleteTemplate(self.selectedDungeonUUID)
+		pass
+
+	def deleteSession(self):
 		pass
 
 	def createSession(self):
 		pass
 
 	def dmSession(self):
-		pass
-
-	def newDungeonNameText(self, newName):
 		pass
 
 	def sessionSelected(self, selectedText):
