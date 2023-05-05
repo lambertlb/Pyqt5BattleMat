@@ -25,3 +25,5 @@ class Constants:
 	DeleteDungeonRequest = 'DELETEDUNGEON'
 	LoadSessionRequest = 'LOADSESSION'
 	UpdateFOWRequest = 'UPDATEFOW'
+	CreateNewSessionRequest = 'CREATENEWSESSION'
+	DeleteSessionRequest = 'DELETESESSION'

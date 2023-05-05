@@ -345,3 +345,51 @@ class DungeonManager(PogManager):
 		self.editMode = False
 		self.setDungeonMaster(True)
 		self.loadSelectedDungeon()
+
+	def isNameValidForNewSession(self, newSessionName):
+		isValidSessionName = not newSessionName.startswith("Enter ") and len(newSessionName) > 4
+		isInCurrentSessionNames = False
+		isInCurrentSessionDirectories = False
+		if isValidSessionName:
+			isInCurrentSessionNames = self.isInCurrentSessionNames(newSessionName);
+		return isValidSessionName and not isInCurrentSessionNames and not isInCurrentSessionDirectories;
+
+	def isInCurrentSessionNames(self, newSessionName):
+		for sessionName in self.sessionListData.sessionNames:
+			if sessionName == newSessionName:
+				return True
+		return False
+
+	def createNewSession(self, dungeonUUID,  newSessionName):
+		request = RequestData(Constants.CreateNewSessionRequest)
+		request.dungeonUUID = dungeonUUID
+		request.newSessionName = newSessionName
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulCreateSession
+		dataResponse.onFailure = self.handleFailedCreateSession
+		dataResponse.dungeonUUID = dungeonUUID
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
+
+	def handleSuccessfulCreateSession(self, dataRequestResponse):
+		self.getSessionList(dataRequestResponse.dungeonUUID)
+		pass
+
+	def handleFailedCreateSession(self, dataRequestResponse):
+		pass
+
+	def deleteSession(self, dungeonUUID, sessionUUID):
+		request = RequestData(Constants.DeleteSessionRequest)
+		request.dungeonUUID = dungeonUUID
+		request.sessionUUID = sessionUUID
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulCreateSession
+		dataResponse.onFailure = self.handleFailedCreateSession
+		dataResponse.dungeonUUID = dungeonUUID
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
+
+	def joinSession(self, selectedDungeonUUID, sessionUUID):
+		self.selectedDungeonUUID = selectedDungeonUUID
+		self.selectedSessionUUID = sessionUUID
+		self.editMode = False
+		self.setDungeonMaster(False)
+		self.loadSelectedDungeon()
