@@ -21,7 +21,10 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 	isSessionSelected = False
 	selectedDungeonUUID = ''
 	templateListDisabled = False
+	sessionListDisabled = False
 	dungeonToCreate = ''
+	selectedSessionName = None
+	selectedSessionUUID = None
 
 	def __init__(self, *args):
 		super(DungeonManagerDialog, self).__init__(*args)
@@ -39,7 +42,7 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.dmSessionButton.clicked.connect(self.dmSession)
 		self.templateList.currentTextChanged.connect(self.templateSelected)
 		self.newDungeonName.textChanged[str].connect(self.newDungeonNameText)
-		self.sessionList.currentTextChanged.connect(self.sessionSelected)
+		self.sessionList.currentIndexChanged.connect(self.sessionSelected)
 		self.newSessionName.textChanged[str].connect(self.newSessionNameText)
 		pass
 
@@ -176,7 +179,10 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		return self.isValidDungeonForSessions and ServicesManager.getDungeonManager().getSessionListData() is not None
 
 	def editDungeon(self):
-		ServicesManager.getDungeonManager().editSelectedDungeonUUID(self.selectedDungeonUUID)
+		if self.isDM:
+			ServicesManager.getDungeonManager().editSelectedDungeonUUID(self.selectedDungeonUUID)
+		else:
+			ServicesManager.getDungeonManager().joinSession(self.selectedDungeonUUID, self.selectedSessionUUID)
 		self.done(0)
 		pass
 
@@ -195,6 +201,15 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		ServicesManager.getDungeonManager().deleteTemplate(self.selectedDungeonUUID)
 		pass
 
+	def sessionSelected(self, index):
+		if index != 0:
+			self.selectedSessionName = self.sessionList.itemText(index)
+			self.selectedSessionUUID = self.sessionList.itemData(index)
+		self.isOkToDeleteSession = index != 0
+		self.isOkToDMSession = self.isOkToDeleteSession
+		self.isOkToJoinSession = self.isOkToDeleteSession
+		self.setStates()
+
 	def deleteSession(self):
 		pass
 
@@ -202,9 +217,8 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		pass
 
 	def dmSession(self):
-		pass
-
-	def sessionSelected(self, selectedText):
+		ServicesManager.getDungeonManager().dmSession(self.selectedDungeonUUID, self.selectedSessionUUID)
+		self.done(0)
 		pass
 
 	def newSessionNameText(self, newSession):

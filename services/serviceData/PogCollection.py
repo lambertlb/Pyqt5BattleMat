@@ -61,3 +61,37 @@ class PogCollection:
 
 	def onFailure(self, dataRequestResponse):
 		pass
+
+	def updateCollection(self, updateList):
+		if self.pogList is None:
+			self.setPogList(updateList)
+			return
+
+		toRemove = self.pogList.pogList.copy()
+		toAdd = []
+		for pd in updateList.pogList:
+			pd.setPogPlace(self.pogPlace)
+			found = self.pogMap.get(pd.uuid)
+			if found is not None:
+				found.fullUpdate(pd)
+				toRemove.remove(found)
+				continue
+			toAdd.append(pd)
+		for pg in toRemove:
+			self.remove(pg)
+		for pg in toAdd:
+			self.addPog(pg)
+
+	def addPog(self, pog):
+		pog.pogPlace = self.pogPlace
+		self.pogList.addPog(pog)
+		self.addToCollections(pog)
+
+	def remove(self, pog):
+		if self.findPog(pog.uuid) is None:
+			return
+		self.pogList.remove(pog)
+		self.pogMap.pop(pog.uuid)
+
+	def findPog(self, pogUUID):
+		return self.pogMap.get(pogUUID)

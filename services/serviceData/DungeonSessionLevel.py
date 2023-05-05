@@ -12,6 +12,11 @@ class DungeonSessionLevel:
 	monsters = None
 	roomObjects = None
 
+	def construct(self):
+		dl = DungeonSessionLevel()
+		self.cloneData(dl)
+		return dl
+
 	def cloneData(self, dl):
 		dl.fogOfWarVersion = self.fogOfWarVersion
 		dl.bitsPerColumn = self.bitsPerColumn
@@ -47,3 +52,23 @@ class DungeonSessionLevel:
 		bitShift = bitIndex % 32
 		bitMask = 1 << bitShift
 		return (self.fogOfWarData[arrayIndex] & bitMask) != 0
+
+	def migrateSession(self, dungeonLevel):
+		self.bitsPerColumn = dungeonLevel.rows
+		oldData = self.fogOfWar
+		if oldData is None:
+			return False
+		newData = self.createNewFOWData(dungeonLevel.rows)
+		for row in range(dungeonLevel.rows):
+			for column  in range( dungeonLevel.columns):
+				bitIndex = (row * self.bitsPerColumn) + column
+				arrayIndex = bitIndex/ 32
+				bitShift = bitIndex % 32
+				bitMask = 1 << bitShift
+				if oldData[column][row]:
+					newData[arrayIndex] |= bitMask
+				else:
+					newData[arrayIndex] &= ~bitMask
+		self.fogOfWarData = newData
+		self.fogOfWar = None
+		return True

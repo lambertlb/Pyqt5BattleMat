@@ -23,3 +23,5 @@ class Constants:
 	LoadJsonFileRequest = 'LOADJSONFILE'
 	CreateNewDungeonRequest = 'CREATENEWDUNGEON'
 	DeleteDungeonRequest = 'DELETEDUNGEON'
+	LoadSessionRequest = 'LOADSESSION'
+	UpdateFOWRequest = 'UPDATEFOW'

@@ -26,4 +26,3 @@ class DungeonData:
 			ld = DungeonLevel()
 			ld.__dict__ = level
 			dl.dungeonLevels.append(ld.construct())
-			pass

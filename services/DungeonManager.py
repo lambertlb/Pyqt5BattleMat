@@ -12,6 +12,7 @@ from services.serviceData.DataRequesterResponse import DataRequesterResponse
 from services.serviceData.DataVersions import DataVersions
 from services.serviceData.DungeonData import DungeonData
 from services.serviceData.DungeonListData import DungeonListData
+from services.serviceData.DungeonSessionData import DungeonSessionData
 from services.serviceData.PogCollection import PogCollection
 from services.serviceData.PogPlace import PogPlace
 from services.serviceData.RequestData import RequestData
@@ -36,6 +37,7 @@ class DungeonManager(PogManager):
 	selectedSession = None
 	fowToggle = False
 	computedGridWidth = 1.0
+	fowDirty = False
 
 	dungeonLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
 	dungeonLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
@@ -163,7 +165,7 @@ class DungeonManager(PogManager):
 		if self.editMode:
 			ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataReadyToEdit, None)
 		else:
-			self.loadSessionData(-1)
+			self.requestLoadSessionData(-1)
 
 	def handleFailedDungeonLoad(self, dataRequestResponse):
 		pass
@@ -205,7 +207,7 @@ class DungeonManager(PogManager):
 			self.dataVersion.setItemVersion(VersionedItem.SESSION_LEVEL_ROOMOBJECTS,
 											self.sessionLevelRoomObjects.getPogListVersion())
 			self.dataVersion.setItemVersion(VersionedItem.SESSION_RESOURCE_PLAYERS, self.sessionLevelPlayers.getPogListVersion())
-			self.dataVersion.setItemVersion(VersionedItem.FOG_OF_WAR, sessionLevelData.getFOWVersion())
+			self.dataVersion.setItemVersion(VersionedItem.FOG_OF_WAR, sessionLevelData.fogOfWarVersion)
 
 	def getCurrentDungeonLevelData(self):
 		if self.selectedDungeon is not None and self.currentLevelIndex < len(self.selectedDungeon.dungeonLevels):
@@ -217,7 +219,74 @@ class DungeonManager(PogManager):
 			return self.selectedSession.sessionLevels[self.currentLevelIndex]
 		return None
 
-	def loadSessionData(self, version):
+	def requestLoadSessionData(self, version):
+		request = RequestData(Constants.LoadSessionRequest)
+		request.dungeonUUID = self.selectedDungeonUUID
+		request.sessionUUID = self.selectedSessionUUID
+		request.version = version
+		dataResponse = DataRequesterResponse()
+		dataResponse.version = version
+		dataResponse.onSuccess = self.handleSuccessfulSessionLoad
+		dataResponse.onFailure = self.handleFailedSessionLoad
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
+
+	def handleSuccessfulSessionLoad(self, dataRequestResponse):
+		dd = DungeonSessionData()
+		dd.__dict__ = json.loads(dataRequestResponse.data.text)
+		self.selectedSession = dd.construct()
+		self.migrateSession()
+		self.loadSessionData()
+		if dataRequestResponse.version == -1:
+			ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataReadyToJoin, None)
+		else:
+			ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionDataChanged, None)
+
+	def handleFailedSessionLoad(self, dataRequestResponse):
+		pass
+
+	def loadSessionData(self):
+		if self.getCurrentSessionLevelData() is not None:
+			self.sessionLevelMonsters.updateCollection(self.getCurrentSessionLevelData().monsters)
+			self.sessionLevelRoomObjects.updateCollection(self.getCurrentSessionLevelData().roomObjects)
+			self.sessionLevelPlayers.updateCollection(self.selectedSession.players)
+			self.updateDataVersion()
+
+	def migrateSession(self):
+		saveIndex = self.currentLevelIndex
+		for i in range(len(self.selectedSession.sessionLevels)):
+			sessionLevel = self.selectedSession.sessionLevels[i]
+			dungeonLevel = self.selectedDungeon.dungeonLevels[i]
+			if sessionLevel.migrateSession(dungeonLevel):
+				self.currentLevelIndex = i
+				self.fowDirty = True
+				self.saveFow()
+		self.currentLevelIndex = saveIndex
+
+	def saveFow(self):
+		if self.isDungeonMaster and self.fowDirty:
+			self.updateFogOfWar()
+		self.fowDirty = False
+
+	def updateFogOfWar(self):
+		if self.selectedDungeon is not None:
+			request = RequestData(Constants.UpdateFOWRequest)
+			request.sessionUUID = self.selectedSessionUUID
+			request.currentLevel = self.currentLevelIndex
+			dataResponse = DataRequesterResponse()
+			dataResponse.onSuccess = self.handleSuccessfulUpdateFogOfWar
+			dataResponse.onFailure = self.handleFailedUpdateFogOfWar
+			sessionLevel = self.getCurrentSessionLevelData()
+			fowData = json.dumps(sessionLevel.fogOfWarData, default=vars)
+			AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, fowData).submit()
+			sessionLevel.fogOfWarVersion = sessionLevel.fogOfWarVersion + 1
+			self.dataVersion.setItemVersion(VersionedItem.FOG_OF_WAR, sessionLevel.fogOfWarVersion)
+
+	# noinspection PyMethodMayBeStatic
+	# noinspection PyUnusedLocal
+	def handleSuccessfulUpdateFogOfWar(self, dataRequestResponse):
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionDataSaved, None)
+
+	def handleFailedUpdateFogOfWar(self, dataRequestResponse):
 		pass
 
 	def createNewDungeon(self, newDungeonName):
@@ -229,6 +298,7 @@ class DungeonManager(PogManager):
 		dataResponse.onFailure = self.handleFailedDungeonCreate
 		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
 
+	# noinspection PyUnusedLocal
 	def handleSuccessfulDungeonCreate(self, dataRequestResponse):
 		self.getDungeonList(self.gotDungeonList, self.failedDungeonList)
 		pass
@@ -237,6 +307,7 @@ class DungeonManager(PogManager):
 		pass
 
 	# noinspection PyMethodMayBeStatic
+	# noinspection PyUnusedLocal
 	def gotDungeonList(self, data):
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataCreated, None)
 		pass
@@ -254,6 +325,7 @@ class DungeonManager(PogManager):
 		dataResponse.onFailure = self.handleFailedDungeonDelete
 		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
 
+	# noinspection PyUnusedLocal
 	def handleSuccessfulDungeonDelete(self, dataRequestResponse):
 		self.getDungeonList(self.gotDungeonList2, self.failedDungeonList)
 		pass
@@ -262,6 +334,14 @@ class DungeonManager(PogManager):
 		pass
 
 	# noinspection PyMethodMayBeStatic
+	# noinspection PyUnusedLocal
 	def gotDungeonList2(self, data):
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataDeleted, None)
 		pass
+
+	def dmSession(self, selectedDungeonUUID, sessionUUID):
+		self.selectedDungeonUUID = selectedDungeonUUID
+		self.selectedSessionUUID = sessionUUID
+		self.editMode = False
+		self.setDungeonMaster(True)
+		self.loadSelectedDungeon()

@@ -25,3 +25,11 @@ class PogList:
 
 	def getListVersion(self):
 		return self.listVersion
+
+	def remove(self, pog):
+		oldList = self.pogList
+		self.pogList = []
+		for pogInList in oldList:
+			if not pogInList.isEqual(pog):
+				self.pogList.append(pogInList)
+		self.listVersion = self.listVersion + 1

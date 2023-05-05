@@ -18,3 +18,8 @@ class PogData:
 	dmNotes = None
 	pogNumber = 0
 	pogPlace = 0
+
+	def isEqual(self, toCompare):
+		if toCompare is None:
+			return False
+		return self.uuid == toCompare.uuid
