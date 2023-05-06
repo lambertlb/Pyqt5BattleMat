@@ -21,6 +21,7 @@ from views.RibbonBar import RibbonBar
 class MainWindow(QMainWindow):
 	dungeonManagerDialog = None
 	loginDialog = None
+	timer = None
 
 	def __init__(self):
 		super(MainWindow, self).__init__()
@@ -58,6 +59,9 @@ class MainWindow(QMainWindow):
 		super(MainWindow, self).show()
 
 	def appStarted(self):
+		self.timer = QtCore.QTimer()
+		self.timer.timeout.connect(self.doTimeBasedTasks)
+		self.timer.start(1000)
 		self.loginDialog = LoginDialog()
 		self.loginDialog.show()
 		self.dungeonManagerDialog = DungeonManagerDialog()
@@ -67,9 +71,15 @@ class MainWindow(QMainWindow):
 		if eventData.eventReason == ReasonForAction.LOGGED_IN:
 			self.loggedIn(eventData.eventData)
 
+	# noinspection PyUnusedLocal
 	def loggedIn(self, succeeded):
 		self.loginDialog = None
 		self.dungeonManagerDialog.show()
+
+	# noinspection PyMethodMayBeStatic
+	def doTimeBasedTasks(self):
+		ServicesManager.getDungeonManager().doTimeBasedTasks()
+		pass
 
 
 if __name__ == "__main__":

@@ -59,6 +59,10 @@ class DungeonManager(PogManager):
 	def okToDeleteThisTemplate(self, uuid):
 		return uuid != self.uuidOfMasterTemplate
 
+	def doTimeBasedTasks(self):
+		if self.selectedSession is not None:
+			self.requestLoadSessionData(self.selectedSession.version)
+
 	def login(self, username, password, onSuccess, onFailure):
 		url = self.makeURL(Constants.ServicePath)
 		if self.isValidLoginData(url, username, password):
@@ -231,6 +235,8 @@ class DungeonManager(PogManager):
 		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
 
 	def handleSuccessfulSessionLoad(self, dataRequestResponse):
+		if dataRequestResponse.data.text == '':
+			return
 		dd = DungeonSessionData()
 		dd.__dict__ = json.loads(dataRequestResponse.data.text)
 		self.selectedSession = dd.construct()
@@ -351,8 +357,8 @@ class DungeonManager(PogManager):
 		isInCurrentSessionNames = False
 		isInCurrentSessionDirectories = False
 		if isValidSessionName:
-			isInCurrentSessionNames = self.isInCurrentSessionNames(newSessionName);
-		return isValidSessionName and not isInCurrentSessionNames and not isInCurrentSessionDirectories;
+			isInCurrentSessionNames = self.isInCurrentSessionNames(newSessionName)
+		return isValidSessionName and not isInCurrentSessionNames and not isInCurrentSessionDirectories
 
 	def isInCurrentSessionNames(self, newSessionName):
 		for sessionName in self.sessionListData.sessionNames:
