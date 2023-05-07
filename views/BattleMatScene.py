@@ -29,7 +29,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.view.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
 		self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 		self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
+		# ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
 	def dragEnterEvent(self, e):
 		e.acceptProposedAction()
