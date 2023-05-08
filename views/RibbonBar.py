@@ -6,25 +6,37 @@ from PyQt5 import QtWidgets, QtCore
 from views.DragButton import DragButton
 
 
-class RibbonBar(QtWidgets.QHBoxLayout):
+class RibbonBar(QtWidgets.QGridLayout):
 
-	def	__init__(self, windowFrame, *args):
+	def	__init__(self, frame, *args):
 		super(RibbonBar, self).__init__(*args)
-		self.windowFrame = windowFrame
-		self.button3 = DragButton('http://static4.paizo.com/image/content/PathfinderTales/PZO8500-CrisisOfFaith-Corogan.jpg',
-								self.windowFrame)
-		self.button3.setObjectName("button3")
-		self.addWidget(self.button3)
-		self.button2 = DragButton('image/FallPanorama.jpg', self.windowFrame)
-		self.button2.setObjectName("button2")
-		self.addWidget(self.button2)
-		self.button1 = DragButton('image/level1.jpg', self.windowFrame)
-		self.button1.setObjectName("button1")
-		self.addWidget(self.button1)
+		self.frame = frame
+		self.gridLayout_2 = self
+		self.selectPlayer_2 = QtWidgets.QComboBox(self.frame)
+		self.gridLayout_2.addWidget(self.selectPlayer_2, 1, 1, 1, 1)
+		spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+		self.gridLayout_2.addItem(spacerItem, 1, 4, 1, 1)
+		self.toggleFOW_2 = QtWidgets.QCheckBox(self.frame)
+		self.gridLayout_2.addWidget(self.toggleFOW_2, 1, 3, 1, 1)
+		self.showSelectedPog_2 = QtWidgets.QCheckBox(self.frame)
+		self.gridLayout_2.addWidget(self.showSelectedPog_2, 0, 2, 1, 1)
+		self.hideFOW_2 = QtWidgets.QCheckBox(self.frame)
+		self.gridLayout_2.addWidget(self.hideFOW_2, 0, 3, 1, 1)
+		self.selectedPogArea_2 = QtWidgets.QGraphicsView(self.frame)
+		self.selectedPogArea_2.setMinimumSize(QtCore.QSize(50, 50))
+		self.selectedPogArea_2.setMaximumSize(QtCore.QSize(50, 50))
+		self.gridLayout_2.addWidget(self.selectedPogArea_2, 0, 0, 2, 1)
+		self.selectDungeonLevel_2 = QtWidgets.QComboBox(self.frame)
+		self.selectDungeonLevel_2.setMinimumSize(QtCore.QSize(200, 0))
+		self.gridLayout_2.addWidget(self.selectDungeonLevel_2, 0, 1, 1, 1)
+		self.showPogNotes_2 = QtWidgets.QCheckBox(self.frame)
+		self.gridLayout_2.addWidget(self.showPogNotes_2, 1, 2, 1, 1)
+
 		self.localize()
 
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
-		self.button3.setText("PushButton")
-		self.button2.setText("PushButton")
-		self.button1.setText("PushButton")
+		self.toggleFOW_2.setText(_translate("MainWindow", "Toggle FOW"))
+		self.showSelectedPog_2.setText(_translate("MainWindow", "Show Selected Pog"))
+		self.hideFOW_2.setText(_translate("MainWindow", "Hide FOW"))
+		self.showPogNotes_2.setText(_translate("MainWindow", "Show Pog Notes"))

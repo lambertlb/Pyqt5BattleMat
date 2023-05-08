@@ -11,10 +11,12 @@ from services.EventManager import EventManager
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 from services.Utilities import MyConfigManager
-from views.AssetManagement import AssetManagement
-from views.BattleMatScene import BattleMatScene
 from views.DungeonManagerDialog import DungeonManagerDialog
 from views.LoginDialog import LoginDialog
+from views.ArtAssetsTab import ArtAssetsTab
+from views.BattleMatScene import BattleMatScene
+from views.DungeonEditorTab import DungeonEditorTab
+from views.PogEditorTab import PogEditorTab
 from views.RibbonBar import RibbonBar
 
 
@@ -25,32 +27,55 @@ class MainWindow(QMainWindow):
 
 	def __init__(self):
 		super(MainWindow, self).__init__()
-		self.resize(800, 600)
-		self.centralWidget = QtWidgets.QWidget()
-		self.gridLayout_2 = QtWidgets.QGridLayout(self.centralWidget)
-		self.windowFrame = QtWidgets.QFrame(self.centralWidget)
-		self.windowFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-		self.windowFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-		self.gridLayout = QtWidgets.QGridLayout(self.windowFrame)
-		self.gridLayout.setContentsMargins(0, 0, 0, 0)
-		self.ribbonBar = RibbonBar(self.windowFrame)
-		self.splitter = QtWidgets.QSplitter(self.windowFrame)
+		self.resize(2000, 1200)
+		self.centralWidget = QtWidgets.QWidget(self)
+		self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralWidget)
+		self.frame = QtWidgets.QFrame(self.centralWidget)
+		self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+		self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+		self.verticalLayout = QtWidgets.QVBoxLayout(self.frame)
+		self.horizontalLayout = QtWidgets.QHBoxLayout()
+		self.gridLayout_2 = RibbonBar(self.frame)
+		self.horizontalLayout.addLayout(self.gridLayout_2)
+		self.verticalLayout.addLayout(self.horizontalLayout)
+		self.splitter = QtWidgets.QSplitter(self.frame)
+		self.splitter.setMinimumSize(QtCore.QSize(0, 500))
 		self.splitter.setOrientation(QtCore.Qt.Horizontal)
+		self.splitter.setHandleWidth(5)
 		self.scene = BattleMatScene(self.splitter)
-		self.gridLayout.addLayout(self.ribbonBar, 0, 0, 1, 1)
-		self.assetHolder = AssetManagement(self.splitter)
-		self.gridLayout.addWidget(self.splitter, 1, 0, 1, 1)
-		self.gridLayout_2.addWidget(self.windowFrame, 0, 0, 1, 1)
+
+		self.assetManagementTabs = QtWidgets.QTabWidget(self.splitter)
+		self.artAssetsTab = ArtAssetsTab()
+		self.assetManagementTabs.addTab(self.artAssetsTab, "")
+
+		self.monsterEditorTab = DungeonEditorTab()
+		self.assetManagementTabs.addTab(self.monsterEditorTab, "")
+
+		self.pogEditorTab = PogEditorTab()
+		self.assetManagementTabs.addTab(self.pogEditorTab, "")
+
+		self.verticalLayout.addWidget(self.splitter)
+		self.verticalLayout_2.addWidget(self.frame)
 		self.setCentralWidget(self.centralWidget)
 		self.statusbar = QtWidgets.QStatusBar(self)
 		self.setStatusBar(self.statusbar)
 		self.splitter.setSizes([600, 200])
+
 		self.localize()
+		self.assetManagementTabs.setCurrentIndex(0)
+		QtCore.QMetaObject.connectSlotsByName(self)
+
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
-		self.setWindowTitle("MainWindow")
+		self.setWindowTitle(_translate("MainWindow", "MainWindow"))
+		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.artAssetsTab),
+											_translate("MainWindow", "Art Assets"))
+		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.monsterEditorTab),
+											_translate("MainWindow", "Monster Editor"))
+		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.pogEditorTab),
+											_translate("MainWindow", "Pog Editor"))
 
 	def mouseDoubleClickEvent(self, event):
 		self.scene.computeInitialZoom()
