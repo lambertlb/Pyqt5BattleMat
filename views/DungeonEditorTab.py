@@ -3,6 +3,9 @@ GPL 3 file header
 """
 from PyQt5 import QtWidgets, QtCore
 
+from services.ReasonForAction import ReasonForAction
+from services.ServicesManager import ServicesManager
+
 
 class DungeonEditorTab(QtWidgets.QWidget):
 
@@ -55,6 +58,7 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.gridLayout_5.addWidget(self.graphicsView_2, 7, 0, 1, 4)
 		self.verticalLayout_4.addLayout(self.gridLayout_5)
 
+		self.setupEvents()
 		self.localize()
 
 	def localize(self):
@@ -75,3 +79,11 @@ class DungeonEditorTab(QtWidgets.QWidget):
 "Picture Resource"))
 		self.saveButton.setText(_translate("MainWindow", "Save"))
 		self.cancelButton.setText(_translate("MainWindow", "Cancel"))
+
+	def setupEvents(self):
+		self.manageDungeonsButton.clicked.connect(self.manageDungeons)
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	def manageDungeons(self):
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.LOGGED_IN, True)

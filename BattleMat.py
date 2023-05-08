@@ -39,7 +39,6 @@ class MainWindow(QMainWindow):
 		self.horizontalLayout.addLayout(self.gridLayout_2)
 		self.verticalLayout.addLayout(self.horizontalLayout)
 		self.splitter = QtWidgets.QSplitter(self.frame)
-		self.splitter.setMinimumSize(QtCore.QSize(0, 500))
 		self.splitter.setOrientation(QtCore.Qt.Horizontal)
 		self.splitter.setHandleWidth(5)
 		self.scene = BattleMatScene(self.splitter)
@@ -95,8 +94,25 @@ class MainWindow(QMainWindow):
 	def eventFired(self, eventData):
 		if eventData.eventReason == ReasonForAction.LOGGED_IN:
 			self.loggedIn(eventData.eventData)
+		elif eventData.eventReason == ReasonForAction.DungeonDataReadyToEdit:
+			self.dungeonDataChanged()
+		elif eventData.eventReason == ReasonForAction.DungeonDataReadyToJoin:
+			self.dungeonDataChanged()
+		elif eventData.eventReason == ReasonForAction.DungeonDataSaved:
+			self.dungeonDataChanged()
 
-	# noinspection PyUnusedLocal
+	def dungeonDataChanged(self):
+		isDM = ServicesManager.getDungeonManager().isDungeonMaster
+		# hide the splitter
+		if isDM:
+			panel1Width = int(self.width() * .75)
+			panel2Width = int(self.width() * .25)
+		else:
+			panel1Width = self.width()
+			panel2Width = 0
+		self.splitter.setSizes([panel1Width, panel2Width])
+
+# noinspection PyUnusedLocal
 	def loggedIn(self, succeeded):
 		self.loginDialog = None
 		self.dungeonManagerDialog.show()

@@ -12,6 +12,7 @@ class ReasonForAction(Enum):
 	DungeonDataDeleted = auto()
 	DungeonDataLoaded = auto()
 	DungeonDataCreated = auto()
+	DungeonDataSaved = auto()
 	DungeonSelected = auto()
 	DungeonDataReadyToEdit = auto()
 	DungeonDataReadyToJoin = auto()
