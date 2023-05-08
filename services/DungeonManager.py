@@ -63,6 +63,11 @@ class DungeonManager(PogManager):
 		if self.selectedSession is not None:
 			self.requestLoadSessionData(self.selectedSession.version)
 
+	def getCurrentSessionUUID(self):
+		if self.selectedSession is not None:
+			return self.selectedSession.sessionUUID
+		return None
+
 	def login(self, username, password, onSuccess, onFailure):
 		url = self.makeURL(Constants.ServicePath)
 		if self.isValidLoginData(url, username, password):
@@ -399,3 +404,19 @@ class DungeonManager(PogManager):
 		self.editMode = False
 		self.setDungeonMaster(False)
 		self.loadSelectedDungeon()
+
+	def getUrlToDungeonResource(self, resourceItem):
+		if '/' in resourceItem or '\\' in resourceItem:
+			if resourceItem.startswith('http'):
+				return resourceItem
+			return self.makeURL(resourceItem)
+		resourceUrl = self.getUrlToDungeonData() + resourceItem
+		return resourceUrl
+
+	def getUrlToDungeonData(self):
+		directoryForDungeon = self.getDirectoryForCurrentDungeon()
+		resourceUrl = self.makeURL(directoryForDungeon) + '/'
+		return resourceUrl
+
+	def getDirectoryForCurrentDungeon(self):
+		return self.uuidTemplatePathMap[self.selectedDungeon.uuid]

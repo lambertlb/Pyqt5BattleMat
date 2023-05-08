@@ -103,7 +103,7 @@ class MainWindow(QMainWindow):
 
 	def dungeonDataChanged(self):
 		isDM = ServicesManager.getDungeonManager().isDungeonMaster
-		# hide the splitter
+		# hide the splitter if not dm
 		if isDM:
 			panel1Width = int(self.width() * .75)
 			panel2Width = int(self.width() * .25)

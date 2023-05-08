@@ -16,6 +16,7 @@ class ReasonForAction(Enum):
 	DungeonSelected = auto()
 	DungeonDataReadyToEdit = auto()
 	DungeonDataReadyToJoin = auto()
+	DungeonSelectedLevelChanged = auto()
 
 	SessionListChanged = auto()
 	SessionDataChanged = auto()
@@ -24,5 +25,7 @@ class ReasonForAction(Enum):
 	DMStateChange = auto()
 	MonsterPogsLoaded = auto()
 	RoomObjectPogsLoaded = auto()
+
+	PogDataChanged = auto()
 
 	LastReason = auto()
