@@ -9,6 +9,7 @@ from services.ServicesManager import ServicesManager
 from services.serviceData.DataVersions import DataVersions
 from views.BattleMatCanvas import BattleMatCanvas
 from views.DragButton import DragButton
+from views.PogCanvas import PogCanvas
 
 
 class BattleMatScene(QtWidgets.QGraphicsScene):
@@ -23,11 +24,20 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	monsterPogs = list()
 	roomObjectPogs = list()
 	playerPogs = list()
-	imageHasBeenLoaded = False
+	imageLoaded = False
+	selectedPogCanvas = None
+	gridOffsetX = 0
+	gridOffsetY = 0
+	gridSpacing = 50
+	showGrid = True
+	imageWidth = 100
+	imageHeight = 100
+	verticalLines = 10
+	horizontalLines = 10
 
 	def __init__(self, splitter):
 		super(BattleMatScene, self).__init__()
-		self.pixelMapLoaded = False
+		self.imageLoaded = False
 		self.splitter = splitter
 		self.pixelMap = QtGui.QPixmap()
 		self.pixMapItem = self.addPixmap(self.pixelMap)
@@ -59,23 +69,8 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	def dragMoveEvent(self, e):
 		e.acceptProposedAction()
 
-	def updateImage(self, newPixmap):
-		"""
-		new image loaded so update old pixel map
-		:param newPixmap:
-		:return: None
-		"""
-		if self.pixMapItem is not None:
-			self.removeItem(self.pixMapItem)
-		self.pixelMap = newPixmap
-		self.pixMapItem = self.addPixmap(self.pixelMap)
-		self.computeInitialZoom()
-		self.resetScroll()
-		self.view.setSceneRect(0, 0, self.pixelMap.width(), self.pixelMap.height())
-		self.view.fitInView(0, 0, self.pixelMap.width(), self.pixelMap.height(), QtCore.Qt.KeepAspectRatio)
-
 	def computeInitialZoom(self):
-		if self.pixelMapLoaded:
+		if self.imageLoaded:
 			if self.pixelMap.width() > self.pixelMap.height():
 				pw = self.pixelMap.width()
 				sz = self.splitter.sizes()[0]
@@ -141,20 +136,21 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		if dungeonLevel is None:
 			return
 		self.dungeonPicture = dungeonLevel.levelDrawing
-		imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(self.dungeonPicture);
-		self.imageHasBeenLoaded = False
-		AsyncImage(imageUrl, self.imageLoaded, self.failedLoad).submit()
+		imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(self.dungeonPicture)
+		self.imageLoaded = False
+		AsyncImage(imageUrl, self.imageWasLoaded, self.failedLoad).submit()
 		pass
 
-	def imageLoaded(self, asynchReturn):
+	def imageWasLoaded(self, asynchReturn):
 		"""
 		Callback from background task when image loaded
 		:param asynchReturn: Image that was loaded
 		:return: None
 		"""
 		image = asynchReturn.getData()
-		self.pixelMapLoaded = True
+		self.imageLoaded = True
 		self.updateImage(QtGui.QPixmap.fromImage(image))
+		self.checkForDataChanges()
 
 	def failedLoad(self, asynchReturn):
 		"""
@@ -164,7 +160,92 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		"""
 		pass
 
+	def updateImage(self, newPixmap):
+		"""
+		new image loaded so update old pixel map
+		:param newPixmap:
+		:return: None
+		"""
+		if self.pixMapItem is not None:
+			self.removeItem(self.pixMapItem)
+		self.pixelMap = newPixmap
+		self.pixMapItem = self.addPixmap(self.pixelMap)
+		self.computeInitialZoom()
+		self.resetScroll()
+		self.view.setSceneRect(0, 0, self.pixelMap.width(), self.pixelMap.height())
+		self.view.fitInView(0, 0, self.pixelMap.width(), self.pixelMap.height(), QtCore.Qt.KeepAspectRatio)
+		self.imageWidth = self.pixelMap.width()
+		self.imageHeight = self.pixelMap.height()
+
 	def dungeonDataUpdated(self):
+		if not self.imageLoaded:
+			return
+		self.calculateDimensions()
+		self.deSelectPog()
+		self.updateNeededData()
+		self.newSelectedPog()
+
+	def deSelectPog(self):
+		if self.selectedPogCanvas is not None:
+			# selectedPogCanvas.getElement().getStyle().setBorderColor("grey");
+			self.selectedPogCanvas = None
+
+	def updateNeededData(self):
+		self.getGridData()
+		monsters = ServicesManager.getDungeonManager().getMonstersForCurrentLevel()
+		pogData = monsters[0]
+		self.addPogToCanvas(pogData)
+		pass
+
+	def addPogToCanvas(self, pogData):
+		proxy = QtWidgets.QGraphicsProxyWidget()
+		pogCanvas = PogCanvas()
+		pogCanvas.setPogData(pogData, False)
+		pogCanvas.setGridSize(self.gridSpacing)
+		proxy.setWidget(pogCanvas)
+		pogCanvas.setProxy(proxy)
+		self.addItem(proxy)
+		proxy.setPos(200, 200)
+		proxy.setZValue(100)
+		pass
+
+	def drawBackground(self, painter, rect):
+		self.drawGrid(painter)
+		pass
+
+	def drawForeground(self, painter, rect):
+		pass
+
+	def drawGrid(self, painter):
+		if not self.imageLoaded:
+			return
+		self.calculateDimensions()
+		if not self.showGrid:
+			return
+		line = QtCore.QLineF(QtCore.QPointF(self.gridOffsetX, self.gridOffsetY),
+							QtCore.QPointF(self.imageWidth, self.gridOffsetY))
+		for _ in range(self.horizontalLines):
+			painter.drawLine(line)
+			line.translate(0, self.gridSpacing)
+		line = QtCore.QLineF(QtCore.QPointF(self.gridOffsetX, self.gridOffsetY),
+							QtCore.QPointF(self.gridOffsetX, self.imageHeight))
+		for _ in range(self.verticalLines):
+			painter.drawLine(line)
+			line.translate(self.gridSpacing, 0)
+
+	def calculateDimensions(self):
+		self.getGridData()
+		self.verticalLines = int((self.imageWidth / self.gridSpacing) + 1)
+		self.horizontalLines = int((self.imageHeight / self.gridSpacing) + 1)
+		ServicesManager.getDungeonManager().setSessionLevelSize(self.verticalLines, self.horizontalLines)
+
+	def getGridData(self):
+		self.gridOffsetX = ServicesManager.getDungeonManager().getCurrentDungeonLevelData().gridOffsetX
+		self.gridOffsetY = ServicesManager.getDungeonManager().getCurrentDungeonLevelData().gridOffsetY
+		self.gridSpacing = ServicesManager.getDungeonManager().getCurrentDungeonLevelData().gridSize
+		self.showGrid = ServicesManager.getDungeonManager().isDungeonGridVisible()
+
+	def newSelectedPog(self):
 		pass
 
 	def addButtonToScene(self, x, y):

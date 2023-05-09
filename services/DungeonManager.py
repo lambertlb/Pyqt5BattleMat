@@ -68,6 +68,9 @@ class DungeonManager(PogManager):
 			return self.selectedSession.sessionUUID
 		return None
 
+	def isDungeonGridVisible(self):
+		return self.selectedDungeon.showGrid
+
 	def login(self, username, password, onSuccess, onFailure):
 		url = self.makeURL(Constants.ServicePath)
 		if self.isValidLoginData(url, username, password):
@@ -420,3 +423,23 @@ class DungeonManager(PogManager):
 
 	def getDirectoryForCurrentDungeon(self):
 		return self.uuidTemplatePathMap[self.selectedDungeon.uuid]
+
+	def getMonstersForCurrentLevel(self):
+		if self.selectedDungeon is None:
+			return None
+		if self.editMode:
+			return self.dungeonLevelMonsters.getPogList()
+		return self.sessionLevelMonsters.getPogList()
+
+	def setSessionLevelSize(self, columns, rows):
+		dungeonLevel = self.getCurrentDungeonLevelData()
+		if not self.isDungeonMaster or dungeonLevel is None:
+			return
+		if dungeonLevel.columns == columns and dungeonLevel.rows == rows:
+			return
+		dungeonLevel.columns = columns
+		dungeonLevel.rows = rows
+		self.saveDungeonData()
+
+	def saveDungeonData(self):
+		pass

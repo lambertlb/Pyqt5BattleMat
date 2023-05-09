@@ -95,3 +95,6 @@ class PogCollection:
 
 	def findPog(self, pogUUID):
 		return self.pogMap.get(pogUUID)
+
+	def getPogList(self):
+		return self.pogList.pogList
