@@ -27,21 +27,47 @@ class AsynchBase(QRunnable):
 	"""
 	Class to allow long takes to run in thread pool
 	"""
-	signaler = None  # so we can call signals
-	returnData = None
 
-	def __init__(self, onSuccess, onFailure):
+	def __init__(self, onSuccess, onFailure, dataResponse):
 		super().__init__()
-		self.onSuccess = onSuccess
-		self.onFailure = onFailure
-		if self.returnData is None:
-			self.returnData = DataRequesterResponse()
-		self.returnData.task = self
-		self.connectToken = None
+		self._signaler = None  # so we can call signals
+		self._onSuccess = onSuccess
+		self._onFailure = onFailure
+		self._returnData = dataResponse
+		self._returnData.task = self
+		self._connectToken = None
+
+	@property
+	def signaler(self):
+		return self._signaler
+
+	@property
+	def connectToken(self):
+		return self._connectToken
+
+	@property
+	def returnData(self):
+		return self._returnData
+
+	@property
+	def onSuccess(self):
+		return self._onSuccess
+
+	@onSuccess.setter
+	def onSuccess(self, value):
+		self._onSuccess = value
+
+	@property
+	def onFailure(self):
+		return self._onFailure
+
+	@onFailure.setter
+	def onFailure(self, value):
+		self._onFailure = value
 
 	def submit(self):
-		self.signaler = AsyncSignal()  # so we can call signals
-		self.connectToken = self.signaler.finished.connect(taskDone)
+		self._signaler = AsyncSignal()  # so we can call signals
+		self._connectToken = self._signaler.finished.connect(taskDone)
 		global asyncPool
 		if asyncPool is None:
 			asyncPool = QThreadPool.globalInstance()
@@ -57,9 +83,9 @@ class AsynchBase(QRunnable):
 		try:
 			self.runTask()
 		except (Exception,):
-			self.returnData.hadException = True
+			self._returnData.hadException(True)
 			traceback.print_exc()
-		self.signaler.finished.emit(self.returnData)
+		self._signaler.finished.emit(self._returnData)
 
 	def runTask(self):
 		"""
@@ -73,7 +99,7 @@ class AsynchBase(QRunnable):
 		Subclasses need to override this method to getting errors
 		:return:True if there was an error
 		"""
-		return self.returnData.hadException
+		return self._returnData.hadException()
 
 
 @QtCore.pyqtSlot(DataRequesterResponse)
@@ -98,7 +124,7 @@ class AsyncImage(AsynchBase):
 	def __init__(self, url,  onSuccess, onFailure):
 		self.url = url
 		self.reply = None
-		super(AsyncImage, self).__init__(onSuccess, onFailure)
+		super(AsyncImage, self).__init__(onSuccess, onFailure, DataRequesterResponse())
 
 	def runTask(self):
 		"""
@@ -108,24 +134,24 @@ class AsyncImage(AsynchBase):
 		if str(self.url).startswith('http'):    # is this a web request?
 			self.reply = requests.get(self.url)
 			if self.reply.status_code == 200:
-				self.returnData.data = QImage()
-				self.returnData.data.loadFromData(self.reply.content)
+				self._returnData._data = QImage()
+				self._returnData._data.loadFromData(self.reply.content)
 		else:
-			self.returnData.data = QImage(self.url)
+			self._returnData._data = QImage(self.url)
 
 	def hadError(self):
 		"""
 		Was there and error
 		:return: True is there was
 		"""
-		return self.returnData.hadError() or self.returnData.getData() is None or self.returnData.getData().isNull()
+		return self._returnData.hadError() or self._returnData.data is None or self._returnData.data.isNull()
 
 	def getImage(self):
 		"""
 		get the image
 		:return: QImage
 		"""
-		return self.returnData.getData()
+		return self._returnData.data
 
 
 class AsyncJsonData(AsynchBase):
@@ -135,10 +161,10 @@ class AsyncJsonData(AsynchBase):
 	def __init__(self, url, requestData, dataResponse, data):
 		self.url = url
 		self.requestData = requestData
-		self.returnData = dataResponse
+		self._returnData = dataResponse
 		self.reply = None
 		self.data = data
-		super(AsyncJsonData, self).__init__(dataResponse.onSuccess, dataResponse.onFailure)
+		super(AsyncJsonData, self).__init__(dataResponse.onSuccess, dataResponse.onFailure, dataResponse)
 
 	def runTask(self):
 		"""
@@ -158,11 +184,11 @@ class AsyncJsonData(AsynchBase):
 		Was there and error
 		:return: True is there was
 		"""
-		return self.returnData.hadError() or self.returnData.getData() is None
+		return self.returnData.hadException or self.returnData.data is None
 
 	def getJsonData(self):
 		"""
 		get the image
 		:return: QImage
 		"""
-		return self.returnData.getData()
+		return self.returnData.data

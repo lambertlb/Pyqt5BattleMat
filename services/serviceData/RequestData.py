@@ -11,7 +11,7 @@ class RequestData:
 
 	token = 0  # token received from login
 
-	def	__init__(self, request):
+	def __init__(self, request):
 		self.request = request
 		self.token = RequestData.token
 	pass

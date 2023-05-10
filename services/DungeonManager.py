@@ -24,27 +24,30 @@ class DungeonManager(PogManager):
 	"""
 	This will manage all dungeon related data
 	"""
-	dungeonToUUIDMap = dict()
-	uuidTemplatePathMap = dict()
-	uuidOfMasterTemplate = 'template-dungeon'
-	sessionListData = None
-	isDungeonMaster = False
-	selectedDungeonUUID = None
-	selectedSessionUUID = None
-	editMode = False
-	selectedDungeon = None
-	currentLevelIndex = 0
-	selectedSession = None
-	fowToggle = False
-	computedGridWidth = 1.0
-	fowDirty = False
 
-	dungeonLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
-	dungeonLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
-	sessionLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.SESSION_LEVEL)
-	sessionLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.SESSION_LEVEL)
-	sessionLevelPlayers = PogCollection(ReasonForAction.LastReason, PogPlace.SESSION_RESOURCE)
-	dataVersion = DataVersions()
+	def __init__(self):
+		super(DungeonManager, self).__init__()
+		self.dungeonToUUIDMap = dict()
+		self.uuidTemplatePathMap = dict()
+		self.uuidOfMasterTemplate = 'template-dungeon'
+		self.sessionListData = None
+		self.isDungeonMaster = False
+		self.selectedDungeonUUID = None
+		self.selectedSessionUUID = None
+		self.editMode = False
+		self.selectedDungeon = None
+		self.currentLevelIndex = 0
+		self.selectedSession = None
+		self.fowToggle = False
+		self.computedGridWidth = 1.0
+		self.fowDirty = False
+
+		self.dungeonLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
+		self.dungeonLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
+		self.sessionLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.SESSION_LEVEL)
+		self.sessionLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.SESSION_LEVEL)
+		self.sessionLevelPlayers = PogCollection(ReasonForAction.LastReason, PogPlace.SESSION_RESOURCE)
+		self.dataVersion = DataVersions()
 
 	# noinspection PyMethodMayBeStatic
 	def isValidLoginData(self, serverURL, username, password):

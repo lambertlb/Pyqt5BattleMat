@@ -13,14 +13,14 @@ from services.serviceData.RequestData import RequestData
 
 
 class PogCollection:
-	pogList = None
-	loadEvent = None
-	pogPlace = None
-	pogMap = dict()
 
 	def __init__(self, loadEvent, pogPlace):
 		self.loadEvent = loadEvent
 		self.pogPlace = pogPlace
+		self.pogList = None
+		self.loadEvent = None
+		self.pogPlace = None
+		self.pogMap = dict()
 
 	def setPogList(self, pogList):
 		self.pogList = pogList

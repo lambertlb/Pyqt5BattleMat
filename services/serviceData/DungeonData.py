@@ -5,10 +5,12 @@ from services.serviceData.DungeonLevel import DungeonLevel
 
 
 class DungeonData:
-	uuid = None
-	dungeonName = None
-	dungeonLevels = None
-	showGrid = False
+
+	def __init__(self):
+		self.uuid = None
+		self.dungeonName = None
+		self.dungeonLevels = None
+		self.showGrid = False
 
 	def construct(self):
 		dl = DungeonData()

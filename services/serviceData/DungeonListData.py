@@ -4,7 +4,8 @@ GPL 3 file header
 
 
 class DungeonListData:
-	dungeonNames = None
-	dungeonUUIDS = None
-	dungeonDirectories = None
-	pass
+
+	def __init__(self):
+		self.dungeonNames = None
+		self.dungeonUUIDS = None
+		self.dungeonDirectories = None

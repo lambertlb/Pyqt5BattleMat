@@ -21,12 +21,13 @@ from views.RibbonBar import RibbonBar
 
 
 class MainWindow(QMainWindow):
-	dungeonManagerDialog = None
-	loginDialog = None
-	timer = None
 
 	def __init__(self):
 		super(MainWindow, self).__init__()
+		self.dungeonManagerDialog = None
+		self.loginDialog = None
+		self.timer = None
+
 		self.resize(2000, 1200)
 		self.centralWidget = QtWidgets.QWidget(self)
 		self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralWidget)

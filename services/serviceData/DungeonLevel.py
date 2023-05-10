@@ -6,13 +6,15 @@ from services.serviceData.DungeonSessionLevel import DungeonSessionLevel
 
 
 class DungeonLevel(DungeonSessionLevel):
-	levelDrawing = None
-	levelName = None
-	gridSize = 30
-	gridOffsetX = 0
-	gridOffsetY = 0
-	columns = 0
-	rows = 0
+
+	def __init__(self):
+		self.levelDrawing = None
+		self.levelName = None
+		self.gridSize = 30
+		self.gridOffsetX = 0
+		self.gridOffsetY = 0
+		self.columns = 0
+		self.rows = 0
 
 	def construct(self):
 		dl = DungeonLevel()

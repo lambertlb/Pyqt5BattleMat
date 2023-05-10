@@ -5,8 +5,10 @@ from services.serviceData.PogData import PogData
 
 
 class PogList:
-	pogList = []
-	listVersion = 0
+
+	def __init__(self):
+		self.pogList = []
+		self.listVersion = 0
 
 	def construct(self):
 		dl = PogList()
@@ -14,7 +16,10 @@ class PogList:
 		return dl
 
 	def cloneData(self, dl):
-		dl.listVersion = self.listVersion
+		if 'listVersion' in locals():
+			dl.listVersion = self.listVersion
+		else:
+			dl.listVersion = 0
 		if self.pogList is None:
 			return
 		for pog in self.pogList:

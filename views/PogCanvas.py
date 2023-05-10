@@ -17,10 +17,13 @@ class PogCanvas(QtWidgets.QPushButton):
 	imageLoaded = False
 	proxy = None
 	pixMap = None
+	gridSize = 30
+	scene = None
 
-	def __init__(self):
+	def __init__(self, scene):
 		super(PogCanvas, self).__init__()
 		self.setMouseTracking(True)
+		self.scene = scene
 		# self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
 
 	def setPogData(self, pogData, fromRibbonBar):
@@ -46,9 +49,10 @@ class PogCanvas(QtWidgets.QPushButton):
 		:param asynchReturn: Image that was loaded
 		:return: None
 		"""
-		image = asynchReturn.getData()
+		image = asynchReturn.data
 		self.pixMap = QtGui.QPixmap.fromImage(image)
 		self.imageLoaded = True
+		self.scene.addPixelMap(self.pixMap)
 		self.update()
 
 	def failedLoad(self, asynchReturn):
@@ -74,8 +78,9 @@ class PogCanvas(QtWidgets.QPushButton):
 		return self.proxy
 
 	def setGridSize(self, size):
-		self.setGeometry(0, 0, int(size), int(size))
-		self.setFixedSize(int(size), int(size))
+		self.gridSize = int(size)
+		self.setGeometry(0, 0, self.gridSize, self.gridSize)
+		self.setFixedSize(self.gridSize, self.gridSize)
 		pass
 
 	def paintEvent(self, event):
@@ -83,10 +88,12 @@ class PogCanvas(QtWidgets.QPushButton):
 		if not self.imageLoaded:
 			return
 		painter = QPainter(self)
+		painter.begin(self)
 		pixmapSize = self.pixMap.size()
-		pixmapSize.scale(event.rect().size(), Qt.KeepAspectRatio)
+		pixmapSize.scale(self.gridSize, self.gridSize, Qt.KeepAspectRatio)
 		pixmapScaled = self.pixMap.scaled(pixmapSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
 		painter.drawPixmap(0, 0, pixmapScaled)
+		painter.end()
 		pass
 
 	def mouseMoveEvent(self, e):

@@ -147,7 +147,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		:param asynchReturn: Image that was loaded
 		:return: None
 		"""
-		image = asynchReturn.getData()
+		image = asynchReturn.data
 		self.imageLoaded = True
 		self.updateImage(QtGui.QPixmap.fromImage(image))
 		self.checkForDataChanges()
@@ -173,7 +173,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.computeInitialZoom()
 		self.resetScroll()
 		self.view.setSceneRect(0, 0, self.pixelMap.width(), self.pixelMap.height())
-		self.view.fitInView(0, 0, self.pixelMap.width(), self.pixelMap.height(), QtCore.Qt.KeepAspectRatio)
+		# self.view.fitInView(0, 0, self.pixelMap.width(), self.pixelMap.height(), QtCore.Qt.KeepAspectRatio)
 		self.imageWidth = self.pixelMap.width()
 		self.imageHeight = self.pixelMap.height()
 
@@ -199,7 +199,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 
 	def addPogToCanvas(self, pogData):
 		proxy = QtWidgets.QGraphicsProxyWidget()
-		pogCanvas = PogCanvas()
+		pogCanvas = PogCanvas(self)
 		pogCanvas.setPogData(pogData, False)
 		pogCanvas.setGridSize(self.gridSpacing)
 		proxy.setWidget(pogCanvas)
@@ -244,6 +244,12 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.gridOffsetY = ServicesManager.getDungeonManager().getCurrentDungeonLevelData().gridOffsetY
 		self.gridSpacing = ServicesManager.getDungeonManager().getCurrentDungeonLevelData().gridSize
 		self.showGrid = ServicesManager.getDungeonManager().isDungeonGridVisible()
+
+	def addPixelMap(self, pixelMap):
+		pm = pixelMap.scaled(int(self.gridSpacing), int(self.gridSpacing), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)
+		it = self.addPixmap(pm)
+		it.setPos(300, 300)
+		pass
 
 	def newSelectedPog(self):
 		pass

@@ -5,12 +5,14 @@ from services.serviceData.PogList import PogList
 
 
 class DungeonSessionLevel:
-	fogOfWarVersion = 0
-	fogOfWar = None		# deprecated used to support old format
-	fogOfWarData = None
-	bitsPerColumn = 0
-	monsters = None
-	roomObjects = None
+
+	def __init__(self):
+		self.fogOfWarVersion = 0
+		self.fogOfWar = None  # deprecated used to support old format
+		self.fogOfWarData = None
+		self.bitsPerColumn = 0
+		self.monsters = None
+		self.roomObjects = None
 
 	def construct(self):
 		dl = DungeonSessionLevel()
@@ -18,10 +20,22 @@ class DungeonSessionLevel:
 		return dl
 
 	def cloneData(self, dl):
-		dl.fogOfWarVersion = self.fogOfWarVersion
-		dl.bitsPerColumn = self.bitsPerColumn
-		dl.fogOfWar = self.fogOfWar
-		dl.fogOfWarData = self.fogOfWarData
+		if 'fogOfWarVersion' in locals():
+			dl.fogOfWarVersion = self.fogOfWarVersion
+		else:
+			dl.fogOfWarVersion = None
+		if 'bitsPerColumn' in locals():
+			dl.bitsPerColumn = self.bitsPerColumn
+		else:
+			dl.fogOfWarVersion = 0
+		if 'fogOfWarVersion' in locals():
+			dl.fogOfWar = self.fogOfWar
+		else:
+			dl.fogOfWar = None
+		if 'fogOfWarData' in locals():
+			dl.fogOfWarData = self.fogOfWarData
+		else:
+			dl.fogOfWarData = None
 		if self.monsters is not None:
 			monsters = PogList()
 			monsters.__dict__ = self.monsters
@@ -60,9 +74,9 @@ class DungeonSessionLevel:
 			return False
 		newData = self.createNewFOWData(dungeonLevel.rows)
 		for row in range(dungeonLevel.rows):
-			for column  in range( dungeonLevel.columns):
+			for column in range(dungeonLevel.columns):
 				bitIndex = (row * self.bitsPerColumn) + column
-				arrayIndex = bitIndex/ 32
+				arrayIndex = bitIndex / 32
 				bitShift = bitIndex % 32
 				bitMask = 1 << bitShift
 				if oldData[column][row]:
@@ -72,3 +86,7 @@ class DungeonSessionLevel:
 		self.fogOfWarData = newData
 		self.fogOfWar = None
 		return True
+
+	# noinspection PyMethodMayBeStatic
+	def createNewFOWData(self, rows):
+		return [rows]

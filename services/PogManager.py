@@ -10,9 +10,10 @@ from services.serviceData.PogPlace import PogPlace
 
 class PogManager:
 
-	baseURL = None
-	monsterCollection = PogCollection(ReasonForAction.MonsterPogsLoaded, PogPlace.COMMON_RESOURCE)
-	roomCollection = PogCollection(ReasonForAction.RoomObjectPogsLoaded, PogPlace.COMMON_RESOURCE)
+	def __init__(self):
+		self.baseURL = None
+		self.monsterCollection = PogCollection(ReasonForAction.MonsterPogsLoaded, PogPlace.COMMON_RESOURCE)
+		self.roomCollection = PogCollection(ReasonForAction.RoomObjectPogsLoaded, PogPlace.COMMON_RESOURCE)
 
 	def getMonsterCollection(self):
 		return self.monsterCollection
@@ -37,5 +38,6 @@ class PogManager:
 	def makeURL(self, additions):
 		if self.baseURL is None:
 			self.baseURL = ServicesManager.getConfigManager().getValue(Constants.Login_Url, 'URL')
+		if not additions.startswith('/'):
+			additions = '/' + additions
 		return self.baseURL + additions
-

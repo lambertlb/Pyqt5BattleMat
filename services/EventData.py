@@ -7,8 +7,6 @@ class EventData:
 	"""
 	This manages data around a single event
 	"""
-	eventReason = None
-	eventData = None
 
 	def __init__(self, reason, data):
 		"""

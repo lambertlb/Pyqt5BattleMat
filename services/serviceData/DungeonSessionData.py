@@ -6,30 +6,32 @@ from services.serviceData.PogList import PogList
 
 
 class DungeonSessionData:
-    version = 0
-    sessionName = ''
-    dungeonUUID = ''
-    sessionUUID = ''
-    players = PogList()
-    sessionLevels = []
-    bitsPerColumn = 32
 
-    def construct(self):
-        ds = DungeonSessionData()
-        self.cloneData(ds)
-        return ds
+	def __init__(self):
+		self.version = 0
+		self.sessionName = ''
+		self.dungeonUUID = ''
+		self.sessionUUID = ''
+		self.players = PogList()
+		self.sessionLevels = []
+		self.bitsPerColumn = 32
 
-    def cloneData(self, ds):
-        ds.version = self.version
-        ds.sessionName = self.sessionName
-        ds.dungeonUUID = self.dungeonUUID
-        ds.sessionUUID = self.sessionUUID
+	def construct(self):
+		ds = DungeonSessionData()
+		self.cloneData(ds)
+		return ds
 
-        players = PogList()
-        players.__dict__ = self.players
-        ds.players = players.construct()
+	def cloneData(self, ds):
+		ds.version = self.version
+		ds.sessionName = self.sessionName
+		ds.dungeonUUID = self.dungeonUUID
+		ds.sessionUUID = self.sessionUUID
 
-        for level in self.sessionLevels:
-                ld = DungeonSessionLevel()
-                ld.__dict__ = level
-                ds.sessionLevels.append(ld.construct())
+		players = PogList()
+		players.__dict__ = self.players
+		ds.players = players.construct()
+
+		for level in self.sessionLevels:
+				ld = DungeonSessionLevel()
+				ld.__dict__ = level
+				ds.sessionLevels.append(ld.construct())
