@@ -71,16 +71,18 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		e.acceptProposedAction()
 
 	def computeInitialZoom(self):
-		if self._imageLoaded:
-			if self.pixelMap.width() > self.pixelMap.height():
-				pw = self.pixelMap.width()
-				sz = self.splitter.sizes()[0]
-			else:
-				pw = self.pixelMap.height()
-				sz = self.splitter.height()
-
-			newZoom = sz / pw
-			self.view.setZoom(newZoom)
+		# if self._imageLoaded:
+		# 	if self.pixelMap.width() > self.pixelMap.height():
+		# 		pw = self.pixelMap.width()
+		# 		sz = self.splitter.sizes()[0]
+		# 	else:
+		# 		pw = self.pixelMap.height()
+		# 		sz = self.splitter.height()
+		#
+		# 	newZoom = sz / pw
+		# 	self.view.setZoom(newZoom)
+		self.view.setZoom(1)
+		pass
 
 	def resetScroll(self):
 		self.view.verticalScrollBar().setValue(0)
@@ -199,15 +201,12 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		pass
 
 	def addPogToCanvas(self, pogData):
-		proxy = QtWidgets.QGraphicsProxyWidget()
-		pogCanvas = PogCanvas(self)
+		pogCanvas = PogCanvas(self.view)
 		pogCanvas.setPogData(pogData, False)
 		pogCanvas.setGridSize(self._gridSpacing)
-		proxy.setWidget(pogCanvas)
-		pogCanvas.setProxy(proxy)
-		self.addItem(proxy)
-		proxy.setPos(200, 200)
-		proxy.setZValue(100)
+		self.addItem(pogCanvas)
+		pogCanvas.setPos(200, 200)
+		pogCanvas.setZValue(100)
 		pass
 
 	def drawBackground(self, painter, rect):
@@ -270,4 +269,3 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.addItem(pw)
 		pw.setPos(x, y)
 		pw.setZValue(100)
-
