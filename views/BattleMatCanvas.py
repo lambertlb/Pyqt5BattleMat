@@ -1,7 +1,7 @@
 """
 GPL 3 file header
 """
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QTransform
 
 
@@ -14,6 +14,9 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 		super(BattleMatCanvas, self).__init__(scene, parent)
 		self.zoom = 1
 		self.scene = scene
+		# self.setOptimizationFlags(QtWidgets.QGraphicsView.OptimizationFlags.)
+		pass
+
 		# self.setAcceptDrops(True)
 
 	def wheelEvent(self, event):
@@ -37,3 +40,9 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 
 	def resizeEvent(self, event):
 		self.scene.computeInitialZoom()
+
+	def drawForeground(self, painter: QtGui.QPainter, rect: QtCore.QRectF) -> None:
+		pass
+
+	def drawItems(self, painter, items, options):
+		self.saveDraw(painter, items, options)

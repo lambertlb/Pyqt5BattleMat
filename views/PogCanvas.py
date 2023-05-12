@@ -52,7 +52,6 @@ class PogCanvas(QtWidgets.QPushButton):
 		image = asynchReturn.data
 		self.pixMap = QtGui.QPixmap.fromImage(image)
 		self.imageLoaded = True
-		self.scene.addPixelMap(self.pixMap)
 		self.update()
 
 	def failedLoad(self, asynchReturn):
