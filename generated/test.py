@@ -1,5 +1,7 @@
+import typing
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget
 
 
 class MyQGraphicsView(QtWidgets.QGraphicsView):
@@ -28,36 +30,31 @@ class MyQGraphicsView(QtWidgets.QGraphicsView):
         return int(self.gridSize * self.zoom)
 
 
-class MyLabel(QtWidgets.QLabel):
+class MyItem(QtWidgets.QGraphicsItem):
 
     def __init__(self, imagePath, view, *args):
-        super(MyLabel, self).__init__(*args)
-        self.image = QtGui.QImage('../image/test.jpg')
+        super(MyItem, self).__init__(*args)
+        self.image = QtGui.QImage(imagePath)
         self.pixMap = None
         self.view = view
         self.scaledGridSize = 0
-        pass
 
-    def paintEvent(self, a0: QtGui.QPaintEvent) -> None:
+    def boundingRect(self):
+        return QtCore.QRectF(0, 0, 50, 50)
+
+    def paint(self, painter: QtGui.QPainter, option: 'QStyleOptionGraphicsItem',
+              widget: typing.Optional[QWidget] = ...) -> None:
         gridSize = self.view.getScaledGridSize()
         if gridSize != self.scaledGridSize:
             self.scaledGridSize = gridSize
             pixMap = QtGui.QPixmap.fromImage(self.image)
-            pixmapSize = pixMap.size()
-            # pixmapSize.scale(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio)
-            self.pixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        painter = QtGui.QPainter(self)
-        painter.begin(self)
-        # painter.drawPixmap(0, 0, self.pixMap)
-        print(f'Scaled grid size {self.scaledGridSize} w {self.width()} h {self.height()}')
-        painter.drawLine(0, 0, self.scaledGridSize, 0)
-        painter.drawLine(0, 0, 0, self.scaledGridSize)
-        painter.drawLine(self.scaledGridSize, self.scaledGridSize, 0, self.scaledGridSize)
-        painter.drawLine(self.scaledGridSize - 1, self.scaledGridSize -1, self.scaledGridSize, 0)
-        painter.end()
+            self.pixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio,
+                                        Qt.SmoothTransformation)
+        painter.drawPixmap(0, 0, self.pixMap)
 
 
 class Ui_MainWindow(object):
+
     def setupUi(self, MainWindow):
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -68,22 +65,9 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.graphicsView.setSceneRect(0, 0, 2000, 2000)
         self.graphicsView.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-
-        # img = QtGui.QImage('../image/test.jpg')
-        # pix = QtGui.QPixmap.fromImage(img)
-        # pix.scaled(50, 50, Qt.KeepAspectRatio)
-        # wig = QtWidgets.QLabel()
-        wig = MyLabel('../image/test.jpg', self.graphicsView)
-        wig.setGeometry(0,0,50,50)
-        # wig.setPixmap(pix)
-        wig.setAlignment(QtCore.Qt.AlignCenter)
-        wig.setScaledContents(True)
-        wig.setMinimumSize(1, 1)
-
-        proxy = QtWidgets.QGraphicsProxyWidget()
-        proxy.setWidget(wig)
-        self.scene.addItem(proxy)
-        proxy.setPos(200, 200)
+        wig = MyItem('../image/test.jpg', self.graphicsView)
+        self.scene.addItem(wig)
+        wig.setPos(200, 200)
 
 if __name__ == "__main__":
     import sys

@@ -5,11 +5,11 @@
 import math
 import sys
 
-from PySide2.QtCore import (QLineF, QPointF, QRandomGenerator, QRectF, QTimer,
+from PyQt5.QtCore import (QLineF, QPointF, QRandomGenerator, QRectF, QTimer,
                             Qt)
-from PySide2.QtGui import (QBrush, QColor, QPainter, QPainterPath, QPixmap,
+from PyQt5.QtGui import (QBrush, QColor, QPainter, QPainterPath, QPixmap,
                            QPolygonF, QTransform)
-from PySide2.QtWidgets import (QApplication, QGraphicsItem, QGraphicsScene,
+from PyQt5.QtWidgets import (QApplication, QGraphicsItem, QGraphicsScene,
                                QGraphicsView)
 
 # import mice_rc
@@ -176,5 +176,5 @@ if __name__ == '__main__':
 
     timer = QTimer()
     timer.timeout.connect(scene.advance)
-    timer.start(1000 / 33)
+    timer.start(int(1000 / 33))
     sys.exit(app.exec_())
