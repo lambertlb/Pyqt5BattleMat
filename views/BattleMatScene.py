@@ -61,8 +61,11 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		:return:None
 		"""
 		src = e.source()
-		if src.getProxy() is not None:
-			src.getProxy().setPos(e.scenePos())
+		proxy = None
+		if hasattr(src, 'proxy'):
+			proxy = src.proxy
+		if proxy is not None:
+			proxy.setPos(e.scenePos())
 		else:
 			pos = e.scenePos()
 			self.addButtonToScene(pos.x(), pos.y())

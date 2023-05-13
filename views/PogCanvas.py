@@ -24,7 +24,12 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		self.gridSize = 0
 		self.fromRibbonBar = False
 		fl = self.flags()
-		self.setFlags(fl | QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations)
+		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges
+		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations
+		self.setFlags(fl)
+		self.setAcceptDrops(True)
 
 	def setPogData(self, pogData, fromRibbonBar):
 		self.fromRibbonBar = fromRibbonBar
@@ -66,15 +71,20 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		pass
 
 	def boundingRect(self):
-		return QtCore.QRectF(0, 0, self.gridSize, self.gridSize)
+		scaledGridSize = self.getScaledGridSize()
+		return QtCore.QRectF(0, 0, scaledGridSize, scaledGridSize)
+
+	def getScaledGridSize(self):
+		zoom = self.view.getZoom()
+		scaledGridSize = int(zoom * self.gridSize)
+		return scaledGridSize
 
 	def paint(self, painter: QtGui.QPainter, *args):
 		if not self.imageLoaded:
 			return
-		zm = self.view.getZoom()
-		gs = int(zm * self.gridSize)
-		if gs != self.scaledGridSize:
-			self.scaledGridSize = gs
+		scaledGridSize = self.getScaledGridSize()
+		if scaledGridSize != self.scaledGridSize:
+			self.scaledGridSize = scaledGridSize
 			pixMap = QtGui.QPixmap.fromImage(self.image)
 			self.pixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio,
 										Qt.SmoothTransformation)
@@ -83,29 +93,38 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		painter.drawRect(0, 0, self.scaledGridSize, self.scaledGridSize)
 		painter.drawPixmap(0, 0, self.pixMap)
 
-	# def paintEvent(self, event):
-	# 	# super(PogCanvas, self).paintEvent(event)
-	# 	if not self.imageLoaded:
-	# 		return
-	# 	painter = QPainter(self)
-	# 	painter.begin(self)
-	# 	pixmapSize = self.pixMap.size()
-	# 	pixmapSize.scale(self.gridSize, self.gridSize, Qt.KeepAspectRatio)
-	# 	pixmapScaled = self.pixMap.scaled(pixmapSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-	# 	painter.drawPixmap(0, 0, pixmapScaled)
-	# 	painter.end()
-	# 	pass
-
-	def mouseMoveEvent(self, e):
+	def mouseMoveEvent(self, event):
 		"""
 		Move moved one me so start dragging
-		:param e: event
+		:param event: event
 		:return: None
 		"""
-		# if e.buttons() == QtCore.Qt.LeftButton:
-		# 	drag = QtGui.QDrag(self)
-		# 	mime = QtCore.QMimeData()
-		# 	drag.setMimeData(mime)
-		# 	drag.setPixmap(self.grab())
-		# 	drag.exec_(QtCore.Qt.MoveAction)
-		pass
+		if QtCore.QLineF(QtCore.QPointF(event.screenPos()),
+				QtCore.QPointF(event.buttonDownScreenPos(Qt.LeftButton))).length() < QtWidgets.QApplication.startDragDistance():
+			return
+
+		pixMap = QtGui.QPixmap.fromImage(self.image)
+		dragPixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio,
+									Qt.SmoothTransformation)
+		pxmTgt = QtGui.QPixmap(self.scaledGridSize, self.scaledGridSize)
+		canvas = QtGui.QPainter()
+		canvas.begin(pxmTgt)
+		canvas.fillRect(0, 0, pxmTgt.width(), pxmTgt.height(), QtGui.QBrush(QtGui.QColor(255, 255, 255)))
+		canvas.setCompositionMode(QtGui.QPainter.CompositionMode_Multiply)
+		canvas.drawImage(0, 0, dragPixMap.toImage())
+		canvas.end()
+
+		wig = event.widget()
+		wig.proxy = self
+		drag = QtGui.QDrag(wig)
+		mime = QtCore.QMimeData()
+		drag.setMimeData(mime)
+		drag.setPixmap(pxmTgt)
+		drag.exec_()
+		self.setCursor(Qt.OpenHandCursor)
+
+	def getProxy(self):
+		"""
+		:return: proxy else None if not in scene
+		"""
+		return self
