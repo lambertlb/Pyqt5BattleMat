@@ -42,7 +42,7 @@ class DungeonSessionLevel:
 			dl.monsters = monsters.construct()
 		if self.roomObjects is not None:
 			roomObjects = PogList()
-			roomObjects.__dict__ = self.monsters
+			roomObjects.__dict__ = self.roomObjects
 			dl.roomObjects = roomObjects.construct()
 		pass
 

@@ -35,6 +35,9 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		self.fromRibbonBar = fromRibbonBar
 		self.setupWithPogData(pogData)
 
+	def getPogData(self):
+		return self.pogData
+
 	def setupWithPogData(self, pogData):
 		self.pogData = pogData
 		self.badURL = False

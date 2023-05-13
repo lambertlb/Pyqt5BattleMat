@@ -27,3 +27,8 @@ class Constants:
 	UpdateFOWRequest = 'UPDATEFOW'
 	CreateNewSessionRequest = 'CREATENEWSESSION'
 	DeleteSessionRequest = 'DELETESESSION'
+
+# pog types
+	POG_TYPE_MONSTER = 'MONSTER'
+	POG_TYPE_PLAYER = 'PLAYER'
+	POG_TYPE_ROOMOBJECT = 'ROOMOBJECT'

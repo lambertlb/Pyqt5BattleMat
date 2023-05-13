@@ -36,7 +36,7 @@ class DungeonManager(PogManager):
 		self.selectedSessionUUID = None
 		self.editMode = False
 		self.selectedDungeon = None
-		self.currentLevelIndex = 0
+		self._currentLevelIndex = 0
 		self.selectedSession = None
 		self.fowToggle = False
 		self.computedGridWidth = 1.0
@@ -48,6 +48,14 @@ class DungeonManager(PogManager):
 		self.sessionLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.SESSION_LEVEL)
 		self.sessionLevelPlayers = PogCollection(ReasonForAction.LastReason, PogPlace.SESSION_RESOURCE)
 		self.dataVersion = DataVersions()
+
+	@property
+	def currentLevelIndex(self):
+		return self._currentLevelIndex
+
+	@currentLevelIndex.setter
+	def currentLevelIndex(self, value):
+		self._currentLevelIndex = value
 
 	# noinspection PyMethodMayBeStatic
 	def isValidLoginData(self, serverURL, username, password):
@@ -186,7 +194,7 @@ class DungeonManager(PogManager):
 		pass
 
 	def initializeDungeonData(self):
-		self.currentLevelIndex = 0
+		self._currentLevelIndex = 0
 		self.selectedDungeon = None
 		self.selectedSession = None
 		self.fowToggle = False
@@ -225,13 +233,13 @@ class DungeonManager(PogManager):
 			self.dataVersion.setItemVersion(VersionedItem.FOG_OF_WAR, sessionLevelData.fogOfWarVersion)
 
 	def getCurrentDungeonLevelData(self):
-		if self.selectedDungeon is not None and self.currentLevelIndex < len(self.selectedDungeon.dungeonLevels):
-			return self.selectedDungeon.dungeonLevels[self.currentLevelIndex]
+		if self.selectedDungeon is not None and self._currentLevelIndex < len(self.selectedDungeon.dungeonLevels):
+			return self.selectedDungeon.dungeonLevels[self._currentLevelIndex]
 		return None
 
 	def getCurrentSessionLevelData(self):
-		if self.selectedSession is not None and self.currentLevelIndex < len(self.selectedSession.sessionLevels):
-			return self.selectedSession.sessionLevels[self.currentLevelIndex]
+		if self.selectedSession is not None and self._currentLevelIndex < len(self.selectedSession.sessionLevels):
+			return self.selectedSession.sessionLevels[self._currentLevelIndex]
 		return None
 
 	def requestLoadSessionData(self, version):
@@ -269,15 +277,15 @@ class DungeonManager(PogManager):
 			self.updateDataVersion()
 
 	def migrateSession(self):
-		saveIndex = self.currentLevelIndex
+		saveIndex = self._currentLevelIndex
 		for i in range(len(self.selectedSession.sessionLevels)):
 			sessionLevel = self.selectedSession.sessionLevels[i]
 			dungeonLevel = self.selectedDungeon.dungeonLevels[i]
 			if sessionLevel.migrateSession(dungeonLevel):
-				self.currentLevelIndex = i
+				self._currentLevelIndex = i
 				self.fowDirty = True
 				self.saveFow()
-		self.currentLevelIndex = saveIndex
+		self._currentLevelIndex = saveIndex
 
 	def saveFow(self):
 		if self.isDungeonMaster and self.fowDirty:
@@ -288,7 +296,7 @@ class DungeonManager(PogManager):
 		if self.selectedDungeon is not None:
 			request = RequestData(Constants.UpdateFOWRequest)
 			request.sessionUUID = self.selectedSessionUUID
-			request.currentLevel = self.currentLevelIndex
+			request.currentLevel = self._currentLevelIndex
 			dataResponse = DataRequesterResponse()
 			dataResponse.onSuccess = self.handleSuccessfulUpdateFogOfWar
 			dataResponse.onFailure = self.handleFailedUpdateFogOfWar
@@ -434,6 +442,13 @@ class DungeonManager(PogManager):
 			return self.dungeonLevelMonsters.getPogList()
 		return self.sessionLevelMonsters.getPogList()
 
+	def getRoomObjectsForCurrentLevel(self):
+		if self.selectedDungeon is None:
+			return None
+		if self.editMode:
+			return self.dungeonLevelRoomObjects.getPogList()
+		return self.sessionLevelRoomObjects.getPogList()
+
 	def setSessionLevelSize(self, columns, rows):
 		dungeonLevel = self.getCurrentDungeonLevelData()
 		if not self.isDungeonMaster or dungeonLevel is None:
@@ -443,6 +458,22 @@ class DungeonManager(PogManager):
 		dungeonLevel.columns = columns
 		dungeonLevel.rows = rows
 		self.saveDungeonData()
+
+	def getPlayersForCurrentSession(self):
+		if self.editMode or self.selectedDungeon is None or self.selectedSession is None:
+			return None
+		currentLevel = self._currentLevelIndex
+		playersOnLevel = list()
+		for player in self.sessionLevelPlayers.getPogList():
+			if player.getDungeonLevel() == currentLevel:
+				playersOnLevel.append(player)
+		return playersOnLevel
+
+	def getItemVersion(self, itemToGet):
+		return self.dataVersion.getItemVersion(itemToGet)
+
+	def updateVersion(self, needsUpdating):
+		self.dataVersion.updateFrom(needsUpdating)
 
 	def saveDungeonData(self):
 		pass

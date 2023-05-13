@@ -46,6 +46,3 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 
 	def drawForeground(self, painter: QtGui.QPainter, rect: QtCore.QRectF) -> None:
 		pass
-
-	def drawItems(self, painter, items, options):
-		self.saveDraw(painter, items, options)

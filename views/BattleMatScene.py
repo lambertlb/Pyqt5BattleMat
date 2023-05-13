@@ -4,11 +4,12 @@ GPL 3 file header
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from services.AsyncTasks import AsyncImage
+from services.Constants import Constants
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 from services.serviceData.DataVersions import DataVersions
+from services.serviceData.VersionedItem import VersionedItem
 from views.BattleMatCanvas import BattleMatCanvas
-from views.DragButton import DragButton
 from views.PogCanvas import PogCanvas
 
 
@@ -38,6 +39,8 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self._verticalLines = 10
 		self._horizontalLines = 10
 		self._imageLoaded = False
+		self._selectedColumn = 0
+		self._selectedRow = 0
 
 		self.splitter = splitter
 		self.pixelMap = QtGui.QPixmap()
@@ -65,25 +68,21 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		if hasattr(src, 'proxy'):
 			proxy = src.proxy
 		if proxy is not None:
-			proxy.setPos(e.scenePos())
-		else:
 			pos = e.scenePos()
-			self.addButtonToScene(pos.x(), pos.y())
+			self.computeSelectedColumnAndRow(pos.x(), pos.y())
+			x = self.columnToPixel(self._selectedColumn)
+			y = self.rowToPixel(self._selectedRow)
+			pix = QtCore.QPointF(x, y)
+			proxy.setPos(pix)
+			# proxy.setPos(pos)
+		# else:
+		# 	pos = e.scenePos()
+		# self.addButtonToScene(pos.x(), pos.y())
 
 	def dragMoveEvent(self, e):
 		e.acceptProposedAction()
 
 	def computeInitialZoom(self):
-		# if self._imageLoaded:
-		# 	if self.pixelMap.width() > self.pixelMap.height():
-		# 		pw = self.pixelMap.width()
-		# 		sz = self.splitter.sizes()[0]
-		# 	else:
-		# 		pw = self.pixelMap.height()
-		# 		sz = self.splitter.height()
-		#
-		# 	newZoom = sz / pw
-		# 	self.view.setZoom(newZoom)
 		self.view.setZoom(1)
 		pass
 
@@ -92,9 +91,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.view.horizontalScrollBar().setValue(0)
 
 	def eventFired(self, eventData):
-		# if eventData.eventReason == ReasonForAction.LOAD_IMAGE:
-		# 	if eventData.eventData is not None:
-		# 		self.loadImage(eventData.eventData)
 		if eventData.eventReason == ReasonForAction.PogDataChanged:
 			self.checkForDataChanges()
 		elif eventData.eventReason == ReasonForAction.DungeonDataReadyToEdit:
@@ -109,7 +105,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 			self.checkForDataChanges()
 
 	def checkForDataChanges(self):
-		pass
 		dungeonManager = ServicesManager.getDungeonManager()
 		if dungeonManager.getCurrentDungeonLevelData() is None:
 			return
@@ -179,7 +174,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.computeInitialZoom()
 		self.resetScroll()
 		self.view.setSceneRect(0, 0, self.pixelMap.width(), self.pixelMap.height())
-		# self.view.fitInView(0, 0, self.pixelMap.width(), self.pixelMap.height(), QtCore.Qt.KeepAspectRatio)
 		self._imageWidth = self.pixelMap.width()
 		self._imageHeight = self.pixelMap.height()
 
@@ -198,26 +192,27 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 
 	def updateNeededData(self):
 		self.getGridData()
-		monsters = ServicesManager.getDungeonManager().getMonstersForCurrentLevel()
-		pogData = monsters[0]
-		self.addPogToCanvas(pogData)
-		pass
+		self.updatePogs(VersionedItem.SESSION_RESOURCE_PLAYERS,
+						ServicesManager.getDungeonManager().getPlayersForCurrentSession(),
+						self._playerPogs)
+		if ServicesManager.getDungeonManager().editMode:
+			self.updatePogs(VersionedItem.DUNGEON_LEVEL_MONSTERS,
+							ServicesManager.getDungeonManager().getMonstersForCurrentLevel(),
+							self._monsterPogs)
+			self.updatePogs(VersionedItem.DUNGEON_LEVEL_ROOMOBJECTS,
+							ServicesManager.getDungeonManager().getRoomObjectsForCurrentLevel(),
+							self._roomObjectPogs)
 
-	def addPogToCanvas(self, pogData):
-		pogCanvas = PogCanvas(self.view)
-		pogCanvas.setPogData(pogData, False)
-		pogCanvas.setGridSize(self._gridSpacing)
-		self.addItem(pogCanvas)
-		pogCanvas.setPos(200, 200)
-		pogCanvas.setZValue(100)
-		pass
-
-	def drawBackground(self, painter, rect):
-		self.drawGrid(painter)
-		pass
-
-	def drawForeground(self, painter, rect):
-		pass
+		else:
+			self.updatePogs(VersionedItem.SESSION_LEVEL_MONSTERS,
+							ServicesManager.getDungeonManager().getMonstersForCurrentLevel(),
+							self._monsterPogs)
+			self.updatePogs(VersionedItem.SESSION_LEVEL_ROOMOBJECTS,
+							ServicesManager.getDungeonManager().getRoomObjectsForCurrentLevel(),
+							self._roomObjectPogs)
+		# updateFogOfWar();
+		# drawEverything();
+		ServicesManager.getDungeonManager().updateVersion(self._dataVersionsHistory)
 
 	def drawGrid(self, painter):
 		if not self._imageLoaded:
@@ -248,27 +243,76 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self._gridSpacing = ServicesManager.getDungeonManager().getCurrentDungeonLevelData().gridSize
 		self._showGrid = ServicesManager.getDungeonManager().isDungeonGridVisible()
 
-	def addPixelMap(self, pixelMap):
-		pm = pixelMap.scaled(int(self._gridSpacing), int(self._gridSpacing),
-							QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)
-		it = self.addPixmap(pm)
-		it.setPos(300, 300)
+	def updatePogs(self, versionedItem, pogs, pogList):
+		if pogs is None or ServicesManager.getDungeonManager().getItemVersion(
+				versionedItem) == self._dataVersionsHistory.getItemVersion(versionedItem):
+			return
+		existingPogs = pogList.copy()
+		pogsToBeAdded = list()
+
+		self.getPogsThatNeedToBeAddedOrRemoved(pogs, existingPogs, pogsToBeAdded)
+		for pog in existingPogs:
+			pogList.remove(pog)
+			self.removeItem(pog)
+		for pog in pogsToBeAdded:
+			self.addPogToCanvas(pog)
+
+	# noinspection PyMethodMayBeStatic
+	def getPogsThatNeedToBeAddedOrRemoved(self, sourcePogs, existingPogs, pogsToBeAdded):
+		for pog in sourcePogs:
+			found = False
+			for index in range(len(existingPogs)):
+				pg = existingPogs[index]
+				if pog.isEqual(pg.getPogData()):
+					existingPogs.remove(pg)
+					pg.updatePogData(pog)
+					found = True
+					break
+			if not found:
+				pogsToBeAdded.append(pog)
+
+	def addPogToCanvas(self, pogData):
+		pogCanvas = PogCanvas(self.view)
+		pogCanvas.setPogData(pogData, False)
+		pogCanvas.setGridSize(self._gridSpacing)
+		self.addPogToProperList(pogCanvas)
+		self.addItem(pogCanvas)
+		where = self.computePogPosition(pogData)
+		pogCanvas.setPos(where)
+		# pogCanvas.setZValue(100)
+
+	def adjustedGridSize(self):
+		return self._gridSpacing * self.view.getZoom()
+
+	def columnToPixel(self, column):
+		return (self._gridSpacing * column) + self._gridOffsetX
+
+	def rowToPixel(self, row):
+		return (self._gridSpacing * row) + self._gridOffsetY
+
+	def computePogPosition(self, pogData):
+		x = self.columnToPixel(pogData.pogColumn)
+		y = self.rowToPixel(pogData.pogRow)
+		return QtCore.QPointF(x, y)
+
+	def computeSelectedColumnAndRow(self, clientX,  clientY):
+		self._selectedColumn = int(((clientX - self._gridOffsetX) / self._gridSpacing))
+		self._selectedRow = int(((clientY - self._gridOffsetY) / self._gridSpacing))
+
+	def addPogToProperList(self, scalablePog):
+		if scalablePog.getPogData().pogType == Constants.POG_TYPE_MONSTER:
+			self._monsterPogs.append(scalablePog)
+		elif scalablePog.getPogData().pogType == Constants.POG_TYPE_ROOMOBJECT:
+			self._roomObjectPogs.append(scalablePog)
+		elif scalablePog.getPogData().pogType == Constants.POG_TYPE_PLAYER:
+			self._playerPogs.append(scalablePog)
+
+	def drawBackground(self, painter, rect):
+		self.drawGrid(painter)
+		pass
+
+	def drawForeground(self, painter, rect):
 		pass
 
 	def newSelectedPog(self):
 		pass
-
-	def addButtonToScene(self, x, y):
-		"""
-		add a button to scene
-		:param x:
-		:param y:
-		:return: None
-		"""
-		pw = QtWidgets.QGraphicsProxyWidget()
-		db = DragButton('image/level1.jpg', 'push me')
-		pw.setWidget(db)
-		db.setProxy(pw)
-		self.addItem(pw)
-		pw.setPos(x, y)
-		pw.setZValue(100)

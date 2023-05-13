@@ -15,3 +15,10 @@ class DataVersions:
 
 	def setItemVersion(self, item, version):
 		self.dataVersion[item.value] = version
+
+	def getItemVersion(self, item):
+		return self.dataVersion[item.value]
+
+	def updateFrom(self, needsUpdating):
+		for i in range(len(self.dataVersion)):
+			needsUpdating.dataVersion[i] = self.dataVersion[i]
