@@ -306,8 +306,8 @@ class DungeonManager(PogManager):
 			sessionLevel.fogOfWarVersion = sessionLevel.fogOfWarVersion + 1
 			self.dataVersion.setItemVersion(VersionedItem.FOG_OF_WAR, sessionLevel.fogOfWarVersion)
 
-	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
+	# noinspection PyMethodMayBeStatic
 	def handleSuccessfulUpdateFogOfWar(self, dataRequestResponse):
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionDataSaved, None)
 

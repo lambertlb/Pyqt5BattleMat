@@ -5,13 +5,19 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
 
 from services.AsyncTasks import AsyncImage
+from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
+from views.PopupMenu import PopupMenu
 
 
 class PogCanvas(QtWidgets.QGraphicsItem):
 
+	popup = None
+
 	def __init__(self, view):
 		super(PogCanvas, self).__init__()
+		if PogCanvas.popup is None:
+			PogCanvas.popup = PopupMenu()
 		self.view = view
 		self.image = None
 		self.pogData = None
@@ -91,14 +97,34 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 			pixMap = QtGui.QPixmap.fromImage(self.image)
 			self.pixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio,
 										Qt.SmoothTransformation)
-		painter.setPen(QtGui.QPen(Qt.black, 5, Qt.SolidLine))
+		# painter.setPen(QtGui.QPen(Qt.black, 5, Qt.SolidLine))
 		painter.setBrush(QtGui.QBrush(Qt.white, Qt.SolidPattern))
 		painter.drawRect(0, 0, self.scaledGridSize, self.scaledGridSize)
 		painter.drawPixmap(0, 0, self.pixMap)
 
+	def mousePressEvent(self, event):
+		# modifiers = QtWidgets.QApplication.keyboardModifiers()
+		# if ServicesManager.getDungeonManager().getFowToggle() or modifiers & QtCore.Qt.ShiftModifier:
+		# 	ServicesManager.getEventManager().fireEvent(ReasonForAction.MouseDownEventBubble, event)
+		# 	return
+		# if not ServicesManager.getDungeonManager().isDungeonMaster() and not ServicesManager.getDungeonManager().isEditMode and ServicesManager.getDungeonManager().isFowSet(self.pogData.column, self.pogData.row):
+		# 	ServicesManager.getEventManager().fireEvent(ReasonForAction.MouseDownEventBubble, event)
+		# 	return
+		# if not self.fromRibbonBar:
+		# 	ServicesManager.getDungeonManager().setSelectedPog(self.pogData)
+			# if event.button() == Qt.RightButton:
+			# 	if (popup != null) {
+			# 		popup.setPopupPosition(event.getClientX(), event.getClientY());
+			# 		popup.setPogData(pogData);
+			# 		popup.show();
+		pass
+
+	def contextMenuEvent(self, event):
+		PogCanvas.popup.showMe(event.screenPos())
+
 	def mouseMoveEvent(self, event):
 		"""
-		Move moved one me so start dragging
+		Move moved on me so start dragging
 		:param event: event
 		:return: None
 		"""
@@ -109,20 +135,20 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		pixMap = QtGui.QPixmap.fromImage(self.image)
 		dragPixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio,
 									Qt.SmoothTransformation)
-		pxmTgt = QtGui.QPixmap(self.scaledGridSize, self.scaledGridSize)
+		mapToDrag = QtGui.QPixmap(self.scaledGridSize, self.scaledGridSize)
 		canvas = QtGui.QPainter()
-		canvas.begin(pxmTgt)
-		canvas.fillRect(0, 0, pxmTgt.width(), pxmTgt.height(), QtGui.QBrush(QtGui.QColor(255, 255, 255)))
+		canvas.begin(mapToDrag)
+		canvas.fillRect(0, 0, mapToDrag.width(), mapToDrag.height(), QtGui.QBrush(QtGui.QColor(255, 255, 255)))
 		canvas.setCompositionMode(QtGui.QPainter.CompositionMode_Multiply)
 		canvas.drawImage(0, 0, dragPixMap.toImage())
 		canvas.end()
 
 		wig = event.widget()
-		wig.proxy = self
+		wig.proxy = self  # add myself to the dragging widget so target can know me
 		drag = QtGui.QDrag(wig)
 		mime = QtCore.QMimeData()
 		drag.setMimeData(mime)
-		drag.setPixmap(pxmTgt)
+		drag.setPixmap(mapToDrag)
 		drag.exec_()
 		self.setCursor(Qt.OpenHandCursor)
 

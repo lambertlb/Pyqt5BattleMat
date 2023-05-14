@@ -28,4 +28,6 @@ class ReasonForAction(Enum):
 
 	PogDataChanged = auto()
 
+	MouseDownEventBubble = auto()
+
 	LastReason = auto()
