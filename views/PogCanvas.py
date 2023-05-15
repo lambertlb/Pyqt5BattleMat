@@ -120,7 +120,9 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		pass
 
 	def contextMenuEvent(self, event):
-		PogCanvas.popup.showMe(event.screenPos())
+		if not self.fromRibbonBar:
+			ServicesManager.getDungeonManager().setSelectedPog(self.pogData)
+			PogCanvas.popup.showMe(event.screenPos(), self.pogData)
 
 	def mouseMoveEvent(self, event):
 		"""

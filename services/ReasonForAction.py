@@ -27,6 +27,7 @@ class ReasonForAction(Enum):
 	RoomObjectPogsLoaded = auto()
 
 	PogDataChanged = auto()
+	PogWasSelected = auto()
 
 	MouseDownEventBubble = auto()
 

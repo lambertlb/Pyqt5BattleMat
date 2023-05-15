@@ -14,6 +14,7 @@ class PogManager:
 		self.baseURL = None
 		self.monsterCollection = PogCollection(ReasonForAction.MonsterPogsLoaded, PogPlace.COMMON_RESOURCE)
 		self.roomCollection = PogCollection(ReasonForAction.RoomObjectPogsLoaded, PogPlace.COMMON_RESOURCE)
+		self.selectedPog = None
 
 	def getMonsterCollection(self):
 		return self.monsterCollection
@@ -22,6 +23,8 @@ class PogManager:
 		return self.roomCollection
 
 	def setSelectedPog(self, pogData):
+		self.selectedPog = pogData
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.PogWasSelected, None)
 		pass
 
 	def setPogBeingDragged(self, pogData, fromRibbonBar):
@@ -41,3 +44,18 @@ class PogManager:
 		if not additions.startswith('/'):
 			additions = '/' + additions
 		return self.baseURL + additions
+
+	def togglePlayerFlagOfSelectedPog(self, flag):
+		if self.selectedPog is not None:
+			self.selectedPog.togglePlayerFlag(flag)
+			ServicesManager.getDungeonManager().addOrUpdatePog(self.selectedPog)
+
+	def toggleDmFlagOfSelectedPog(self, flag):
+		if self.selectedPog is not None:
+			self.selectedPog.toggleDmFlag(flag)
+			ServicesManager.getDungeonManager().addOrUpdatePog(self.selectedPog)
+
+	def updateNumberOfSelectedPog(self, newPogNumber):
+		if self.selectedPog is not None:
+			self.selectedPog.setPogNumber(newPogNumber)
+			ServicesManager.getDungeonManager().addOrUpdatePog(self.selectedPog)

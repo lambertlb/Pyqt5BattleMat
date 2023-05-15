@@ -475,5 +475,12 @@ class DungeonManager(PogManager):
 	def updateVersion(self, needsUpdating):
 		self.dataVersion.updateFrom(needsUpdating)
 
+	def	addOrUpdatePog(self, pog):
+		pass
+
+	def deleteSelectedPog(self):
+		if not self.isDungeonMaster:
+			return
+
 	def saveDungeonData(self):
 		pass
