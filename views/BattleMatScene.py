@@ -75,7 +75,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 			y = self.rowToPixel(self._selectedRow)
 			pix = QtCore.QPointF(x, y)
 			proxy.setPos(pix)
-			# proxy.setPos(pos)
 		# else:
 		# 	pos = e.scenePos()
 		# self.addButtonToScene(pos.x(), pos.y())
@@ -144,7 +143,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self._dungeonPicture = dungeonLevel.levelDrawing
 		imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(self._dungeonPicture)
 		self._imageLoaded = False
-		# AsyncImage(imageUrl, self.imageWasLoaded, self.failedLoad).submit()
+		AsyncImage(imageUrl, self.imageWasLoaded, self.failedLoad).submit()
 		pass
 
 	def imageWasLoaded(self, asynchReturn):
@@ -220,7 +219,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.calculateDimensions()
 		# if not self._showGrid:
 		# 	return
-		painter.begin()
 		painter.setPen(QtGui.QColor(255, 0, 0))
 		line = QtCore.QLineF(QtCore.QPointF(self._gridOffsetX, self._gridOffsetY),
 							QtCore.QPointF(self._imageWidth, self._gridOffsetY))
@@ -232,7 +230,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		for _ in range(self._verticalLines):
 			painter.drawLine(line)
 			line.translate(self._gridSpacing, 0)
-		painter.end()
 
 	def calculateDimensions(self):
 		self.getGridData()
@@ -341,24 +338,9 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	def drawBackground(self, painter, rect):
 		pass
 
-	def drawForeground(self, painter: QtGui.QPainter, rect: QtCore.QRectF) -> None:
+	def drawForeground(self, painter, rect):
+		self.drawGrid(painter)
 		pass
-	# def drawForeground(self, painter, rect):
-	# 	# self.drawGrid(painter)
-	# 	print('Draw foreground')
-	# 	verticalLines = int((rect.width() / 20) + 1)
-	# 	horizontalLines = int((rect.height() / 20) + 1)
-	# 	painter.setPen(QtGui.QColor(255, 0, 0))
-	# 	line = QtCore.QLineF(QtCore.QPointF(0, 0), QtCore.QPointF(rect.width(), 0))
-	# 	for _ in range(horizontalLines):
-	# 		painter.drawLine(line)
-	# 		line.translate(0, 20)
-	# 	line = QtCore.QLineF(QtCore.QPointF(0, 0),
-	# 						QtCore.QPointF(0, rect.height()))
-	# 	for _ in range(verticalLines):
-	# 		painter.drawLine(line)
-	# 		line.translate(20, 0)
-	# 	pass
 
 	def mousePressEvent(self, event):
 		super(BattleMatScene, self).mousePressEvent(event)

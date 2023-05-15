@@ -43,6 +43,3 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 
 	def resizeEvent(self, event):
 		self.scene.computeInitialZoom()
-
-	def drawForeground(self, painter: QtGui.QPainter, rect: QtCore.QRectF) -> None:
-		pass

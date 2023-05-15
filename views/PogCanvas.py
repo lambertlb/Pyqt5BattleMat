@@ -93,22 +93,22 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 			return
 		selected = ServicesManager.getDungeonManager().getSelectedPog()
 		isSelected = selected is not None and selected.isEqual(self.pogData)
-		border = 0
-		# border = self.computePogBorderWidth()
+		border = self.computePogBorderWidth()
+		print(f'Border {border}')
 		scaledGridSize = self.getScaledGridSize()
 		if scaledGridSize != self.scaledGridSize or self.wasSelected != isSelected:
 			self.scaledGridSize = scaledGridSize
 			if selected:
-				self.scaledGridSize -= border
+				self.scaledGridSize -= int(border * 2)
 			pixMap = QtGui.QPixmap.fromImage(self.image)
 			self.pixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio,
 										Qt.SmoothTransformation)
-		# if isSelected:
-		# 	painter.setPen(QtGui.QPen(Qt.black, 50, Qt.SolidLine))
-		# else:
-		# 	painter.setPen(QtGui.QPen(Qt.white, 50, Qt.SolidLine))
-		# painter.setBrush(QtGui.QBrush(Qt.white, Qt.SolidPattern))
-		# painter.drawRect(0, 0, scaledGridSize, scaledGridSize)
+		if isSelected:
+			painter.setPen(QtGui.QPen(Qt.black, border, Qt.SolidLine))
+		else:
+			painter.setPen(QtGui.QPen(Qt.white, border, Qt.SolidLine))
+		painter.setBrush(QtGui.QBrush(Qt.white, Qt.SolidPattern))
+		painter.drawRect(0, 0, self.scaledGridSize, self.scaledGridSize)
 		painter.drawPixmap(border, border, self.pixMap)
 		self.wasSelected = isSelected
 
