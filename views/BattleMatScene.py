@@ -41,6 +41,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self._imageLoaded = False
 		self._selectedColumn = 0
 		self._selectedRow = 0
+		self.selectedPogCanvas = None
 
 		self.splitter = splitter
 		self.pixelMap = QtGui.QPixmap()
@@ -103,6 +104,10 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 			self.checkForDataChanges()
 		elif eventData.eventReason == ReasonForAction.DungeonDataSaved:
 			self.checkForDataChanges()
+		elif eventData.eventReason == ReasonForAction.MouseDownEventBubble:
+			self.mousePressEvent(eventData.eventData)
+		elif eventData.eventReason == ReasonForAction.PogWasSelected:
+			self.newSelectedPog()
 
 	def checkForDataChanges(self):
 		dungeonManager = ServicesManager.getDungeonManager()
@@ -139,7 +144,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self._dungeonPicture = dungeonLevel.levelDrawing
 		imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(self._dungeonPicture)
 		self._imageLoaded = False
-		AsyncImage(imageUrl, self.imageWasLoaded, self.failedLoad).submit()
+		# AsyncImage(imageUrl, self.imageWasLoaded, self.failedLoad).submit()
 		pass
 
 	def imageWasLoaded(self, asynchReturn):
@@ -185,11 +190,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.updateNeededData()
 		self.newSelectedPog()
 
-	def deSelectPog(self):
-		if self._selectedPogCanvas is not None:
-			# selectedPogCanvas.getElement().getStyle().setBorderColor("grey");
-			self._selectedPogCanvas = None
-
 	def updateNeededData(self):
 		self.getGridData()
 		self.updatePogs(VersionedItem.SESSION_RESOURCE_PLAYERS,
@@ -218,8 +218,10 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		if not self._imageLoaded:
 			return
 		self.calculateDimensions()
-		if not self._showGrid:
-			return
+		# if not self._showGrid:
+		# 	return
+		painter.begin()
+		painter.setPen(QtGui.QColor(255, 0, 0))
 		line = QtCore.QLineF(QtCore.QPointF(self._gridOffsetX, self._gridOffsetY),
 							QtCore.QPointF(self._imageWidth, self._gridOffsetY))
 		for _ in range(self._horizontalLines):
@@ -230,6 +232,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		for _ in range(self._verticalLines):
 			painter.drawLine(line)
 			line.translate(self._gridSpacing, 0)
+		painter.end()
 
 	def calculateDimensions(self):
 		self.getGridData()
@@ -307,12 +310,56 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		elif scalablePog.getPogData().pogType == Constants.POG_TYPE_PLAYER:
 			self._playerPogs.append(scalablePog)
 
-	def drawBackground(self, painter, rect):
-		self.drawGrid(painter)
-		pass
-
-	def drawForeground(self, painter, rect):
-		pass
-
 	def newSelectedPog(self):
+		self.deSelectPog()
+		pog = ServicesManager.getDungeonManager().getSelectedPog()
+		if pog is None:
+			return
+		found = self.findPogCanvas(pog)
+		if found is not None:
+			self.selectedPogCanvas = found
+			self.selectedPogCanvas.update()
+		pass
+
+	def deSelectPog(self):
+		if self._selectedPogCanvas is not None:
+			self._selectedPogCanvas.update()
+			self._selectedPogCanvas = None
+
+	def findPogCanvas(self, pogToFind):
+		for pog in self._playerPogs:
+			if pog.getPogData().isEqual(pogToFind):
+				return pog
+		for pog in self._monsterPogs:
+			if pog.getPogData().isEqual(pogToFind):
+				return pog
+		for pog in self._roomObjectPogs:
+			if pog.getPogData().isEqual(pogToFind):
+				return pog
+		return None
+
+	def drawBackground(self, painter, rect):
+		pass
+
+	def drawForeground(self, painter: QtGui.QPainter, rect: QtCore.QRectF) -> None:
+		pass
+	# def drawForeground(self, painter, rect):
+	# 	# self.drawGrid(painter)
+	# 	print('Draw foreground')
+	# 	verticalLines = int((rect.width() / 20) + 1)
+	# 	horizontalLines = int((rect.height() / 20) + 1)
+	# 	painter.setPen(QtGui.QColor(255, 0, 0))
+	# 	line = QtCore.QLineF(QtCore.QPointF(0, 0), QtCore.QPointF(rect.width(), 0))
+	# 	for _ in range(horizontalLines):
+	# 		painter.drawLine(line)
+	# 		line.translate(0, 20)
+	# 	line = QtCore.QLineF(QtCore.QPointF(0, 0),
+	# 						QtCore.QPointF(0, rect.height()))
+	# 	for _ in range(verticalLines):
+	# 		painter.drawLine(line)
+	# 		line.translate(20, 0)
+	# 	pass
+
+	def mousePressEvent(self, event):
+		super(BattleMatScene, self).mousePressEvent(event)
 		pass

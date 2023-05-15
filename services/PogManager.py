@@ -27,6 +27,9 @@ class PogManager:
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.PogWasSelected, None)
 		pass
 
+	def getSelectedPog(self):
+		return self.selectedPog
+
 	def setPogBeingDragged(self, pogData, fromRibbonBar):
 		pass
 

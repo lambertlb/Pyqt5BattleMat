@@ -11,7 +11,6 @@ from views.PopupMenu import PopupMenu
 
 
 class PogCanvas(QtWidgets.QGraphicsItem):
-
 	popup = None
 
 	def __init__(self, view):
@@ -29,6 +28,7 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		self.scaledGridSize = 0
 		self.gridSize = 0
 		self.fromRibbonBar = False
+		self.wasSelected = False
 		fl = self.flags()
 		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
 		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable
@@ -91,33 +91,49 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 	def paint(self, painter: QtGui.QPainter, *args):
 		if not self.imageLoaded:
 			return
+		selected = ServicesManager.getDungeonManager().getSelectedPog()
+		isSelected = selected is not None and selected.isEqual(self.pogData)
+		border = 0
+		# border = self.computePogBorderWidth()
 		scaledGridSize = self.getScaledGridSize()
-		if scaledGridSize != self.scaledGridSize:
+		if scaledGridSize != self.scaledGridSize or self.wasSelected != isSelected:
 			self.scaledGridSize = scaledGridSize
+			if selected:
+				self.scaledGridSize -= border
 			pixMap = QtGui.QPixmap.fromImage(self.image)
 			self.pixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio,
 										Qt.SmoothTransformation)
-		# painter.setPen(QtGui.QPen(Qt.black, 5, Qt.SolidLine))
-		painter.setBrush(QtGui.QBrush(Qt.white, Qt.SolidPattern))
-		painter.drawRect(0, 0, self.scaledGridSize, self.scaledGridSize)
-		painter.drawPixmap(0, 0, self.pixMap)
+		# if isSelected:
+		# 	painter.setPen(QtGui.QPen(Qt.black, 50, Qt.SolidLine))
+		# else:
+		# 	painter.setPen(QtGui.QPen(Qt.white, 50, Qt.SolidLine))
+		# painter.setBrush(QtGui.QBrush(Qt.white, Qt.SolidPattern))
+		# painter.drawRect(0, 0, scaledGridSize, scaledGridSize)
+		painter.drawPixmap(border, border, self.pixMap)
+		self.wasSelected = isSelected
+
+	def computePogBorderWidth(self):
+		zoom = self.view.getZoom()
+		pogBorderWidth = zoom * self.gridSize / 10
+		if pogBorderWidth < 5.0:
+			pogBorderWidth = 5.0
+		if pogBorderWidth * 2 > self.getScaledGridSize():
+			pogBorderWidth = 0
+		return int(pogBorderWidth)
 
 	def mousePressEvent(self, event):
-		# modifiers = QtWidgets.QApplication.keyboardModifiers()
-		# if ServicesManager.getDungeonManager().getFowToggle() or modifiers & QtCore.Qt.ShiftModifier:
-		# 	ServicesManager.getEventManager().fireEvent(ReasonForAction.MouseDownEventBubble, event)
-		# 	return
-		# if not ServicesManager.getDungeonManager().isDungeonMaster() and not ServicesManager.getDungeonManager().isEditMode and ServicesManager.getDungeonManager().isFowSet(self.pogData.column, self.pogData.row):
-		# 	ServicesManager.getEventManager().fireEvent(ReasonForAction.MouseDownEventBubble, event)
-		# 	return
-		# if not self.fromRibbonBar:
-		# 	ServicesManager.getDungeonManager().setSelectedPog(self.pogData)
-			# if event.button() == Qt.RightButton:
-			# 	if (popup != null) {
-			# 		popup.setPopupPosition(event.getClientX(), event.getClientY());
-			# 		popup.setPogData(pogData);
-			# 		popup.show();
-		pass
+		modifiers = QtWidgets.QApplication.keyboardModifiers()
+		dm = ServicesManager.getDungeonManager()
+		em = ServicesManager.getEventManager()
+		if dm.getFowToggle() or modifiers & QtCore.Qt.ShiftModifier:
+			em.fireEvent(ReasonForAction.MouseDownEventBubble, event)
+			return
+		if not dm.isDungeonMaster and not dm.editMode and dm.isFowSet(
+				self.pogData.column, self.pogData.row):
+			em.fireEvent(ReasonForAction.MouseDownEventBubble, event)
+			return
+		if not self.fromRibbonBar:
+			dm.setSelectedPog(self.pogData)
 
 	def contextMenuEvent(self, event):
 		if not self.fromRibbonBar:
@@ -131,12 +147,13 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		:return: None
 		"""
 		if QtCore.QLineF(QtCore.QPointF(event.screenPos()),
-				QtCore.QPointF(event.buttonDownScreenPos(Qt.LeftButton))).length() < QtWidgets.QApplication.startDragDistance():
+						QtCore.QPointF(event.buttonDownScreenPos(
+							Qt.LeftButton))).length() < QtWidgets.QApplication.startDragDistance():
 			return
 
 		pixMap = QtGui.QPixmap.fromImage(self.image)
 		dragPixMap = pixMap.scaled(self.scaledGridSize, self.scaledGridSize, Qt.KeepAspectRatio,
-									Qt.SmoothTransformation)
+								Qt.SmoothTransformation)
 		mapToDrag = QtGui.QPixmap(self.scaledGridSize, self.scaledGridSize)
 		canvas = QtGui.QPainter()
 		canvas.begin(mapToDrag)

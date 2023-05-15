@@ -475,6 +475,17 @@ class DungeonManager(PogManager):
 	def updateVersion(self, needsUpdating):
 		self.dataVersion.updateFrom(needsUpdating)
 
+	def getFowToggle(self):
+		return self.fowToggle
+
+	def isFowSet(self, columns, rows):
+		if self.editMode:
+			return False
+		sessionLevel = self.getCurrentSessionLevelData()
+		if sessionLevel is None:
+			return False
+		return sessionLevel.isFowSet(columns, rows)
+
 	def	addOrUpdatePog(self, pog):
 		pass
 
