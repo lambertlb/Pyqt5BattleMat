@@ -68,16 +68,15 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		proxy = None
 		if hasattr(src, 'proxy'):
 			proxy = src.proxy
+		pos = e.scenePos()
+		self.computeSelectedColumnAndRow(pos.x(), pos.y())
 		if proxy is not None:
-			pos = e.scenePos()
-			self.computeSelectedColumnAndRow(pos.x(), pos.y())
 			x = self.columnToPixel(self._selectedColumn)
 			y = self.rowToPixel(self._selectedRow)
 			pix = QtCore.QPointF(x, y)
 			proxy.setPos(pix)
-		# else:
-		# 	pos = e.scenePos()
-		# self.addButtonToScene(pos.x(), pos.y())
+		else:
+			pos = e.scenePos()
 
 	def dragMoveEvent(self, e):
 		e.acceptProposedAction()

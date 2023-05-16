@@ -23,7 +23,6 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		self.image = None
 		self.pogData = None
 		self.badURL = False
-		self.currentPictureUrl = None
 		self.imageLoaded = False
 		self.proxy = None
 		self.pixMap = None
@@ -53,30 +52,14 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		if pogData.pogNumber != 0:
 			self.setToolTip(str(pogData.pogNumber))
 		if pogData.pogImageUrl != '':
-			self.setPogImageUrl(pogData.pogImageUrl)
+			self.pogData.loafPogImage(self.successfulLoaded, self.failedLoad)
 
-	def setPogImageUrl(self, pogImageUrl):
-		self.currentPictureUrl = pogImageUrl
-		self.pogData.pogImageUrl = pogImageUrl
-		imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(pogImageUrl)
-		AsyncImage(imageUrl, self.successfulLoaded, self.failedLoad).submit()
-
-	def successfulLoaded(self, asynchReturn):
-		"""
-		Callback from background task when image loaded
-		:param asynchReturn: Image that was loaded
-		:return: None
-		"""
-		self.image = asynchReturn.data
-		self.imageLoaded = True
+	def successfulLoaded(self):
+		self.image = self.pogData.image
+		self.imageLoaded = self.image is not None
 		self.update()
 
 	def failedLoad(self, asynchReturn):
-		"""
-		Image loading failed
-		:param asynchReturn: return data from task
-		:return: None
-		"""
 		pass
 
 	def setGridSize(self, size):

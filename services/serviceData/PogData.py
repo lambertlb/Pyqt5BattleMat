@@ -1,9 +1,15 @@
 """
 GPL 3 file header
 """
+from functools import partial
+
+from services.AsyncTasks import AsyncImage
+from services.ServicesManager import ServicesManager
 
 
 class PogData:
+
+	images = dict()
 
 	def __init__(self):
 		self.pogName = None
@@ -20,6 +26,10 @@ class PogData:
 		self.dmNotes = None
 		self.pogNumber = 0
 		self.pogPlace = 0
+
+	@property
+	def image(self):
+		return PogData.images[self.pogImageUrl]
 
 	def isEqual(self, toCompare):
 		if toCompare is None:
@@ -72,3 +82,18 @@ class PogData:
 
 	def setPogNumber(self, pogNumber):
 		self.pogNumber = pogNumber
+
+	def loafPogImage(self, onSuccess, onFailure):
+		imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(self.pogImageUrl)
+		if self.pogImageUrl in PogData.images:
+			onSuccess()
+			return
+		AsyncImage(imageUrl, partial(self.successfulLoaded, onSuccess), partial(self.failedLoad, onFailure)).submit()
+
+	def successfulLoaded(self, onSuccess, asynchReturn):
+		PogData.images[self.pogImageUrl] = asynchReturn.data
+		onSuccess()
+
+	def failedLoad(self, onFailure, asynchReturn):
+		onFailure()
+		pass
