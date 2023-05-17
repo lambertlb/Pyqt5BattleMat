@@ -527,12 +527,29 @@ class DungeonManager(PogManager):
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.PogDataChanged, pog)
 		pass
 
+	def addOrUpdatePogToServer(self, pog, place):
+		request = RequestData(Constants.AddOrUpdatePog)
+		request.dungeonUUID = self.selectedDungeonUUID
+		if self.selectedSession is None:
+			request.sessionUUID = ''
+		else:
+			request.sessionUUID = self.selectedSessionUUID
+		request.currentLevel = self._currentLevelIndex
+		request.place = place.displayString
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulAddOrUpdatePog
+		dataResponse.onFailure = self.handleFailedAddOrUpdatePog
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, pog).submit()
+
+	def handleSuccessfulAddOrUpdatePog(self, dataRequestResponse):
+		pass
+
+	def handleFailedAddOrUpdatePog(self, dataRequestResponse):
+		pass
+
 	def deleteSelectedPog(self):
 		if not self.isDungeonMaster:
 			return
-
-	def addOrUpdatePogToServer(self, pog, place):
-		pass
 
 	def saveDungeonData(self):
 		pass
