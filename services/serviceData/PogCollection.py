@@ -18,8 +18,8 @@ class PogCollection:
 		self.loadEvent = loadEvent
 		self.pogPlace = pogPlace
 		self.pogList = None
-		self.loadEvent = None
-		self.pogPlace = None
+		self.loadEvent = loadEvent
+		self.pogPlace = pogPlace
 		self.pogMap = dict()
 
 	def setPogList(self, pogList):

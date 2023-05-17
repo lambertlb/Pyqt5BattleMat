@@ -27,7 +27,8 @@ class Constants:
 	UpdateFOWRequest = 'UPDATEFOW'
 	CreateNewSessionRequest = 'CREATENEWSESSION'
 	DeleteSessionRequest = 'DELETESESSION'
-	AddOrUpdatePog = 'ADDORUPDATEPOG'
+	AddOrUpdatePogRequest = 'ADDORUPDATEPOG'
+	DeletePogRequest = 'DELETEPOG'
 
 # pog types
 	POG_TYPE_MONSTER = 'MONSTER'

@@ -31,3 +31,6 @@ class PogPlace(Flag, metaclass=PogPlaceEnumMeta):
 	SESSION_LEVEL = auto(), 'Session Level'
 	SESSION_RESOURCE = auto(), 'Player Location'
 	COMMON_RESOURCE = auto(), 'Common Resource'
+
+	def _get_value(self, **kwargs):
+		return self.value

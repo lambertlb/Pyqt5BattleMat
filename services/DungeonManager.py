@@ -1,7 +1,9 @@
 """
 GPL 3 file header
 """
+import copy
 import json
+from functools import partial
 
 from services.AsyncTasks import AsyncJsonData
 from services.Constants import Constants
@@ -528,7 +530,7 @@ class DungeonManager(PogManager):
 		pass
 
 	def addOrUpdatePogToServer(self, pog, place):
-		request = RequestData(Constants.AddOrUpdatePog)
+		request = RequestData(Constants.AddOrUpdatePogRequest)
 		request.dungeonUUID = self.selectedDungeonUUID
 		if self.selectedSession is None:
 			request.sessionUUID = ''
@@ -537,19 +539,56 @@ class DungeonManager(PogManager):
 		request.currentLevel = self._currentLevelIndex
 		request.place = place.displayString
 		dataResponse = DataRequesterResponse()
-		dataResponse.onSuccess = self.handleSuccessfulAddOrUpdatePog
+		dataResponse.onSuccess = partial(self.handleSuccessfulAddOrUpdatePog, pog)
 		dataResponse.onFailure = self.handleFailedAddOrUpdatePog
 		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, pog).submit()
 
-	def handleSuccessfulAddOrUpdatePog(self, dataRequestResponse):
-		pass
+	# noinspection PyUnusedLocal
+	def handleSuccessfulAddOrUpdatePog(self, pog,  dataRequestResponse):
+		if self.editMode:
+			ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionDataSaved, None)
+		else:
+			ServicesManager.getEventManager().fireEvent(ReasonForAction.PogDataChanged, pog)
 
 	def handleFailedAddOrUpdatePog(self, dataRequestResponse):
 		pass
 
 	def deleteSelectedPog(self):
-		if not self.isDungeonMaster:
+		if not self.isDungeonMaster or self.selectedPog is None:
 			return
+		place = self.computePlace(self.selectedPog)
+		request = RequestData(Constants.DeletePogRequest)
+		request.dungeonUUID = self.selectedDungeonUUID
+		if self.selectedSession is None:
+			request.sessionUUID = ''
+		else:
+			request.sessionUUID = self.selectedSessionUUID
+		request.currentLevel = self._currentLevelIndex
+		request.place = place.displayString
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulDeletePog
+		dataResponse.onFailure = self.handleFailedDeletePog
+		cpy = copy.deepcopy(self.selectedPog)
+		if hasattr(cpy, 'pogPlace'):
+			delattr(cpy, 'pogPlace')
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, cpy).submit()
+
+	# noinspection PyUnusedLocal
+	def handleSuccessfulDeletePog(self,  dataRequestResponse):
+		self.removeThisPog(self.selectedPog, self.selectedPog.pogPlace)
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionDataSaved, None)
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.PogDataChanged, None)
+		self.setSelectedPog(None)
+
+	def handleFailedDeletePog(self, dataRequestResponse):
+		pass
+
+	def removeThisPog(self, pog, place):
+		collection = self.getProperCollection(place, pog.pogType)
+		if collection is None:
+			return
+		collection.remove(pog)
+		self.updateDataVersion()
 
 	def saveDungeonData(self):
 		pass
