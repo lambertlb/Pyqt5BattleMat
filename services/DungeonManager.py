@@ -537,7 +537,7 @@ class DungeonManager(PogManager):
 		else:
 			request.sessionUUID = self.selectedSessionUUID
 		request.currentLevel = self._currentLevelIndex
-		request.place = place.displayString
+		request.place = PogPlace.displayName(place)
 		dataResponse = DataRequesterResponse()
 		dataResponse.onSuccess = partial(self.handleSuccessfulAddOrUpdatePog, pog)
 		dataResponse.onFailure = self.handleFailedAddOrUpdatePog
@@ -564,14 +564,11 @@ class DungeonManager(PogManager):
 		else:
 			request.sessionUUID = self.selectedSessionUUID
 		request.currentLevel = self._currentLevelIndex
-		request.place = place.displayString
+		request.place = PogPlace.displayName(place)
 		dataResponse = DataRequesterResponse()
 		dataResponse.onSuccess = self.handleSuccessfulDeletePog
 		dataResponse.onFailure = self.handleFailedDeletePog
-		cpy = copy.deepcopy(self.selectedPog)
-		if hasattr(cpy, 'pogPlace'):
-			delattr(cpy, 'pogPlace')
-		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, cpy).submit()
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, self.selectedPog).submit()
 
 	# noinspection PyUnusedLocal
 	def handleSuccessfulDeletePog(self,  dataRequestResponse):
@@ -591,4 +588,20 @@ class DungeonManager(PogManager):
 		self.updateDataVersion()
 
 	def saveDungeonData(self):
+		if self.selectedDungeon is None:
+			return
+		request = RequestData(Constants.SaveJsonFileRequest)
+		request.dungeonUUID = self.selectedDungeonUUID
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulSaveDungeon
+		dataResponse.onFailure = self.handleFailedSaveDungeon
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, self.selectedDungeon).submit()
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	# noinspection PyUnusedLocal
+	def handleSuccessfulSaveDungeon(self,  dataRequestResponse):
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataSaved, None)
+
+	def handleFailedSaveDungeon(self, dataRequestResponse):
 		pass

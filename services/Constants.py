@@ -29,6 +29,7 @@ class Constants:
 	DeleteSessionRequest = 'DELETESESSION'
 	AddOrUpdatePogRequest = 'ADDORUPDATEPOG'
 	DeletePogRequest = 'DELETEPOG'
+	SaveJsonFileRequest = 'SAVEJSONFILE'
 
 # pog types
 	POG_TYPE_MONSTER = 'MONSTER'
