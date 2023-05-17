@@ -98,3 +98,10 @@ class PogCollection:
 
 	def getPogList(self):
 		return self.pogList.pogList
+
+	def addOrUpdatePogCollection(self, pog):
+		existing = self.findPog(pog.uuid)
+		if existing is None:
+			self.addPog(pog)
+		else:
+			self.pogList.update(pog, existing)

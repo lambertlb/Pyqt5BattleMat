@@ -86,7 +86,7 @@ class PogData:
 	def setPogNumber(self, pogNumber):
 		self.pogNumber = pogNumber
 
-	def loafPogImage(self, onSuccess, onFailure):
+	def loadPogImage(self, onSuccess, onFailure):
 		imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(self.pogImageUrl)
 		if self.pogImageUrl in PogData.images:
 			onSuccess()

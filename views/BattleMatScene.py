@@ -91,7 +91,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 	def updateDroppedItem(self, proxy):
 		proxy.pogData.setPogPosition(self._selectedColumn, self._selectedRow)
 		proxy.pogData.dungeonLevel = ServicesManager.getDungeonManager().currentLevelIndex
-		ServicesManager.getDungeonManager().addOrUpdatePog(proxy.pogData)
+		ServicesManager.getDungeonManager().addOrUpdatePogWithoutPlace(proxy.pogData)
 		ServicesManager.getDungeonManager().setSelectedPog(proxy.pogData)
 		pass
 

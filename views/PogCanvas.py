@@ -30,6 +30,7 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		self.gridSize = 0
 		self.fromRibbonBar = False
 		self.wasSelected = False
+		self.currentPictureUrl = None
 		fl = self.flags()
 		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
 		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable
@@ -45,14 +46,20 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 	def getPogData(self):
 		return self.pogData
 
+	def updatePogData(self, updateData):
+		if updateData.pogImageUrl != self.currentPictureUrl:
+			self.setupWithPogData(updateData)
+
 	def setupWithPogData(self, pogData):
 		self.pogData = pogData
 		self.badURL = False
 		self.imageLoaded = False
+		self.currentPictureUrl = pogData.pogImageUrl
+
 		if pogData.pogNumber != 0:
 			self.setToolTip(str(pogData.pogNumber))
 		if pogData.pogImageUrl != '':
-			self.pogData.loafPogImage(self.successfulLoaded, self.failedLoad)
+			self.pogData.loadPogImage(self.successfulLoaded, self.failedLoad)
 
 	def successfulLoaded(self):
 		self.image = self.pogData.image

@@ -486,12 +486,53 @@ class DungeonManager(PogManager):
 			return False
 		return sessionLevel.isFowSet(columns, rows)
 
-	def	addOrUpdatePog(self, pog):
+	# noinspection PyMethodMayBeStatic
+	def computePlace(self, pog):
+		return pog.pogPlace
+
+	def getProperCollection(self, fromWhere, typeOfPogs):
+		collection = None
+		if fromWhere == PogPlace.COMMON_RESOURCE:
+			if typeOfPogs == Constants.POG_TYPE_MONSTER:
+				collection = self.getMonsterCollection()
+			else:
+				collection = self.getRoomCollection()
+		elif fromWhere == PogPlace.SESSION_LEVEL:
+			if typeOfPogs == Constants.POG_TYPE_MONSTER:
+				collection = self.sessionLevelMonsters
+			else:
+				collection = self.sessionLevelRoomObjects
+		elif fromWhere == PogPlace.DUNGEON_LEVEL:
+			if typeOfPogs == Constants.POG_TYPE_MONSTER:
+				collection = self.dungeonLevelMonsters
+			else:
+				collection = self.dungeonLevelRoomObjects
+		elif fromWhere == PogPlace.SESSION_RESOURCE:
+			collection = self.sessionLevelPlayers
+		return collection
+
+	def addOrUpdatePogWithoutPlace(self, pog):
+		self.addOrUpdatePog(pog, self.computePlace(pog))
+		pass
+
+	def addOrUpdatePog(self, pog, place):
+		collection = self.getProperCollection(place, pog.pogType)
+		if collection is None:
+			return
+		collection.addOrUpdatePogCollection(pog)
+		self.addOrUpdatePogToServer(pog, place)
+		if pog.isEqual(self.getSelectedPog()):
+			self.selectedPog = pog
+		self.updateDataVersion()
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.PogDataChanged, pog)
 		pass
 
 	def deleteSelectedPog(self):
 		if not self.isDungeonMaster:
 			return
+
+	def addOrUpdatePogToServer(self, pog, place):
+		pass
 
 	def saveDungeonData(self):
 		pass

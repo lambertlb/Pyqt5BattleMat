@@ -38,3 +38,7 @@ class PogList:
 			if not pogInList.isEqual(pog):
 				self.pogList.append(pogInList)
 		self.listVersion = self.listVersion + 1
+
+	def addPog(self, pogToAdd):
+		self.pogList.append(pogToAdd)
+		self.listVersion += 1

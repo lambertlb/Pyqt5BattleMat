@@ -113,7 +113,7 @@ class RibbonBar(QtWidgets.QGridLayout):
 				return
 		self.selectedPog = selectedPog
 		if self.selectedPog is not None:
-			self.selectedPog.loafPogImage(self.successfulLoaded, self.failedLoad)
+			self.selectedPog.loadPogImage(self.successfulLoaded, self.failedLoad)
 		else:
 			self.scene.clear()
 		pass
