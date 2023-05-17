@@ -1,9 +1,12 @@
 """
 GPL 3 file header
 """
+import copy
+import uuid
 from functools import partial
 
 from services.AsyncTasks import AsyncImage
+from services.Constants import Constants
 from services.ServicesManager import ServicesManager
 
 
@@ -97,3 +100,15 @@ class PogData:
 	def failedLoad(self, onFailure, asynchReturn):
 		onFailure()
 		pass
+
+	def setPogPosition(self, column, row):
+		self.pogColumn = column
+		self.pogRow = row
+
+	def isThisAPlayer(self):
+		return self.pogType == Constants.POG_TYPE_PLAYER
+
+	def clone(self):
+		theClone = copy.deepcopy(self)
+		theClone.uuid = str(uuid.uuid4())
+		return theClone

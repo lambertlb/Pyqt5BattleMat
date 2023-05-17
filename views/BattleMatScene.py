@@ -8,6 +8,7 @@ from services.Constants import Constants
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 from services.serviceData.DataVersions import DataVersions
+from services.serviceData.PogPlace import PogPlace
 from services.serviceData.VersionedItem import VersionedItem
 from views.BattleMatCanvas import BattleMatCanvas
 from views.PogCanvas import PogCanvas
@@ -64,19 +65,59 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		:param e: event
 		:return:None
 		"""
+		pos = e.scenePos()
+		self.computeSelectedColumnAndRow(pos.x(), pos.y())
+		if not ServicesManager.getDungeonManager().isDungeonMaster:
+			if ServicesManager.getDungeonManager().isFowSet(self._selectedColumn, self._selectedRow):
+				return
 		src = e.source()
 		proxy = None
 		if hasattr(src, 'proxy'):
 			proxy = src.proxy
-		pos = e.scenePos()
-		self.computeSelectedColumnAndRow(pos.x(), pos.y())
 		if proxy is not None:
-			x = self.columnToPixel(self._selectedColumn)
-			y = self.rowToPixel(self._selectedRow)
-			pix = QtCore.QPointF(x, y)
-			proxy.setPos(pix)
+			self.movePogToNewSpot(proxy)
 		else:
-			pos = e.scenePos()
+			self.createPogCanvasForThisCell()
+
+	def movePogToNewSpot(self, proxy):
+		x = self.columnToPixel(self._selectedColumn)
+		y = self.rowToPixel(self._selectedRow)
+		pix = QtCore.QPointF(x, y)
+		proxy.setPos(pix)
+		self.removeItem(proxy)
+		self.addItem(proxy)  # make sure on top
+		self.updateDroppedItem(proxy)
+
+	def updateDroppedItem(self, proxy):
+		proxy.pogData.setPogPosition(self._selectedColumn, self._selectedRow)
+		proxy.pogData.dungeonLevel = ServicesManager.getDungeonManager().currentLevelIndex
+		ServicesManager.getDungeonManager().addOrUpdatePog(proxy.pogData)
+		ServicesManager.getDungeonManager().setSelectedPog(proxy.pogData)
+		pass
+
+	def createPogCanvasForThisCell(self):
+		pogBeingDragged = ServicesManager.getDungeonManager().getSelectedPog()
+		if pogBeingDragged is None:
+			return
+		if pogBeingDragged.isThisAPlayer():  # players can only be on once
+			existing = self.findPogCanvas(pogBeingDragged)
+			if existing is not None:
+				self.movePogToNewSpot(existing)
+				return
+		clone = self.addClonePogToCanvas(pogBeingDragged)
+		self.updateDroppedItem(clone)
+
+	def addClonePogToCanvas(self, pogData):
+		if pogData.isThisAPlayer():
+			clonePog = pogData
+		else:
+			clonePog = pogData.clone()
+			if ServicesManager.getDungeonManager().editMode:
+				clonePog.pogPlace = PogPlace.DUNGEON_LEVEL
+			else:
+				clonePog.pogPlace = PogPlace.SESSION_LEVEL
+		clonePog.setPogPosition(self._selectedColumn, self._selectedRow)
+		return self.addPogToCanvas(clonePog)
 
 	def dragMoveEvent(self, e):
 		e.acceptProposedAction()
@@ -278,7 +319,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self.addItem(pogCanvas)
 		where = self.computePogPosition(pogData)
 		pogCanvas.setPos(where)
-		# pogCanvas.setZValue(100)
+		return pogCanvas
 
 	def adjustedGridSize(self):
 		return self._gridSpacing * self.view.getZoom()

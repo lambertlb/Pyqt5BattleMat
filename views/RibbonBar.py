@@ -43,7 +43,6 @@ class MyPixmapItem(QtWidgets.QGraphicsPixmapItem):
 		drag.setMimeData(mime)
 		drag.setPixmap(mapToDrag)
 		drag.exec_()
-		self.setCursor(Qt.OpenHandCursor)
 
 
 class RibbonBar(QtWidgets.QGridLayout):
