@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
 		self.timer.start(1000)
 		self.loginDialog = LoginDialog()
 		self.loginDialog.show()
-		self.dungeonManagerDialog = DungeonManagerDialog()
+		self.dungeonManagerDialog = DungeonManagerDialog(False)
 		pass
 
 	def eventFired(self, eventData):

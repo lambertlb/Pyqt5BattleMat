@@ -27,8 +27,9 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 	selectedSessionUUID = None
 	sessionToCreate = None
 
-	def __init__(self, *args):
+	def __init__(self, needButtons, *args):
 		super(DungeonManagerDialog, self).__init__(*args)
+		self.needButtons = needButtons
 		self.setupUi(self)
 		self.setupEventHandling()
 
@@ -45,6 +46,11 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.newDungeonName.textChanged[str].connect(self.newDungeonNameText)
 		self.sessionList.currentIndexChanged.connect(self.sessionSelected)
 		self.newSessionName.textChanged[str].connect(self.newSessionNameText)
+		if not self.needButtons:
+			button = self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)
+			button.setEnabled(False)
+			button = self.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel)
+			button.setEnabled(False)
 		pass
 
 	def show(self):
