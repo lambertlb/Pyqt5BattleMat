@@ -32,6 +32,7 @@ class PogViewer(QtWidgets.QDialog):
 		self.selectedPog = ServicesManager.getDungeonManager().getSelectedPog()
 		if self.selectedPog is None or self.selectedPog.pogImageUrl is None:
 			return
+		self.setWindowTitle(self.selectedPog.pogName)
 		self.selectedPog.loadPogImage(self.successfulLoaded, self.failedLoad)
 		pass
 
