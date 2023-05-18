@@ -42,3 +42,7 @@ class PogList:
 	def addPog(self, pogToAdd):
 		self.pogList.append(pogToAdd)
 		self.listVersion += 1
+
+	def update(self, src, dst):
+		dst.fullUpdate(src)
+		self.listVersion = self.listVersion + 1

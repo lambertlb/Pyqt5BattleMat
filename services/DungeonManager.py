@@ -1,7 +1,6 @@
 """
 GPL 3 file header
 """
-import copy
 import json
 from functools import partial
 
@@ -58,6 +57,9 @@ class DungeonManager(PogManager):
 	@currentLevelIndex.setter
 	def currentLevelIndex(self, value):
 		self._currentLevelIndex = value
+		self.loadDungeonData()
+		self.loadSessionData()
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonSelectedLevelChanged, None)
 
 	# noinspection PyMethodMayBeStatic
 	def isValidLoginData(self, serverURL, username, password):
@@ -605,3 +607,17 @@ class DungeonManager(PogManager):
 
 	def handleFailedSaveDungeon(self, dataRequestResponse):
 		pass
+
+	def getDungeonLevelNames(self):
+		if self.selectedDungeon is None:
+			return []
+		levels = self.selectedDungeon.dungeonLevels
+		levelNames = []
+		for i in range(len(levels)):
+			levelNames.append(levels[i].levelName)
+		return levelNames
+
+	def findCharacterPog(self, uuid):
+		if self.selectedSession is None:
+			return None
+		return self.sessionLevelPlayers.findPog(uuid)

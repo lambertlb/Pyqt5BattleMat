@@ -112,3 +112,21 @@ class PogData:
 		theClone = copy.deepcopy(self)
 		theClone.uuid = str(uuid.uuid4())
 		return theClone
+
+	def fullUpdate(self, pogData):
+		self.updatePog(pogData)
+		self.playerFlags = pogData.playerFlags
+		self.dungeonMasterFlags = pogData.dungeonMasterFlags
+		self.pogName = pogData.pogName
+		self.pogImageUrl = pogData.pogImageUrl
+		self.pogType = pogData.pogType
+		self.pogSize = pogData.pogSize
+
+	def updatePog(self, withUpdates):
+		self.pogColumn = withUpdates.pogColumn
+		self.pogRow = withUpdates.pogRow
+		self.dungeonLevel = withUpdates.dungeonLevel
+		self.notes = withUpdates.notes
+		self.dmNotes = withUpdates.dmNotes
+		self.pogNumber = withUpdates.pogNumber
+		self.pogPlace = withUpdates.pogPlace

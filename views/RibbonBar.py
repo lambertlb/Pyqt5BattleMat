@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt
 
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
+from views.PogViewer import PogViewer
 
 
 class MyPixmapItem(QtWidgets.QGraphicsPixmapItem):
@@ -51,15 +52,19 @@ class RibbonBar(QtWidgets.QGridLayout):
 		super(RibbonBar, self).__init__(*args)
 		self.selectedPog = None
 		self.pogSize = 70
+		self.pogDialog = None
+
 		self.frame = frame
 		self.gridLayout_2 = self
 		self.selectPlayer_2 = QtWidgets.QComboBox(self.frame)
+		self.selectPlayer_2.activated[str].connect(self.onPlayerChanged)
 		self.gridLayout_2.addWidget(self.selectPlayer_2, 1, 1, 1, 1)
 		spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 		self.gridLayout_2.addItem(spacerItem, 1, 4, 1, 1)
 		self.toggleFOW_2 = QtWidgets.QCheckBox(self.frame)
 		self.gridLayout_2.addWidget(self.toggleFOW_2, 1, 3, 1, 1)
 		self.showSelectedPog_2 = QtWidgets.QCheckBox(self.frame)
+		self.showSelectedPog_2.stateChanged.connect(self.handleSelectedPog)
 		self.gridLayout_2.addWidget(self.showSelectedPog_2, 0, 2, 1, 1)
 		self.hideFOW_2 = QtWidgets.QCheckBox(self.frame)
 		self.gridLayout_2.addWidget(self.hideFOW_2, 0, 3, 1, 1)
@@ -72,7 +77,8 @@ class RibbonBar(QtWidgets.QGridLayout):
 		self.selectedPogArea_2.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 		self.gridLayout_2.addWidget(self.selectedPogArea_2, 0, 0, 2, 1)
 		self.selectDungeonLevel_2 = QtWidgets.QComboBox(self.frame)
-		self.selectDungeonLevel_2.setMinimumSize(QtCore.QSize(200, 0))
+		self.selectDungeonLevel_2.setMinimumSize(QtCore.QSize(400, 0))
+		self.selectDungeonLevel_2.activated[str].connect(self.onLevelChanged)
 		self.gridLayout_2.addWidget(self.selectDungeonLevel_2, 0, 1, 1, 1)
 		self.showPogNotes_2 = QtWidgets.QCheckBox(self.frame)
 		self.gridLayout_2.addWidget(self.showPogNotes_2, 1, 2, 1, 1)
@@ -88,25 +94,20 @@ class RibbonBar(QtWidgets.QGridLayout):
 		self.showPogNotes_2.setText(_translate("MainWindow", "Show Pog Notes"))
 
 	def eventFired(self, eventData):
-		if eventData.eventReason == ReasonForAction.PogDataChanged:
-			self.checkForDataChanges()
-		elif eventData.eventReason == ReasonForAction.DungeonDataReadyToEdit:
-			self.checkForDataChanges()
-		elif eventData.eventReason == ReasonForAction.DungeonDataReadyToJoin:
-			self.checkForDataChanges()
-		elif eventData.eventReason == ReasonForAction.SessionDataChanged:
-			self.checkForDataChanges()
-		elif eventData.eventReason == ReasonForAction.DungeonSelectedLevelChanged:
-			self.checkForDataChanges()
+		if eventData.eventReason == ReasonForAction.DMStateChange:
+			self.setupView()
+		elif eventData.eventReason == ReasonForAction.DungeonDataLoaded:
+			self.dungeonDataLoaded()
 		elif eventData.eventReason == ReasonForAction.DungeonDataSaved:
-			self.checkForDataChanges()
+			self.dungeonDataLoaded()
+		elif eventData.eventReason == ReasonForAction.SessionDataChanged:
+			self.characterPogsLoaded()
+		elif eventData.eventReason == ReasonForAction.DungeonDataReadyToJoin:
+			self.characterPogsLoaded()
 		elif eventData.eventReason == ReasonForAction.PogWasSelected:
-			self.newSelectedPog()
+			self.pogSelection()
 
-	def checkForDataChanges(self):
-		pass
-
-	def newSelectedPog(self):
+	def pogSelection(self):
 		selectedPog = ServicesManager.getDungeonManager().getSelectedPog()
 		if self.selectedPog is not None:
 			if self.selectedPog.isEqual(selectedPog):
@@ -131,3 +132,51 @@ class RibbonBar(QtWidgets.QGridLayout):
 
 	def failedLoad(self, asynchReturn):
 		pass
+
+	def setupView(self):
+		editMode = ServicesManager.getDungeonManager().editMode
+		isDM = ServicesManager.getDungeonManager().isDungeonMaster
+		self.selectPlayer_2.setVisible(not editMode)
+		self.toggleFOW_2.setVisible(not editMode and isDM)
+		self.hideFOW_2.setVisible(not editMode and isDM)
+		pass
+
+	def dungeonDataLoaded(self):
+		self.selectDungeonLevel_2.clear()
+		levelNames = ServicesManager.getDungeonManager().getDungeonLevelNames()
+		for levelName in levelNames:
+			self.selectDungeonLevel_2.addItem(levelName)
+		self.selectDungeonLevel_2.setCurrentIndex(ServicesManager.getDungeonManager().currentLevelIndex)
+		pass
+
+	def characterPogsLoaded(self):
+		self.selectPlayer_2.clear()
+		self.selectPlayer_2.addItem("Select Character Pog", "")
+		players = ServicesManager.getDungeonManager().getPlayersForCurrentSession()
+		if players is None:
+			return
+		for pogData in players:
+			self.selectPlayer_2.addItem(pogData.pogName, pogData.uuid)
+		pass
+
+	def onLevelChanged(self, text):
+		ServicesManager.getDungeonManager().currentLevelIndex = self.selectDungeonLevel_2.currentIndex()
+		pass
+
+	def onPlayerChanged(self, text):
+		uuid = self.selectPlayer_2.currentData()
+		if uuid is None or uuid == '':
+			return
+		characterPog = ServicesManager.getDungeonManager().findCharacterPog(uuid)
+		if characterPog is not None:
+			ServicesManager.getDungeonManager().setSelectedPog(characterPog)
+
+	def handleSelectedPog(self):
+		if self.pogDialog is None:
+			mainWindow = QtCore.QCoreApplication.instance().mainWindow
+			self.pogDialog = PogViewer(mainWindow)
+		if self.showSelectedPog_2.isChecked():
+			self.pogDialog.show()
+		else:
+			self.pogDialog.hide()
+
