@@ -18,6 +18,7 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.artAssetsTab)
 		self.gridLayout_3 = QtWidgets.QGridLayout()
 		self.downLoadAssetButton = QtWidgets.QPushButton(self.artAssetsTab)
+		self.downLoadAssetButton.clicked.connect(self.downloadAsset)
 		self.gridLayout_3.addWidget(self.downLoadAssetButton, 0, 0, 1, 1)
 		self.upLoadButton = QtWidgets.QPushButton(self.artAssetsTab)
 		self.gridLayout_3.addWidget(self.upLoadButton, 0, 2, 1, 1)
@@ -144,3 +145,10 @@ class ArtAssetsTab(QtWidgets.QWidget):
 			base = base + '/'
 		url = base + rtnName
 		return url
+
+	def downloadAsset(self):
+		selected = self.treeWidget.selectedItems()[0]
+		filename = selected.data(1, QtCore.Qt.EditRole)
+		folder = selected.parent().data(1, QtCore.Qt.EditRole)
+		ServicesManager.getDungeonManager().downloadFile(folder, filename)
+

@@ -192,3 +192,31 @@ class AsyncJsonData(AsynchBase):
 		:return: QImage
 		"""
 		return self.returnData.data
+
+
+class AsyncDownload(AsynchBase):
+	"""
+	Task to asynchronously load an image.
+	if the URL starts with http it assumes a web request
+	else if tries to load from file
+	"""
+	def __init__(self, url,  onSuccess, onFailure):
+		self.url = url
+		self.reply = None
+		super(AsyncDownload, self).__init__(onSuccess, onFailure, DataRequesterResponse())
+
+	def runTask(self):
+		"""
+			Runs in background thread to load image
+			:return: None
+			"""
+		self.reply = requests.get(self.url, allow_redirects=True)
+		if self.reply.status_code == 200:
+			self._returnData._data = self.reply.content
+
+	def hadError(self):
+		"""
+		Was there and error
+		:return: True is there was
+		"""
+		return self._returnData.hadError() or self._returnData.data is None
