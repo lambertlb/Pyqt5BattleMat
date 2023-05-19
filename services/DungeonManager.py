@@ -42,6 +42,7 @@ class DungeonManager(PogManager):
 		self.fowToggle = False
 		self.computedGridWidth = 1.0
 		self.fowDirty = False
+		self.assetURL = None
 
 		self.dungeonLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
 		self.dungeonLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
@@ -644,3 +645,6 @@ class DungeonManager(PogManager):
 	def handleFailedGetFileList(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure()
 		pass
+
+	def setAssetURL(self, assetURL):
+		self.assetURL = assetURL

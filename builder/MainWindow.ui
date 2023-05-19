@@ -119,7 +119,7 @@
          <widget class="QGraphicsView" name="dungeonPictureArea"/>
          <widget class="QTabWidget" name="assetManagementTabs">
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="artAssestsTab">
            <attribute name="title">
@@ -161,12 +161,9 @@
              </widget>
             </item>
             <item>
-             <widget class="QGraphicsView" name="graphicsView">
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
+             <widget class="QLineEdit" name="filePath">
+              <property name="readOnly">
+               <bool>false</bool>
               </property>
              </widget>
             </item>

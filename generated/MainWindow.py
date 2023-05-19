@@ -86,10 +86,10 @@ class Ui_MainWindow(object):
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.headerItem().setText(0, "1")
         self.verticalLayout_3.addWidget(self.treeWidget)
-        self.graphicsView = QtWidgets.QGraphicsView(self.artAssestsTab)
-        self.graphicsView.setMaximumSize(QtCore.QSize(50, 50))
-        self.graphicsView.setObjectName("graphicsView")
-        self.verticalLayout_3.addWidget(self.graphicsView)
+        self.filePath = QtWidgets.QLineEdit(self.artAssestsTab)
+        self.filePath.setReadOnly(False)
+        self.filePath.setObjectName("filePath")
+        self.verticalLayout_3.addWidget(self.filePath)
         self.assetManagementTabs.addTab(self.artAssestsTab, "")
         self.monsterEditorTab = QtWidgets.QWidget()
         self.monsterEditorTab.setObjectName("monsterEditorTab")
@@ -240,7 +240,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.assetManagementTabs.setCurrentIndex(2)
+        self.assetManagementTabs.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

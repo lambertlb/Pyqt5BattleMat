@@ -26,9 +26,9 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		self.verticalLayout_3.addLayout(self.gridLayout_3)
 		self.treeWidget = QtWidgets.QTreeWidget(self.artAssetsTab)
 		self.verticalLayout_3.addWidget(self.treeWidget)
-		self.graphicsView = QtWidgets.QGraphicsView(self.artAssetsTab)
-		self.graphicsView.setMaximumSize(QtCore.QSize(50, 50))
-		self.verticalLayout_3.addWidget(self.graphicsView)
+		self.filePath = QtWidgets.QLineEdit(self.artAssetsTab)
+		self.filePath.setReadOnly(False)
+		self.verticalLayout_3.addWidget(self.filePath)
 
 		self.localize()
 		self.treeWidget.setColumnCount(1)
@@ -39,6 +39,7 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		self.treeWidget.addTopLevelItem(self.monsterAssets)
 		self.roomAssets = QtWidgets.QTreeWidgetItem(['Global Room Assets'])
 		self.treeWidget.addTopLevelItem(self.roomAssets)
+		self.treeWidget.selectionModel().selectionChanged.connect(self.treeItemSelected)
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
 
@@ -56,6 +57,7 @@ class ArtAssetsTab(QtWidgets.QWidget):
 
 	def loadFiles(self):
 		self.disableButtons()
+		self.clearBranches()
 		dm = ServicesManager.getDungeonManager()
 		dm.getFileList(dm.getDirectoryForCurrentDungeon(), self.onSuccessGetFilelist, self.onFailedGetFilelist)
 		dm.getFileList(Constants.DungeonData + Constants.Monsters, self.onSuccessGetFilelist, self.onFailedGetFilelist)
@@ -81,14 +83,64 @@ class ArtAssetsTab(QtWidgets.QWidget):
 			itemToPopulate = self.monsterAssets
 		else:
 			itemToPopulate = self.roomAssets
-		for i in range(itemToPopulate.childCount()):
-			itemToPopulate.removeChild(itemToPopulate.child(0))
 		itemToPopulate.setData(1, QtCore.Qt.EditRole, filePath)
 		for fileName in fileNames:
 			treeItem = QtWidgets.QTreeWidgetItem([fileName])
 			itemToPopulate.addChild(treeItem)
 			treeItem.setData(1, QtCore.Qt.EditRole, fileName)
+
+	def clearBranches(self):
+		self.clearBranch(self.dungeonAssets)
+		self.clearBranch(self.monsterAssets)
+		self.clearBranch(self.roomAssets)
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	def clearBranch(self, branch):
+		for i in range(branch.childCount()):
+			branch.removeChild(branch.child(0))
 		pass
 
 	def disableButtons(self):
+		self.downLoadAssetButton.setDisabled(True)
+		self.upLoadButton.setDisabled(True)
+		self.deleteAssetButton.setDisabled(True)
 		pass
+
+	def treeItemSelected(self, *args):
+		selItem = self.treeWidget.selectedItems()[0]
+		data = selItem.data(1, QtCore.Qt.EditRole)
+		self.disableButtons()
+		if data is None:
+			return
+		if data.startswith("/"):
+			self.upLoadButton.setDisabled(False)
+			return
+		if data.endswith(".json"):
+			self.downLoadAssetButton.setDisabled(False)
+			self.upLoadButton.setDisabled(False)
+			return
+
+		self.deleteAssetButton.setDisabled(False)
+		self.downLoadAssetButton.setDisabled(False)
+		self.upLoadButton.setDisabled(False)
+		url = self.buildUrlToFilename(data)
+		self.filePath.setText(url)
+		ServicesManager.getDungeonManager().setAssetURL(url)
+		pass
+
+	def buildUrlToFilename(self, filename):
+		selected = self.treeWidget.selectedItems()[0]
+		if "/" not in filename:
+			selected = selected.parent()
+		i = filename.rfind('/')
+		if i == -1:
+			i = filename.rfind('\\')
+		rtnName = filename
+		if i != -1 and (i + 1) < len(filename):
+			rtnName = filename[0, i + 1]
+		base = selected.data(1, QtCore.Qt.EditRole)
+		if not base.endswith('/') and not base.endswith('\\'):
+			base = base + '/'
+		url = base + rtnName
+		return url
