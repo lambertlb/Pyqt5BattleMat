@@ -3,19 +3,17 @@ GPL 3 file header
 """
 from PyQt5 import QtWidgets, QtGui, QtCore
 
+from generated.ViewPog import Ui_PogDialog
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 
 
-class PogViewer(QtWidgets.QDialog):
+class PogViewer(QtWidgets.QDialog, Ui_PogDialog):
 	def __init__(self, *args):
 		super(PogViewer, self).__init__(*args)
 		self.selectedPog = None
 
-		self.resize(458, 522)
-		self.gridLayout = QtWidgets.QGridLayout(self)
-		self.graphicsView = QtWidgets.QGraphicsView(self)
-		self.gridLayout.addWidget(self.graphicsView, 0, 0, 1, 1)
+		self.setupUi(self)
 		self.scene = QtWidgets.QGraphicsScene()
 		self.graphicsView.setScene(self.scene)
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)

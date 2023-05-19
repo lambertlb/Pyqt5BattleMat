@@ -11,38 +11,29 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(458, 522)
-        self.gridLayout = QtWidgets.QGridLayout(Dialog)
+class Ui_PogDialog(object):
+    def setupUi(self, PogDialog):
+        PogDialog.setObjectName("PogDialog")
+        PogDialog.resize(458, 522)
+        self.gridLayout = QtWidgets.QGridLayout(PogDialog)
         self.gridLayout.setObjectName("gridLayout")
-        self.graphicsView = QtWidgets.QGraphicsView(Dialog)
+        self.graphicsView = QtWidgets.QGraphicsView(PogDialog)
         self.graphicsView.setObjectName("graphicsView")
         self.gridLayout.addWidget(self.graphicsView, 0, 0, 1, 1)
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
-        self.scene = QtWidgets.QGraphicsScene()
-        self.graphicsView.setScene(self.scene)
-        self.image = QtGui.QImage('../image/test.jpg')
-        pixMap = QtGui.QPixmap.fromImage(self.image)
-        scenePixMap = pixMap.scaled(Dialog.width(), Dialog.height(), QtCore.Qt.KeepAspectRatio,
-                                    QtCore.Qt.SmoothTransformation)
-        self.scene.addPixmap(scenePixMap)
-        self.graphicsView.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.graphicsView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.retranslateUi(PogDialog)
+        QtCore.QMetaObject.connectSlotsByName(PogDialog)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self, PogDialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        PogDialog.setWindowTitle(_translate("PogDialog", "Dialog"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
-    ui.setupUi(Dialog)
-    Dialog.show()
+    PogDialog = QtWidgets.QDialog()
+    ui = Ui_PogDialog()
+    ui.setupUi(PogDialog)
+    PogDialog.show()
     sys.exit(app.exec_())

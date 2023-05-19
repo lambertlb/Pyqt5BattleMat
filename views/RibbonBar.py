@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt
 
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
+from views.PogNotesView import PogNotesViewer
 from views.PogViewer import PogViewer
 
 
@@ -48,11 +49,12 @@ class MyPixmapItem(QtWidgets.QGraphicsPixmapItem):
 
 class RibbonBar(QtWidgets.QGridLayout):
 
-	def	__init__(self, frame, *args):
+	def __init__(self, frame, *args):
 		super(RibbonBar, self).__init__(*args)
 		self.selectedPog = None
 		self.pogSize = 70
 		self.pogDialog = None
+		self.pogNotesDialog = None
 
 		self.frame = frame
 		self.gridLayout_2 = self
@@ -81,6 +83,7 @@ class RibbonBar(QtWidgets.QGridLayout):
 		self.selectDungeonLevel_2.activated[str].connect(self.onLevelChanged)
 		self.gridLayout_2.addWidget(self.selectDungeonLevel_2, 0, 1, 1, 1)
 		self.showPogNotes_2 = QtWidgets.QCheckBox(self.frame)
+		self.showPogNotes_2.stateChanged.connect(self.handleSelectedPogNotes)
 		self.gridLayout_2.addWidget(self.showPogNotes_2, 1, 2, 1, 1)
 
 		self.localize()
@@ -180,3 +183,11 @@ class RibbonBar(QtWidgets.QGridLayout):
 		else:
 			self.pogDialog.hide()
 
+	def handleSelectedPogNotes(self):
+		if self.pogNotesDialog is None:
+			mainWindow = QtCore.QCoreApplication.instance().mainWindow
+			self.pogNotesDialog = PogNotesViewer(mainWindow)
+		if self.showPogNotes_2.isChecked():
+			self.pogNotesDialog.show()
+		else:
+			self.pogNotesDialog.hide()
