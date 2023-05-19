@@ -621,3 +621,26 @@ class DungeonManager(PogManager):
 		if self.selectedSession is None:
 			return None
 		return self.sessionLevelPlayers.findPog(uuid)
+
+	def getFileList(self, directory, onSuccess, onFailure):
+		if self.selectedDungeon is None:
+			return
+		request = RequestData(Constants.FileListerRequest)
+		request.folder = directory
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulGetFileList
+		dataResponse.onFailure = self.handleFailedGetFileList
+		dataResponse.userOnSuccess = onSuccess
+		dataResponse.userOnFailure = onFailure
+		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	# noinspection PyUnusedLocal
+	def handleSuccessfulGetFileList(self,  dataRequestResponse):
+		dataRequestResponse.userOnSuccess(dataRequestResponse.data.text)
+
+	# noinspection PyMethodMayBeStatic
+	def handleFailedGetFileList(self, dataRequestResponse):
+		dataRequestResponse.userOnFailure()
+		pass
