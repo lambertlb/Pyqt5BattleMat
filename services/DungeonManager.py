@@ -5,7 +5,7 @@ import json
 import os
 from functools import partial
 
-from services.AsyncTasks import AsyncJsonData, AsyncDownload, AsyncUpload
+from services.AsyncTasks import AsyncJsonData, AsyncDownload, AsyncUpload, AsyncCommand
 from services.Constants import Constants
 from services.PogManager import PogManager
 from services.ReasonForAction import ReasonForAction
@@ -687,5 +687,28 @@ class DungeonManager(PogManager):
 
 	# noinspection PyMethodMayBeStatic
 	def handleFailedGetUpload(self, dataRequestResponse):
+		dataRequestResponse.userOnFailure()
+		pass
+
+	def deleteFile(self, url, filename, onSuccess, onFailure):
+		request = RequestData(Constants.FileDeleteRequest)
+		serverPath = url + '/' + filename
+		request.path = serverPath
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulDeleteFile
+		dataResponse.onFailure = self.handleFailedDeleteFile
+		dataResponse.userOnSuccess = onSuccess
+		dataResponse.userOnFailure = onFailure
+		AsyncCommand(self.makeURL(Constants.ServicePath), request, dataResponse).submit()
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	# noinspection PyUnusedLocal
+	def handleSuccessfulDeleteFile(self,  dataRequestResponse):
+		dataRequestResponse.userOnSuccess()
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	def handleFailedDeleteFile(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure()
 		pass

@@ -26,6 +26,7 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		self.upLoadButton.clicked.connect(self.uploadAsset)
 		self.gridLayout_3.addWidget(self.upLoadButton, 0, 2, 1, 1)
 		self.deleteAssetButton = QtWidgets.QPushButton(self.artAssetsTab)
+		self.deleteAssetButton.clicked.connect(self.deleteAsset)
 		self.gridLayout_3.addWidget(self.deleteAssetButton, 0, 1, 1, 1)
 		self.verticalLayout_3.addLayout(self.gridLayout_3)
 		self.treeWidget = QtWidgets.QTreeWidget(self.artAssetsTab)
@@ -185,4 +186,13 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		pass
 
 	def onFailureUpload(self):
+		pass
+
+	def deleteAsset(self):
+		fileItem = self.treeWidget.selectedItems()[0]
+		filename = fileItem.data(1, QtCore.Qt.EditRole)
+		parentItem = fileItem.parent()
+		whereOnServer = parentItem.data(1, QtCore.Qt.EditRole)
+		ServicesManager.getDungeonManager().deleteFile(whereOnServer,
+													filename, self.onSuccessfulUpload, self.onFailureUpload)
 		pass
