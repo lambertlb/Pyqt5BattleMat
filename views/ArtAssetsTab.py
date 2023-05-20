@@ -47,7 +47,6 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		self.treeWidget.selectionModel().selectionChanged.connect(self.treeItemSelected)
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
-
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
 		self.downLoadAssetButton.setText(_translate("MainWindow", "Download Asset"))
@@ -78,10 +77,9 @@ class ArtAssetsTab(QtWidgets.QWidget):
 
 	def buildTreeOfAssets(self, fileList):
 		filePath = fileList['filePath']
-		if not 'fileNames' in fileList:
+		if 'fileNames' not in fileList:
 			return
 		fileNames = fileList['fileNames']
-		itemToPopulate = None
 		if 'dungeons' in filePath:
 			itemToPopulate = self.dungeonAssets
 		elif 'monsters' in filePath:
@@ -112,6 +110,7 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		self.deleteAssetButton.setDisabled(True)
 		pass
 
+	# noinspection PyUnusedLocal
 	def treeItemSelected(self, *args):
 		selItem = self.treeWidget.selectedItems()[0]
 		data = selItem.data(1, QtCore.Qt.EditRole)

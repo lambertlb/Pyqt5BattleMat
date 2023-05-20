@@ -1,7 +1,7 @@
 """
 GPL 3 file header
 """
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets
 from PyQt5.QtGui import QTransform
 
 

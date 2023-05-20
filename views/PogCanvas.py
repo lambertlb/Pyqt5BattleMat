@@ -4,7 +4,6 @@ GPL 3 file header
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
 
-from services.AsyncTasks import AsyncImage
 from services.DungeonMasterFlag import DungeonMasterFlag
 from services.PlayerFlags import PlayerFlag
 from services.ReasonForAction import ReasonForAction

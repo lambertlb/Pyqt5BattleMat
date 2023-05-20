@@ -32,4 +32,3 @@ class DungeonMasterFlag(Flag, metaclass=DungeonMasterEnumMeta):
 	SHIFT_RIGHT = auto(), 'Shifted to Right'
 	SHIFT_TOP = auto(), 'Shifted to Top'
 	DARK_BACKGROUND = auto(), 'Dark background in edit mode'
-

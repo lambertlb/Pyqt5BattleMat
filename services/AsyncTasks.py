@@ -25,7 +25,7 @@ asyncPool = None
 
 class AsynchBase(QRunnable):
 	"""
-	Class to allow long takes to run in thread pool
+	Class to allow long tasks to run in thread pool
 	"""
 
 	def __init__(self, onSuccess, onFailure, dataResponse):
@@ -188,17 +188,15 @@ class AsyncJsonData(AsynchBase):
 
 	def getJsonData(self):
 		"""
-		get the image
-		:return: QImage
+		get the Json return data
+		:return: json
 		"""
 		return self.returnData.data
 
 
 class AsyncDownload(AsynchBase):
 	"""
-	Task to asynchronously load an image.
-	if the URL starts with http it assumes a web request
-	else if tries to load from file
+	Task to asynchronously download a file.
 	"""
 	def __init__(self, url,  onSuccess, onFailure):
 		self.url = url
@@ -207,7 +205,7 @@ class AsyncDownload(AsynchBase):
 
 	def runTask(self):
 		"""
-			Runs in background thread to load image
+			Runs in background thread to load file data
 			:return: None
 			"""
 		self.reply = requests.get(self.url, allow_redirects=True)
@@ -224,9 +222,7 @@ class AsyncDownload(AsynchBase):
 
 class AsyncUpload(AsynchBase):
 	"""
-	Task to asynchronously load an image.
-	if the URL starts with http it assumes a web request
-	else if tries to load from file
+	Task to asynchronously upload an file.
 	"""
 	def __init__(self, url, filePath, requestData, dataResponse):
 		self.url = url
@@ -238,7 +234,7 @@ class AsyncUpload(AsynchBase):
 
 	def runTask(self):
 		"""
-			Runs in background thread to load image
+			Runs in background thread to upload file
 			:return: None
 			"""
 		data = open(self.filePath, "rb")
@@ -258,9 +254,7 @@ class AsyncUpload(AsynchBase):
 
 class AsyncCommand(AsynchBase):
 	"""
-	Task to asynchronously load an image.
-	if the URL starts with http it assumes a web request
-	else if tries to load from file
+	Task to asynchronously execute command on server.
 	"""
 	def __init__(self, url, requestData, dataResponse):
 		self.url = url
@@ -271,7 +265,7 @@ class AsyncCommand(AsynchBase):
 
 	def runTask(self):
 		"""
-			Runs in background thread to load image
+			Runs in background thread to execute command on server
 			:return: None
 			"""
 		headers = {'Content-type': 'binary', 'Accept': 'binary'}

@@ -2,7 +2,6 @@
 GPL 3 file header
 """
 import json
-import os
 from functools import partial
 
 from services.AsyncTasks import AsyncJsonData, AsyncDownload, AsyncUpload, AsyncCommand
@@ -651,7 +650,8 @@ class DungeonManager(PogManager):
 		self.assetURL = assetURL
 
 	def downloadFile(self, url, fileName, dstFolder):
-		AsyncDownload(self.makeURL(url + '/' + fileName), partial (self.handleSuccessfulDownload, fileName, dstFolder), self.handleFailedGetDownload).submit()
+		AsyncDownload(self.makeURL(url + '/' + fileName), partial(self.handleSuccessfulDownload,
+																fileName, dstFolder), self.handleFailedGetDownload).submit()
 		pass
 
 	# noinspection PyMethodMayBeStatic
@@ -663,7 +663,6 @@ class DungeonManager(PogManager):
 
 	# noinspection PyMethodMayBeStatic
 	def handleFailedGetDownload(self, dataRequestResponse):
-		dataRequestResponse.userOnFailure()
 		pass
 
 	def uploadFile(self, url, folder, filename, onSuccess, onFailure):

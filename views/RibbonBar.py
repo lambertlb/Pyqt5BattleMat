@@ -162,10 +162,12 @@ class RibbonBar(QtWidgets.QGridLayout):
 			self.selectPlayer_2.addItem(pogData.pogName, pogData.uuid)
 		pass
 
+	# noinspection PyUnusedLocal
 	def onLevelChanged(self, text):
 		ServicesManager.getDungeonManager().currentLevelIndex = self.selectDungeonLevel_2.currentIndex()
 		pass
 
+	# noinspection PyUnusedLocal
 	def onPlayerChanged(self, text):
 		uuid = self.selectPlayer_2.currentData()
 		if uuid is None or uuid == '':

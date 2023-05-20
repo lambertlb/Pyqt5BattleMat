@@ -47,10 +47,12 @@ class LoginDialog(QtWidgets.QDialog, Ui_Dialog):
 																			self.username.text(), self.password.text())
 		self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(disabled)
 
+	# noinspection PyUnusedLocal
 	def onSuccess(self, data):
 		self.done(0)
 		pass
 
+	# noinspection PyUnusedLocal
 	def onFailure(self, data):
 		self.failed.setVisible(True)
 		pass
