@@ -220,3 +220,37 @@ class AsyncDownload(AsynchBase):
 		:return: True is there was
 		"""
 		return self._returnData.hadError() or self._returnData.data is None
+
+
+class AsyncUpload(AsynchBase):
+	"""
+	Task to asynchronously load an image.
+	if the URL starts with http it assumes a web request
+	else if tries to load from file
+	"""
+	def __init__(self, url, filePath, requestData, dataResponse):
+		self.url = url
+		self.requestData = requestData
+		self._returnData = dataResponse
+		self.reply = None
+		self.filePath = filePath
+		super(AsyncUpload, self).__init__(dataResponse.onSuccess, dataResponse.onFailure, dataResponse)
+
+	def runTask(self):
+		"""
+			Runs in background thread to load image
+			:return: None
+			"""
+		data = open(self.filePath, "rb")
+		results = requests.post(self.url, files={"form_field_name": data}, params=self.requestData.__dict__)
+		if results.ok:
+			self.returnData.data = 'good'
+		else:
+			self.returnData.data = None
+
+	def hadError(self):
+		"""
+		Was there and error
+		:return: True is there was
+		"""
+		return self._returnData.hadError() or self._returnData.data is None

@@ -5,7 +5,7 @@ import json
 import os
 from functools import partial
 
-from services.AsyncTasks import AsyncJsonData, AsyncDownload
+from services.AsyncTasks import AsyncJsonData, AsyncDownload, AsyncUpload
 from services.Constants import Constants
 from services.PogManager import PogManager
 from services.ReasonForAction import ReasonForAction
@@ -650,19 +650,42 @@ class DungeonManager(PogManager):
 	def setAssetURL(self, assetURL):
 		self.assetURL = assetURL
 
-	def downloadFile(self, url, fileName):
-		AsyncDownload(self.makeURL(url + '/' + fileName), partial (self.handleSuccessfulDownload, fileName), self.handleFailedGetDownload).submit()
+	def downloadFile(self, url, fileName, dstFolder):
+		AsyncDownload(self.makeURL(url + '/' + fileName), partial (self.handleSuccessfulDownload, fileName, dstFolder), self.handleFailedGetDownload).submit()
 		pass
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
-	def handleSuccessfulDownload(self, filename,  dataRequestResponse):
-		folder = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Downloads/')
-		filePath = folder + filename
+	def handleSuccessfulDownload(self, filename, dstFolder,  dataRequestResponse):
+		filePath = dstFolder + '/' + filename
 		open(filePath, 'wb').write(dataRequestResponse.data)
 		pass
 
 	# noinspection PyMethodMayBeStatic
 	def handleFailedGetDownload(self, dataRequestResponse):
+		dataRequestResponse.userOnFailure()
+		pass
+
+	def uploadFile(self, url, folder, filename, onSuccess, onFailure):
+		request = RequestData(Constants.FileUploadRequest)
+		serverPath = url + '/' + filename
+		request.filePath = serverPath
+		dataResponse = DataRequesterResponse()
+		dataResponse.onSuccess = self.handleSuccessfulUpload
+		dataResponse.onFailure = self.handleFailedGetUpload
+		dataResponse.userOnSuccess = onSuccess
+		dataResponse.userOnFailure = onFailure
+		filePath = folder + '/' + filename
+		AsyncUpload(self.makeURL(Constants.ServicePath), filePath, request, dataResponse).submit()
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	# noinspection PyUnusedLocal
+	def handleSuccessfulUpload(self,  dataRequestResponse):
+		dataRequestResponse.userOnSuccess()
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	def handleFailedGetUpload(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure()
 		pass

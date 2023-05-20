@@ -2,6 +2,8 @@
 GPL 3 file header
 """
 import json
+import os
+from os.path import expanduser
 
 from PyQt5 import QtWidgets, QtCore
 
@@ -21,6 +23,7 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		self.downLoadAssetButton.clicked.connect(self.downloadAsset)
 		self.gridLayout_3.addWidget(self.downLoadAssetButton, 0, 0, 1, 1)
 		self.upLoadButton = QtWidgets.QPushButton(self.artAssetsTab)
+		self.upLoadButton.clicked.connect(self.uploadAsset)
 		self.gridLayout_3.addWidget(self.upLoadButton, 0, 2, 1, 1)
 		self.deleteAssetButton = QtWidgets.QPushButton(self.artAssetsTab)
 		self.gridLayout_3.addWidget(self.deleteAssetButton, 0, 1, 1, 1)
@@ -150,5 +153,36 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		selected = self.treeWidget.selectedItems()[0]
 		filename = selected.data(1, QtCore.Qt.EditRole)
 		folder = selected.parent().data(1, QtCore.Qt.EditRole)
-		ServicesManager.getDungeonManager().downloadFile(folder, filename)
+		dstFolder = QtWidgets.QFileDialog.getExistingDirectory(
+			self,
+			"Open a folder",
+			expanduser("~"),
+			QtWidgets.QFileDialog.ShowDirsOnly
+		)
+		if not dstFolder:
+			return
+		ServicesManager.getDungeonManager().downloadFile(folder, filename, dstFolder)
 
+	def uploadAsset(self):
+		dialog = QtWidgets.QFileDialog(self)
+		dialog.setNameFilters(['All Files (*)'])
+		dialog.setDefaultSuffix('.jpg')
+		filePath, afilter = dialog.getOpenFileName(self, 'Open file')
+		if not filePath:
+			return
+		folder, filename = os.path.split(filePath)
+		selected = self.treeWidget.selectedItems()[0]
+		whereOnServer = selected.data(1, QtCore.Qt.EditRole)
+		if "/" not in whereOnServer:
+			selected = selected.parent()
+		whereOnServer = selected.data(1, QtCore.Qt.EditRole)
+		ServicesManager.getDungeonManager().uploadFile(whereOnServer,
+													folder, filename, self.onSuccessfulUpload, self.onFailureUpload)
+		pass
+
+	def onSuccessfulUpload(self):
+		self.loadFiles()
+		pass
+
+	def onFailureUpload(self):
+		pass

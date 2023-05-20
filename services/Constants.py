@@ -31,6 +31,7 @@ class Constants:
 	DeletePogRequest = 'DELETEPOG'
 	SaveJsonFileRequest = 'SAVEJSONFILE'
 	FileListerRequest = 'FILELISTER'
+	FileUploadRequest = 'FILEUPLOAD'
 
 # pog types
 	POG_TYPE_MONSTER = 'MONSTER'
