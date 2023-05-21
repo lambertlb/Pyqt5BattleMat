@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
 		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.artAssetsTab),
 											_translate("MainWindow", "Art Assets"))
 		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.monsterEditorTab),
-											_translate("MainWindow", "Monster Editor"))
+											_translate("MainWindow", "Dungeon Editor"))
 		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.pogEditorTab),
 											_translate("MainWindow", "Pog Editor"))
 

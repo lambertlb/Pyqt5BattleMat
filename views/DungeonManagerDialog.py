@@ -48,9 +48,9 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.newSessionName.textChanged[str].connect(self.newSessionNameText)
 		if not self.needButtons:
 			button = self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)
-			button.setEnabled(False)
+			button.setVisible(False)
 			button = self.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel)
-			button.setEnabled(False)
+			button.setVisible(False)
 		pass
 
 	def show(self):

@@ -255,11 +255,13 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 
 	def drawGrid(self, painter):
 		if not self._imageLoaded:
+				return
+		if ServicesManager.getDungeonManager().selectedDungeon is None:
 			return
 		self.calculateDimensions()
-		# if not self._showGrid:
-		# 	return
-		painter.setPen(QtGui.QColor(255, 0, 0))
+		if not self._showGrid:
+			return
+		painter.setPen(QtGui.QColor(174, 173, 172))
 		line = QtCore.QLineF(QtCore.QPointF(self._gridOffsetX, self._gridOffsetY),
 							QtCore.QPointF(self._imageWidth, self._gridOffsetY))
 		for _ in range(self._horizontalLines):

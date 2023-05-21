@@ -231,10 +231,12 @@ class DungeonManager(PogManager):
 											self.dungeonLevelRoomObjects.getPogListVersion())
 		sessionLevelData = self.getCurrentSessionLevelData()
 		if sessionLevelData is not None:
-			self.dataVersion.setItemVersion(VersionedItem.SESSION_LEVEL_MONSTERS, self.sessionLevelMonsters.getPogListVersion())
+			self.dataVersion.setItemVersion(VersionedItem.SESSION_LEVEL_MONSTERS,
+											self.sessionLevelMonsters.getPogListVersion())
 			self.dataVersion.setItemVersion(VersionedItem.SESSION_LEVEL_ROOMOBJECTS,
 											self.sessionLevelRoomObjects.getPogListVersion())
-			self.dataVersion.setItemVersion(VersionedItem.SESSION_RESOURCE_PLAYERS, self.sessionLevelPlayers.getPogListVersion())
+			self.dataVersion.setItemVersion(VersionedItem.SESSION_RESOURCE_PLAYERS,
+											self.sessionLevelPlayers.getPogListVersion())
 			self.dataVersion.setItemVersion(VersionedItem.FOG_OF_WAR, sessionLevelData.fogOfWarVersion)
 
 	def getCurrentDungeonLevelData(self):
@@ -390,7 +392,7 @@ class DungeonManager(PogManager):
 				return True
 		return False
 
-	def createNewSession(self, dungeonUUID,  newSessionName):
+	def createNewSession(self, dungeonUUID, newSessionName):
 		request = RequestData(Constants.CreateNewSessionRequest)
 		request.dungeonUUID = dungeonUUID
 		request.newSessionName = newSessionName
@@ -547,7 +549,7 @@ class DungeonManager(PogManager):
 		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, pog).submit()
 
 	# noinspection PyUnusedLocal
-	def handleSuccessfulAddOrUpdatePog(self, pog,  dataRequestResponse):
+	def handleSuccessfulAddOrUpdatePog(self, pog, dataRequestResponse):
 		if self.editMode:
 			ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionDataSaved, None)
 		else:
@@ -574,7 +576,7 @@ class DungeonManager(PogManager):
 		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, self.selectedPog).submit()
 
 	# noinspection PyUnusedLocal
-	def handleSuccessfulDeletePog(self,  dataRequestResponse):
+	def handleSuccessfulDeletePog(self, dataRequestResponse):
 		self.removeThisPog(self.selectedPog, self.selectedPog.pogPlace)
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionDataSaved, None)
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.PogDataChanged, None)
@@ -603,7 +605,7 @@ class DungeonManager(PogManager):
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
-	def handleSuccessfulSaveDungeon(self,  dataRequestResponse):
+	def handleSuccessfulSaveDungeon(self, dataRequestResponse):
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataSaved, None)
 
 	def handleFailedSaveDungeon(self, dataRequestResponse):
@@ -638,7 +640,7 @@ class DungeonManager(PogManager):
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
-	def handleSuccessfulGetFileList(self,  dataRequestResponse):
+	def handleSuccessfulGetFileList(self, dataRequestResponse):
 		dataRequestResponse.userOnSuccess(dataRequestResponse.data.text)
 
 	# noinspection PyMethodMayBeStatic
@@ -651,12 +653,12 @@ class DungeonManager(PogManager):
 
 	def downloadFile(self, url, fileName, dstFolder):
 		AsyncDownload(self.makeURL(url + '/' + fileName), partial(self.handleSuccessfulDownload,
-																fileName, dstFolder), self.handleFailedGetDownload).submit()
+							fileName, dstFolder), self.handleFailedGetDownload).submit()
 		pass
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
-	def handleSuccessfulDownload(self, filename, dstFolder,  dataRequestResponse):
+	def handleSuccessfulDownload(self, filename, dstFolder, dataRequestResponse):
 		filePath = dstFolder + '/' + filename
 		open(filePath, 'wb').write(dataRequestResponse.data)
 		pass
@@ -680,7 +682,7 @@ class DungeonManager(PogManager):
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
-	def handleSuccessfulUpload(self,  dataRequestResponse):
+	def handleSuccessfulUpload(self, dataRequestResponse):
 		dataRequestResponse.userOnSuccess()
 		pass
 
@@ -703,11 +705,42 @@ class DungeonManager(PogManager):
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
-	def handleSuccessfulDeleteFile(self,  dataRequestResponse):
+	def handleSuccessfulDeleteFile(self, dataRequestResponse):
 		dataRequestResponse.userOnSuccess()
 		pass
 
 	# noinspection PyMethodMayBeStatic
 	def handleFailedDeleteFile(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure()
+		pass
+
+	# noinspection PyMethodMayBeStatic
+	def isLegalDungeonName(self, nameToCheck):
+		if not nameToCheck or len(nameToCheck) < 4:
+			return False
+		return True
+
+	# noinspection PyMethodMayBeStatic
+	def isValidPictureURL(self, url):
+		if not url:
+			return False
+		i = url.rfind('.')
+		if i > 0:
+			fileExtension = url[i + 1:]
+		else:
+			fileExtension = ''
+		valid = fileExtension == 'jpeg' or fileExtension == 'jpg' or \
+			fileExtension == 'png' or fileExtension == 'webp'
+		return valid
+
+	def getNextAvailableLevelNumber(self):
+		pass
+
+	def setIsDungeonGridVisible(self, visible):
+		pass
+
+	def addNewLevel(self, level):
+		pass
+
+	def setCurrentLevel(self, newIndex):
 		pass

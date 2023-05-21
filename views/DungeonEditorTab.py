@@ -3,14 +3,20 @@ GPL 3 file header
 """
 from PyQt5 import QtWidgets, QtCore
 
+from services.DungeonManager import DungeonManager
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
+from services.serviceData.DungeonLevel import DungeonLevel
 
 
 class DungeonEditorTab(QtWidgets.QWidget):
 
 	def __init__(self, *args):
 		super(DungeonEditorTab, self).__init__(*args)
+		self.isDirty = False
+		self.newLevel = False
+		self.currentLevel: DungeonLevel | None = None
+
 		self.monsterEditorTab = self
 		self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.monsterEditorTab)
 		self.gridLayout_5 = QtWidgets.QGridLayout()
@@ -58,8 +64,8 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.gridLayout_5.addWidget(self.graphicsView_2, 7, 0, 1, 4)
 		self.verticalLayout_4.addLayout(self.gridLayout_5)
 
-		self.setupEvents()
 		self.localize()
+		self.setupEvents()
 
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
@@ -76,14 +82,130 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.offsetYLabel.setText(_translate("MainWindow", "Offset Y"))
 		self.offsetYEdit.setText(_translate("MainWindow", "0"))
 		self.useSelectedPictureButton.setText(_translate("MainWindow", "Use Selected\n"
-"Picture Resource"))
+												"Picture Resource"))
 		self.saveButton.setText(_translate("MainWindow", "Save"))
 		self.cancelButton.setText(_translate("MainWindow", "Cancel"))
 
 	def setupEvents(self):
+		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 		self.manageDungeonsButton.clicked.connect(self.manageDungeons)
+		self.newLevelButton.clicked.connect(self.createNewLevel)
+		self.deleteLevelButton.clicked.connect(self.deleteLevel)
+		self.levelNameEdit.textChanged.connect(self.dataChanged)
+		self.selectedPictureEdit.textChanged.connect(self.dataChanged)
+		self.gridSizeEdit.textChanged.connect(self.dataChanged)
+		self.offsetXEdit.textChanged.connect(self.dataChanged)
+		self.offsetYEdit.textChanged.connect(self.dataChanged)
+		self.showGridCheckBox.clicked.connect(self.dataChanged)
+		self.cancelButton.clicked.connect(self.gatherData)
+		self.saveButton.clicked.connect(self.saveFormData)
+
 		pass
 
 	# noinspection PyMethodMayBeStatic
 	def manageDungeons(self):
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.LOGGED_IN, True)
+
+	def initialize(self):
+		self.newLevel = False
+		self.gridSizeEdit.setText(str(30))
+		self.offsetXEdit.setText(str(0.0))
+		self.offsetYEdit.setText(str(0.0))
+		self.levelNameEdit.setText("New Level")
+		self.selectedPictureEdit.setText("")
+		self.validateContent()
+
+	def eventFired(self, eventData):
+		if eventData.eventReason == ReasonForAction.DungeonDataLoaded:
+			self.gatherData()
+		elif eventData.eventReason == ReasonForAction.DungeonSelectedLevelChanged:
+			self.gatherData()
+
+	def gatherData(self):
+		self.currentLevel = ServicesManager.getDungeonManager().getCurrentDungeonLevelData()
+		if self.currentLevel is None:
+			return
+		self.addLevelDataToForm()
+		self.validateContent()
+		self.saveButton.setDisabled(True)
+		self.cancelButton.setDisabled(True)
+		self.isDirty = False
+
+	def addLevelDataToForm(self):
+		self.showGridCheckBox.setChecked(ServicesManager.getDungeonManager().isDungeonGridVisible())
+		self.gridSizeEdit.setText(str(self.currentLevel.gridSize))
+		self.offsetXEdit.setText(str(self.currentLevel.gridOffsetX))
+		self.offsetYEdit.setText(str(self.currentLevel.gridOffsetY))
+		self.levelNameEdit.setText(self.currentLevel.levelName)
+		self.selectedPictureEdit.setText(self.currentLevel.levelDrawing)
+
+	def dataChanged(self):
+		self.isDirty = True
+		self.validateContent()
+
+	def validateContent(self):
+		isOK = True
+		numberCheck = 0.0
+		dm: DungeonManager = ServicesManager.getDungeonManager()
+		if not dm.isLegalDungeonName(self.levelNameEdit.text()):
+			isOK = False
+			self.levelNameLabel.setStyleSheet('color: red')
+		else:
+			self.levelNameLabel.setStyleSheet('color: black')
+		if not dm.isValidPictureURL(self.selectedPictureEdit.text()):
+			isOK = False
+			self.selectedPictureEdit.setStyleSheet('color: red')
+		else:
+			self.selectedPictureEdit.setStyleSheet('color: black')
+			self.drawPicture()
+		isOK = self.checkNumberFromControl(self.gridSizeEdit, 4.0, isOK)
+		isOK = self.checkNumberFromControl(self.offsetXEdit, 0, isOK)
+		isOK = self.checkNumberFromControl(self.offsetYEdit, 0, isOK)
+		self.saveButton.setDisabled(not isOK or not self.isDirty)
+		self.cancelButton.setDisabled(not self.isDirty)
+
+	# noinspection PyMethodMayBeStatic
+	def checkNumberFromControl(self, control, lowerRange, isOK):
+		returnIsOK = isOK
+		try:
+			numberCheck = float(control.text())
+			if numberCheck < lowerRange:
+				returnIsOK = False
+				control.setStyleSheet('color: red')
+			else:
+				control.setStyleSheet('color: black')
+		except (Exception,):
+			returnIsOK = False
+			control.setStyleSheet('color: red')
+		return returnIsOK
+
+	def saveFormData(self):
+		dm: DungeonManager = ServicesManager.getDungeonManager()
+		levelData: DungeonLevel = dm.getCurrentDungeonLevelData()
+		if levelData is None:
+			return
+		nextAvailableLevelIndex = dm.getNextAvailableLevelNumber()
+		dm.setIsDungeonGridVisible(self.showGridCheckBox.isChecked())
+		self.currentLevel.gridSize = float(self.gridSizeEdit.text())
+		self.currentLevel.gridOffsetX = float(self.offsetXEdit.text())
+		self.currentLevel.gridOffsetY = float(self.offsetYEdit.text())
+		self.currentLevel.levelName = self.levelNameEdit.text()
+		self.currentLevel.levelDrawing = self.selectedPictureEdit.text()
+		if self.newLevel:
+			dm.addNewLevel(self.currentLevel)
+		dm.saveDungeonData()
+		if self.newLevel:
+			dm.setCurrentLevel(nextAvailableLevelIndex)
+		self.newLevel = False
+		self.isDirty = False
+		self.validateContent()
+
+	def drawPicture(self):
+		pass
+
+	def createNewLevel(self):
+		self.initialize()
+		pass
+
+	def deleteLevel(self):
+		pass
