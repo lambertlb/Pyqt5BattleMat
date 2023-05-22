@@ -1,8 +1,10 @@
 """
 GPL 3 file header
 """
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtGui import QTransform
+
+from services.ServicesManager import ServicesManager
 
 
 class BattleMatCanvas(QtWidgets.QGraphicsView):
@@ -14,10 +16,9 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 		super(BattleMatCanvas, self).__init__(scene, parent)
 		self.zoom = 1
 		self.scene = scene
-		# self.setOptimizationFlags(QtWidgets.QGraphicsView.OptimizationFlags.)
-		pass
-
-		# self.setAcceptDrops(True)
+		self.changeRubberBand = False
+		self.origin = QtCore.QPoint()
+		self.rubberBand = QtWidgets.QRubberBand(QtWidgets.QRubberBand.Rectangle, self)
 
 	def wheelEvent(self, event):
 		delta = event.angleDelta().y() / 120
@@ -43,3 +44,37 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 
 	def resizeEvent(self, event):
 		self.scene.computeInitialZoom()
+
+	def mousePressEvent(self, event):
+		modifierPressed = QtWidgets.QApplication.keyboardModifiers()
+		self.origin = event.pos()
+		if (modifierPressed & QtCore.Qt.ControlModifier) == QtCore.Qt.ControlModifier:
+			self.rubberBand.setGeometry(QtCore.QRect(self.origin, QtCore.QSize()))
+			self.rubberBand.show()
+			self.changeRubberBand = True
+		QtWidgets.QGraphicsView.mousePressEvent(self, event)
+		pass
+
+	def mouseMoveEvent(self, event):
+		if self.changeRubberBand:
+			self.rubberBand.setGeometry(QtCore.QRect(self.origin, event.pos()).normalized())
+		else:
+			QtWidgets.QGraphicsView.mouseMoveEvent(self, event)
+		pass
+
+	def mouseReleaseEvent(self, event):
+		if self.changeRubberBand:
+			rect = self.rubberBand.geometry()
+			if ServicesManager.getDungeonManager().editMode:
+				sw = rect.width() / self.zoom
+				sh = rect.height() / self.zoom
+				gridWidth = (sw + sh) / 2
+				ServicesManager.getDungeonManager().computedGridWidth = gridWidth
+			else:
+				self.handleFOWSelection(rect)
+			self.changeRubberBand = False
+			self.rubberBand.hide()
+		QtWidgets.QGraphicsView.mouseReleaseEvent(self, event)
+
+	def handleFOWSelection(self, rect):
+		pass

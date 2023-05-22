@@ -9,10 +9,10 @@ class DungeonSessionLevel:
 	def __init__(self):
 		self.fogOfWarVersion = 0
 		self.fogOfWar = None  # deprecated used to support old format
-		self.fogOfWarData = None
+		self.fogOfWarData = []
 		self.bitsPerColumn = 0
-		self.monsters = None
-		self.roomObjects = None
+		self.monsters = PogList()
+		self.roomObjects = PogList()
 
 	def construct(self):
 		dl = DungeonSessionLevel()

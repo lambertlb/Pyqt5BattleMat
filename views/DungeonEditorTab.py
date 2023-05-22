@@ -1,8 +1,9 @@
 """
 GPL 3 file header
 """
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 
+from services.AsyncTasks import AsyncImage
 from services.DungeonManager import DungeonManager
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
@@ -16,6 +17,9 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.isDirty = False
 		self.newLevel = False
 		self.currentLevel: DungeonLevel | None = None
+		self.imageLoaded = False
+		self.lastImageUrl = ''
+		self.image = None
 
 		self.monsterEditorTab = self
 		self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.monsterEditorTab)
@@ -60,9 +64,12 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.cancelButton = QtWidgets.QPushButton(self.monsterEditorTab)
 		self.horizontalLayout_4.addWidget(self.cancelButton)
 		self.gridLayout_5.addLayout(self.horizontalLayout_4, 6, 0, 1, 3)
-		self.graphicsView_2 = QtWidgets.QGraphicsView(self.monsterEditorTab)
+		self.scene = QtWidgets.QGraphicsScene(self.monsterEditorTab)
+		self.graphicsView_2 = QtWidgets.QGraphicsView(self.scene)
 		self.gridLayout_5.addWidget(self.graphicsView_2, 7, 0, 1, 4)
 		self.verticalLayout_4.addLayout(self.gridLayout_5)
+		self.graphicsView_2.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+		self.graphicsView_2.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
 		self.localize()
 		self.setupEvents()
@@ -99,8 +106,8 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.showGridCheckBox.clicked.connect(self.dataChanged)
 		self.cancelButton.clicked.connect(self.gatherData)
 		self.saveButton.clicked.connect(self.saveFormData)
-
-		pass
+		self.useSelectedPictureButton.clicked.connect(self.copyResourceURL)
+		self.gridSizeButton.clicked.connect(self.copyGridSize)
 
 	# noinspection PyMethodMayBeStatic
 	def manageDungeons(self):
@@ -145,7 +152,6 @@ class DungeonEditorTab(QtWidgets.QWidget):
 
 	def validateContent(self):
 		isOK = True
-		numberCheck = 0.0
 		dm: DungeonManager = ServicesManager.getDungeonManager()
 		if not dm.isLegalDungeonName(self.levelNameEdit.text()):
 			isOK = False
@@ -200,12 +206,60 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.isDirty = False
 		self.validateContent()
 
+	def copyResourceURL(self):
+		url = ServicesManager.getDungeonManager().assetURL
+		if ServicesManager.getDungeonManager().isValidPictureURL(url):
+			self.selectedPictureEdit.setText(url)
+		pass
+
 	def drawPicture(self):
+		self.imageLoaded = False
+		url = self.selectedPictureEdit.text()
+		fullUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(url)
+		if self.lastImageUrl != fullUrl:
+			self.lastImageUrl = fullUrl
+			AsyncImage(fullUrl, self.onSuccessPictureLoaded, self.onFailurePictureLoaded).submit()
+
+	def onSuccessPictureLoaded(self, data):
+		self.imageLoaded = True
+		self.image = data.data
+		self.showThePicture()
+		pass
+
+	def showThePicture(self):
+		if not self.imageLoaded:
+			return
+		self.scene.clear()
+		gw = self.graphicsView_2.width()
+		gh = self.graphicsView_2.height()
+		pixMap = QtGui.QPixmap.fromImage(self.image)
+		scenePixMap = pixMap.scaled(gw, gh, QtCore.Qt.KeepAspectRatio,
+									QtCore.Qt.SmoothTransformation)
+		self.scene.addPixmap(scenePixMap)
+		self.scene.setSceneRect(0, 0, scenePixMap.width(), scenePixMap.height())
+
+	def onFailurePictureLoaded(self, *args):
+		pass
+
+	def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
+		self.showThePicture()
 		pass
 
 	def createNewLevel(self):
 		self.initialize()
-		pass
+		self.currentLevel = DungeonLevel()
+		self.addLevelDataToForm()
+		self.newLevel = True
+		self.validateContent()
 
+	# noinspection PyMethodMayBeStatic
 	def deleteLevel(self):
-		pass
+		dm: DungeonManager = ServicesManager.getDungeonManager()
+		dm.removeCurrentLevel()
+		dm.saveDungeonData()
+		dm.setCurrentLevel(0)
+
+	def copyGridSize(self):
+		self.gridSizeEdit.setText(str(ServicesManager.getDungeonManager().computedGridWidth))
+		self.isDirty = True
+		self.validateContent()

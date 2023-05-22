@@ -18,3 +18,4 @@ class AssetManagement(QtWidgets.QTabWidget):
 		_translate = QtCore.QCoreApplication.translate
 		self.setTabText(self.indexOf(self.tab), "Tab 1")
 		self.setTabText(self.indexOf(self.tab_2), "Tab 2")
+

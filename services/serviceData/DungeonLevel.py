@@ -8,8 +8,9 @@ from services.serviceData.DungeonSessionLevel import DungeonSessionLevel
 class DungeonLevel(DungeonSessionLevel):
 
 	def __init__(self):
-		self.levelDrawing = None
-		self.levelName = None
+		super(DungeonLevel, self).__init__()
+		self.levelDrawing = ''
+		self.levelName = ''
 		self.gridSize = 30
 		self.gridOffsetX = 0
 		self.gridOffsetY = 0

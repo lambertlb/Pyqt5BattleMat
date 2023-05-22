@@ -169,6 +169,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self._currentDungeonID = dungeonManager.selectedDungeonUUID
 		self._currentSessionID = dungeonManager.getCurrentSessionUUID()
 		self._currentLevel = dungeonManager.currentLevelIndex
+		self.update(0, 0, self.width(), self.height())
 
 	def intializeView(self):
 		self._dataVersionsHistory.initialize()

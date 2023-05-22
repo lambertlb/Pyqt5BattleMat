@@ -36,13 +36,13 @@ class DungeonManager(PogManager):
 		self.selectedDungeonUUID = None
 		self.selectedSessionUUID = None
 		self.editMode = False
-		self.selectedDungeon = None
+		self.selectedDungeon: DungeonData | None = None
 		self._currentLevelIndex = 0
-		self.selectedSession = None
+		self.selectedSession: DungeonSessionData | None = None
 		self.fowToggle = False
 		self.computedGridWidth = 1.0
 		self.fowDirty = False
-		self.assetURL = None
+		self.AssetURL = ''
 
 		self.dungeonLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
 		self.dungeonLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
@@ -734,13 +734,21 @@ class DungeonManager(PogManager):
 		return valid
 
 	def getNextAvailableLevelNumber(self):
-		pass
+		return len(self.selectedDungeon.dungeonLevels)
 
 	def setIsDungeonGridVisible(self, visible):
-		pass
-
-	def addNewLevel(self, level):
+		self.selectedDungeon.showGrid = visible
 		pass
 
 	def setCurrentLevel(self, newIndex):
-		pass
+		self.currentLevelIndex = newIndex
+		self.loadDungeonData()
+		self.loadSessionData()
+		self.computedGridWidth = self.getCurrentDungeonLevelData().gridSize
+		ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonSelectedLevelChanged, None)
+
+	def addNewLevel(self, level):
+		self.selectedDungeon.addDungeonLevel(level)
+
+	def removeCurrentLevel(self):
+		self.selectedDungeon.remove(self.currentLevelIndex)
