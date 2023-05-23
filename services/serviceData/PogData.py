@@ -71,16 +71,16 @@ class PogData:
 
 	@staticmethod
 	def _IsFlagSet(flags, flag):
-		return flags & flag.value != 0
+		return flags & flag != 0
 
 	@staticmethod
 	def _ClearFlag(flags, flag):
-		flags &= ~flag.value
+		flags &= ~flag
 		return flags
 
 	@staticmethod
 	def _SetFlag(flags, flag):
-		flags |= flag.value
+		flags |= flag
 		return flags
 
 	def setPogNumber(self, pogNumber):

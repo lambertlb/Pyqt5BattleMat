@@ -78,7 +78,7 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 
 	def getScaledGridSize(self):
 		zoom = self.view.getZoom()
-		scaledGridSize = int(zoom * self.gridSize)
+		scaledGridSize = int(zoom * (self.gridSize * self.pogData.pogSize))
 		return scaledGridSize
 
 	def paint(self, painter: QtGui.QPainter, *args):
@@ -86,6 +86,7 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 			return
 		invisibleToPlayer = self.pogData.isDmFlagSet(DungeonMasterFlag.INVISIBLE_FROM_PLAYER)
 		isDM = ServicesManager.getDungeonManager().isDungeonMaster
+		invisible = self.pogData.isPlayerFlagSet(PlayerFlag.INVISIBLE)
 		if not isDM and invisibleToPlayer:
 			return
 		inEdit = ServicesManager.getDungeonManager().editMode
@@ -99,7 +100,7 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 										Qt.SmoothTransformation)
 		darkInBackground = self.pogData.isDmFlagSet(DungeonMasterFlag.DARK_BACKGROUND)
 		transparent = self.pogData.isDmFlagSet(DungeonMasterFlag.TRANSPARENT_BACKGROUND)
-		if not inEdit and invisibleToPlayer:
+		if (not inEdit and invisibleToPlayer) or invisible:
 			painter.setOpacity(0.5)
 		else:
 			painter.setOpacity(1.0)

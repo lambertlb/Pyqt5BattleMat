@@ -8,13 +8,13 @@ class PogPlace:
 		0: 'Dungeon Level',
 		1: 'Session Level',
 		2: 'Player Location',
-		4: 'Common Resource'
+		3: 'Common Resource'
 	}
 
 	DUNGEON_LEVEL = 0
 	SESSION_LEVEL = 1
 	SESSION_RESOURCE = 2
-	COMMON_RESOURCE = 4
+	COMMON_RESOURCE = 3
 
 	@staticmethod
 	def displayName(value):

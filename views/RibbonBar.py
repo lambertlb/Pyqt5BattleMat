@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt
 
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
+from services.serviceData.PogData import PogData
 from views.PogNotesView import PogNotesViewer
 from views.PogViewer import PogViewer
 
@@ -51,10 +52,10 @@ class RibbonBar(QtWidgets.QGridLayout):
 
 	def __init__(self, frame, *args):
 		super(RibbonBar, self).__init__(*args)
-		self.selectedPog = None
+		self.selectedPog: PogData | None = None
 		self.pogSize = 70
 		self.pogDialog = None
-		self.pogNotesDialog = None
+		self.pogNotesDialog: PogNotesViewer | None = None
 
 		self.frame = frame
 		self.gridLayout_2 = self
@@ -111,7 +112,7 @@ class RibbonBar(QtWidgets.QGridLayout):
 			self.pogSelection()
 
 	def pogSelection(self):
-		selectedPog = ServicesManager.getDungeonManager().getSelectedPog()
+		selectedPog: PogData = ServicesManager.getDungeonManager().getSelectedPog()
 		if self.selectedPog is not None:
 			if self.selectedPog.isEqual(selectedPog):
 				return
@@ -120,7 +121,13 @@ class RibbonBar(QtWidgets.QGridLayout):
 			self.selectedPog.loadPogImage(self.successfulLoaded, self.failedLoad)
 		else:
 			self.scene.clear()
-		pass
+		if self.pogNotesDialog is not None:
+			if self.selectedPog is not None:
+				self.pogNotesDialog.setNotes(self.selectedPog.notes)
+				self.pogNotesDialog.setDmNotes(self.selectedPog.dmNotes)
+			else:
+				self.pogNotesDialog.setNotes('')
+				self.pogNotesDialog.setDmNotes('')
 
 	def successfulLoaded(self):
 		self.scene.clear()

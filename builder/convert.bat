@@ -3,4 +3,5 @@ python -m PyQt5.uic.pyuic -x dungeonManagerDialog.ui -o ../generated/dungeonMana
 python -m PyQt5.uic.pyuic -x MainWindow.ui -o ../generated/MainWindow.py
 python -m PyQt5.uic.pyuic -x ViewPog.ui -o ../generated/ViewPog.py
 python -m PyQt5.uic.pyuic -x ViewNotes.ui -o ../generated/ViewNotes.py
+python -m PyQt5.uic.pyuic -x FlagSelector.ui -o ../generated/FlagSelector.py
 python -m PyQt5.uic.pyuic -x test.ui -o ../generated/test.py

@@ -472,7 +472,7 @@ class DungeonManager(PogManager):
 		currentLevel = self._currentLevelIndex
 		playersOnLevel = list()
 		for player in self.sessionLevelPlayers.getPogList():
-			if player.getDungeonLevel() == currentLevel:
+			if player.dungeonLevel == currentLevel:
 				playersOnLevel.append(player)
 		return playersOnLevel
 
@@ -752,3 +752,7 @@ class DungeonManager(PogManager):
 
 	def removeCurrentLevel(self):
 		self.selectedDungeon.remove(self.currentLevelIndex)
+
+	def isValidNewMonsterName(self, monsterName):
+		isValid = not monsterName.startswith('Enter ') and len(monsterName) > 3
+		return isValid

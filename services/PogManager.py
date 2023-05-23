@@ -1,10 +1,13 @@
 """
 GPL 3 file header
 """
+import uuid
+
 from services.Constants import Constants
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 from services.serviceData.PogCollection import PogCollection
+from services.serviceData.PogData import PogData
 from services.serviceData.PogPlace import PogPlace
 
 
@@ -62,3 +65,15 @@ class PogManager:
 		if self.selectedPog is not None:
 			self.selectedPog.setPogNumber(newPogNumber)
 			ServicesManager.getDungeonManager().addOrUpdatePog(self.selectedPog)
+
+	# noinspection PyMethodMayBeStatic
+	def createTemplatePog(self, pogType):
+		pogData: PogData = PogData()
+		pogData.uuid = str(uuid.uuid4())
+		pogData.pogType = pogType
+		return pogData
+
+	# noinspection PyMethodMayBeStatic
+	def getPogSizes(self):
+		return ["Normal", "Large", "Huge", "Gargantuan"]
+
