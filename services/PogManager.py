@@ -41,7 +41,7 @@ class PogManager:
 		pass
 
 	def loadRoomObjectPogs(self):
-		self.monsterCollection.loadFromServer(self.makeURL(Constants.ServicePath), Constants.RoomObjects)
+		self.roomCollection.loadFromServer(self.makeURL(Constants.ServicePath), Constants.RoomObjects)
 		pass
 
 	def makeURL(self, additions):

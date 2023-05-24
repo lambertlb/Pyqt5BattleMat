@@ -359,7 +359,7 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		if found is not None:
 			self.selectedPogCanvas = found
 			self.selectedPogCanvas.update()
-		pass
+		self.update(0, 0, self.width(), self.height())
 
 	def deSelectPog(self):
 		if self._selectedPogCanvas is not None:

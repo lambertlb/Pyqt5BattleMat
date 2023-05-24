@@ -1,7 +1,6 @@
 """
 GPL 3 file header
 """
-import uuid
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
@@ -33,6 +32,8 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.addingData = False
 		self.imageLoading = False
 		self.pictureDrag = None
+		self.justDidSelection = False
+		self.previousSelected = None
 
 		self.pogEditorTab = self
 		self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.pogEditorTab)
@@ -87,6 +88,7 @@ class PogEditorTab(QtWidgets.QWidget):
 
 		self.localize()
 		self.setupEvents()
+		self.setupTree()
 
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
@@ -117,6 +119,8 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.deletePogButton.clicked.connect(self.deletePog)
 		self.createPogButton.clicked.connect(self.createPog)
 		self.savePogButton.clicked.connect(self.saveFormData)
+		self.treeWidget_2.expanded.connect(self.nodeExpanded)
+		self.treeWidget_2.selectionModel().selectionChanged.connect(self.treeItemSelected)
 
 	def eventFired(self, eventData):
 		if eventData.eventReason == ReasonForAction.DungeonDataLoaded:
@@ -127,6 +131,8 @@ class PogEditorTab(QtWidgets.QWidget):
 			self.selectPog()
 		elif eventData.eventReason == ReasonForAction.PogDataChanged:
 			self.pogDataChanged(eventData.eventData)
+		elif eventData.eventReason == ReasonForAction.DungeonSelectedLevelChanged:
+			self.fillTrees()
 
 	def dataChanged(self):
 		self.isDirty = True
@@ -137,6 +143,7 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.fillPogPlaceList()
 		self.fillPogTypeList()
 		self.selectPog()
+		self.fillTrees()
 
 	def fillInSizes(self):
 		self.pogSizeComboBox.clear()
@@ -172,8 +179,9 @@ class PogEditorTab(QtWidgets.QWidget):
 			self.createPog()
 			return
 		self.pogData = pog.clone()
-		self.pogData.uuid = str(uuid.uuid4())
+		self.pogData.uuid = pog.uuid
 		self.setupPogData()
+		self.setSelectedInTree()
 
 	def setupPogData(self):
 		self.addingData = True
@@ -315,6 +323,7 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.scene.addItem(self.pictureDrag)
 		self.scene.setSceneRect(0, 0, scenePixMap.width(), scenePixMap.height())
 
+	# noinspection PyUnusedLocal
 	def failedLoad(self, asynchReturn):
 		self.imageLoading = False
 
@@ -339,3 +348,140 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.pogData.dungeonMasterFlags = self.dmFlags
 		self.pogData.notes = self.notes
 		self.pogData.dmNotes = self.dmNotes
+
+	# noinspection PyAttributeOutsideInit
+	def setupTree(self):
+		self.treeWidget_2.setColumnCount(1)
+		self.treeWidget_2.setHeaderHidden(True)
+		self.treeWidget_2.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+		self.playersItem = QtWidgets.QTreeWidgetItem(['Players'])
+		self.treeWidget_2.addTopLevelItem(self.playersItem)
+		self.playersItem.addChild(QtWidgets.QTreeWidgetItem(['dummy']))
+		self.commonResources = QtWidgets.QTreeWidgetItem(['Common Pog Resources'])
+		self.treeWidget_2.addTopLevelItem(self.commonResources)
+		self.monsterResources = QtWidgets.QTreeWidgetItem(['Monsters'])
+		self.commonResources.addChild(self.monsterResources)
+		self.monsterResources.addChild(QtWidgets.QTreeWidgetItem(['dummy']))
+		self.roomResources = QtWidgets.QTreeWidgetItem(['Room Objects'])
+		self.commonResources.addChild(self.roomResources)
+		self.roomResources.addChild(QtWidgets.QTreeWidgetItem(['dummy']))
+		self.dungeonPogs = QtWidgets.QTreeWidgetItem(['Dungeon Level Pogs'])
+		self.treeWidget_2.addTopLevelItem(self.dungeonPogs)
+		self.dungeonMonsters = QtWidgets.QTreeWidgetItem(['Monsters'])
+		self.dungeonPogs.addChild(self.dungeonMonsters)
+		self.dungeonMonsters.addChild(QtWidgets.QTreeWidgetItem(['dummy']))
+		self.dungeonRooms = QtWidgets.QTreeWidgetItem(['Room Objects'])
+		self.dungeonPogs.addChild(self.dungeonRooms)
+		self.dungeonRooms.addChild(QtWidgets.QTreeWidgetItem(['dummy']))
+		self.sessionPogs = QtWidgets.QTreeWidgetItem(['Session Level Pogs'])
+		self.treeWidget_2.addTopLevelItem(self.sessionPogs)
+		self.sessionMonsters = QtWidgets.QTreeWidgetItem(['Monsters'])
+		self.sessionPogs.addChild(self.sessionMonsters)
+		self.sessionMonsters.addChild(QtWidgets.QTreeWidgetItem(['dummy']))
+		self.sessionRooms = QtWidgets.QTreeWidgetItem(['Room Objects'])
+		self.sessionPogs.addChild(self.sessionRooms)
+		self.sessionRooms.addChild(QtWidgets.QTreeWidgetItem(['dummy']))
+		self.expandableItems = [
+								self.playersItem,
+								self.monsterResources,
+								self.roomResources,
+								self.dungeonMonsters,
+								self.dungeonRooms,
+								self.sessionMonsters,
+								self.sessionRooms
+								]
+		self.pogPlaces = [
+							PogPlace.SESSION_RESOURCE,
+							PogPlace.COMMON_RESOURCE,
+							PogPlace.COMMON_RESOURCE,
+							PogPlace.DUNGEON_LEVEL,
+							PogPlace.DUNGEON_LEVEL,
+							PogPlace.SESSION_LEVEL,
+							PogPlace.SESSION_LEVEL
+						]
+		self.pogTypes = [
+							Constants.POG_TYPE_PLAYER,
+							Constants.POG_TYPE_MONSTER,
+							Constants.POG_TYPE_ROOMOBJECT,
+							Constants.POG_TYPE_MONSTER,
+							Constants.POG_TYPE_ROOMOBJECT,
+							Constants.POG_TYPE_MONSTER,
+							Constants.POG_TYPE_ROOMOBJECT
+						]
+
+	def fillTrees(self):
+		inEditMode = ServicesManager.getDungeonManager().editMode
+		self.playersItem.setHidden(inEditMode)
+		self.sessionPogs.setHidden(inEditMode)
+		self.previousSelected = None
+		index = 0
+		for treeItem in self.expandableItems:
+			if treeItem.isExpanded():
+				self.buildSortedTree(treeItem, ServicesManager.getDungeonManager().getSortedList(self.pogPlaces[index],
+																								self.pogTypes[index]))
+			index += 1
+
+	def buildSortedTree(self, treeItem, pogs):
+		if pogs is None:
+			return
+		self.clearBranch(treeItem)
+		for pog in pogs:
+			self.addTreeItem(treeItem, pog)
+
+	# noinspection PyMethodMayBeStatic
+	def addTreeItem(self, treeItem, pog):
+		child = QtWidgets.QTreeWidgetItem([pog.pogName])
+		child.setData(1, QtCore.Qt.EditRole, pog)
+		treeItem.addChild(child)
+		selectedPog = ServicesManager.getDungeonManager().getSelectedPog()
+		if pog.isEqual(selectedPog):
+			child.setSelected(True)
+
+	# noinspection PyMethodMayBeStatic
+	def clearBranch(self, branch):
+		for i in range(branch.childCount()):
+			branch.removeChild(branch.child(0))
+		pass
+
+	def nodeExpanded(self, index: QtCore.QModelIndex):
+		expandedItem = self.treeWidget_2.itemFromIndex(index)
+		self.FillNodeWithChildren(expandedItem)
+
+	def FillNodeWithChildren(self, expandedItem):
+		index = 0
+		for treeItem in self.expandableItems:
+			if treeItem == expandedItem:
+				self.buildSortedTree(treeItem, ServicesManager.getDungeonManager().getSortedList(self.pogPlaces[index],
+																								self.pogTypes[index]))
+				break
+			index += 1
+
+	# noinspection PyUnusedLocal
+	def treeItemSelected(self, *args):
+		if len(self.treeWidget_2.selectedItems()) == 0:
+			return
+		selItem = self.treeWidget_2.selectedItems()[0]
+		data = selItem.data(1, QtCore.Qt.EditRole)
+		if data is not None:
+			ServicesManager.getDungeonManager().setSelectedPog(data)
+
+	def setSelectedInTree(self):
+		if self.justDidSelection:
+			self.justDidSelection = False
+			return
+		if self.previousSelected is not None:
+			self.previousSelected.setSelected(False)
+		index = 0
+		for place in self.pogPlaces:
+			if place == self.pogData.pogPlace:
+				parent: QtWidgets.QTreeWidgetItem = self.expandableItems[index]
+				if not parent.isHidden() and parent.isExpanded():
+					for childIndex in range(parent.childCount()):
+						child = parent.child(childIndex)
+						data = child.data(1, QtCore.Qt.EditRole)
+						if self.pogData.isEqual(data):
+							self.justDidSelection = True
+							child.setSelected(True)
+							self.previousSelected = child
+							return
+			index += 1

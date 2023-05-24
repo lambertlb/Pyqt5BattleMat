@@ -756,3 +756,9 @@ class DungeonManager(PogManager):
 	def isValidNewMonsterName(self, monsterName):
 		isValid = not monsterName.startswith('Enter ') and len(monsterName) > 3
 		return isValid
+
+	def getSortedList(self, fromWhere, typeOfPogs):
+		collection = self.getProperCollection(fromWhere, typeOfPogs)
+		if collection is not None:
+			return collection.getSortedListOfPogs()
+		return None

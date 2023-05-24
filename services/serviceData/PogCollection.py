@@ -2,12 +2,14 @@
 GPL 3 file header
 """
 import json
+from functools import cmp_to_key
 
 from services.AsyncTasks import AsyncJsonData
 from services.Constants import Constants
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 from services.serviceData.DataRequesterResponse import DataRequesterResponse
+from services.serviceData.PogData import PogData
 from services.serviceData.PogList import PogList
 from services.serviceData.RequestData import RequestData
 
@@ -105,3 +107,21 @@ class PogCollection:
 			self.addPog(pog)
 		else:
 			self.pogList.update(pog, existing)
+
+	def getSortedListOfPogs(self):
+		if self.pogList is None or self.pogList.pogList is None:
+			return None
+		keys = []
+		for pog in self.pogList.pogList:
+			keys.append(pog)
+		sortedKeys = sorted(keys, key=cmp_to_key(compare))
+		return sortedKeys
+
+
+def compare(left: PogData, right: PogData):
+	if left.pogName > right.pogName:
+		return 1
+	if left.pogName < right.pogName:
+		return -1
+	return 0
+
