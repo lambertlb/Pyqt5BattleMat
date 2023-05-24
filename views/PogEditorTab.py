@@ -3,7 +3,7 @@ GPL 3 file header
 """
 import uuid
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 
 from services.Constants import Constants
 from services.DungeonManager import DungeonManager
@@ -15,6 +15,7 @@ from services.serviceData.PogData import PogData
 from services.serviceData.PogPlace import PogPlace
 from views.FlagEditor import FlagEditor
 from views.PogNotesView import PogNotesViewer
+from views.RibbonBar import MyPixmapItem
 
 
 class PogEditorTab(QtWidgets.QWidget):
@@ -29,12 +30,15 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.flagEditor = None
 		self.playerFlags = None
 		self.dmFlags = None
+		self.addingData = False
+		self.imageLoading = False
+		self.pictureDrag = None
 
 		self.pogEditorTab = self
 		self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.pogEditorTab)
 		self.gridLayout_7 = QtWidgets.QGridLayout()
-		self.sizeComboBox = QtWidgets.QComboBox(self.pogEditorTab)
-		self.gridLayout_7.addWidget(self.sizeComboBox, 5, 2, 1, 1)
+		self.pogSizeComboBox = QtWidgets.QComboBox(self.pogEditorTab)
+		self.gridLayout_7.addWidget(self.pogSizeComboBox, 5, 2, 1, 1)
 		self.gridLayout_6 = QtWidgets.QGridLayout()
 		self.createPogButton = QtWidgets.QPushButton(self.pogEditorTab)
 		self.gridLayout_6.addWidget(self.createPogButton, 0, 0, 1, 1)
@@ -66,7 +70,8 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.gridLayout_7.addWidget(self.pogTypeLabel, 2, 0, 1, 1)
 		self.playerFlagsButton = QtWidgets.QPushButton(self.pogEditorTab)
 		self.gridLayout_7.addWidget(self.playerFlagsButton, 6, 0, 1, 2)
-		self.graphicsView_3 = QtWidgets.QGraphicsView(self.pogEditorTab)
+		self.scene = QtWidgets.QGraphicsScene(self.pogEditorTab)
+		self.graphicsView_3 = QtWidgets.QGraphicsView(self.scene)
 		self.graphicsView_3.setMaximumSize(QtCore.QSize(50, 50))
 		self.gridLayout_7.addWidget(self.graphicsView_3, 9, 0, 1, 1)
 		self.editNotesButton = QtWidgets.QPushButton(self.pogEditorTab)
@@ -76,6 +81,9 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.dmFlagsButton = QtWidgets.QPushButton(self.pogEditorTab)
 		self.gridLayout_7.addWidget(self.dmFlagsButton, 6, 2, 1, 1)
 		self.verticalLayout_5.addLayout(self.gridLayout_7)
+
+		self.graphicsView_3.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+		self.graphicsView_3.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
 		self.localize()
 		self.setupEvents()
@@ -101,9 +109,14 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.dmFlagsButton.clicked.connect(self.editDmFlags)
 		self.editNotesButton.clicked.connect(self.editNotes)
 		self.pogNameEdit.textChanged.connect(self.dataChanged)
-		self.useSelectedPogPictureEdit.textChanged.connect(self.dataChanged)
+		self.useSelectedPogPictureEdit.textChanged.connect(self.pictureDataChanged)
 		self.pogLocationComboBox.currentIndexChanged.connect(self.dataChanged)
 		self.pogTypeComboBox.currentIndexChanged.connect(self.dataChanged)
+		self.useSelectedPogPictureButton.clicked.connect(self.useSelectedPicture)
+		self.cancelPogButton.clicked.connect(self.cancelEdit)
+		self.deletePogButton.clicked.connect(self.deletePog)
+		self.createPogButton.clicked.connect(self.createPog)
+		self.savePogButton.clicked.connect(self.saveFormData)
 
 	def eventFired(self, eventData):
 		if eventData.eventReason == ReasonForAction.DungeonDataLoaded:
@@ -124,13 +137,12 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.fillPogPlaceList()
 		self.fillPogTypeList()
 		self.selectPog()
-		pass
 
 	def fillInSizes(self):
-		self.sizeComboBox.clear()
+		self.pogSizeComboBox.clear()
 		sizes = ServicesManager.getDungeonManager().getPogSizes()
 		for size in sizes:
-			self.sizeComboBox.addItem(size)
+			self.pogSizeComboBox.addItem(size)
 
 	def fillPogTypeList(self):
 		self.pogTypeComboBox.clear()
@@ -162,19 +174,22 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.pogData = pog.clone()
 		self.pogData.uuid = str(uuid.uuid4())
 		self.setupPogData()
-		pass
 
 	def setupPogData(self):
+		self.addingData = True
 		self.pogNameEdit.setText(self.pogData.pogName)
 		self.setPogType()
 		self.setPogLocation()
+		self.scene.clear()
 		self.useSelectedPogPictureEdit.setText(self.pogData.pogImageUrl)
 		self.setNotesData()
 		self.setSizeData()
 		self.playerFlags = self.pogData.playerFlags
 		self.dmFlags = self.pogData.dungeonMasterFlags
+		self.addingData = False
+		self.isDirty = False
 		self.validateForm()
-		pass
+		self.checkLoadImage()
 
 	def setPogType(self):
 		pogType = self.pogData.pogType
@@ -202,7 +217,7 @@ class PogEditorTab(QtWidgets.QWidget):
 		pogSize = self.pogData.pogSize - 1
 		if pogSize < 0:
 			pogSize = 0
-		self.sizeComboBox.setCurrentIndex(pogSize)
+		self.pogSizeComboBox.setCurrentIndex(pogSize)
 
 	def editPlayerFlags(self):
 		self.checkFlagDialog()
@@ -226,6 +241,8 @@ class PogEditorTab(QtWidgets.QWidget):
 			self.validateForm()
 
 	def validateForm(self):
+		if self.addingData:
+			return
 		isOK = True
 		dm: DungeonManager = ServicesManager.getDungeonManager()
 		if not dm.isValidNewMonsterName(self.pogNameEdit.text()):
@@ -234,7 +251,6 @@ class PogEditorTab(QtWidgets.QWidget):
 		else:
 			self.pogNameLabel.setStyleSheet('color: black')
 		self.pogData.pogImageUrl = self.useSelectedPogPictureEdit.text()
-		self.setupPicture()
 		if not dm.isValidPictureURL(self.pogData.pogImageUrl):
 			isOK = False
 			self.useSelectedPogPictureEdit.setStyleSheet('color: red')
@@ -243,8 +259,9 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.savePogButton.setDisabled(not isOK or not self.isDirty)
 		self.cancelPogButton.setDisabled(not self.isDirty)
 		self.deletePogButton.setDisabled(not isOK)
-		self.createPogButton.setDisabled(not self.isDirty)
-		# selectedPog.setPreventDrag(!isOK);
+		self.createPogButton.setDisabled(self.isDirty)
+		if self.pictureDrag is not None:
+			self.pictureDrag.doNotDrag = not isOK or self.isDirty
 
 	def editNotes(self):
 		if self.notesDialog.exec_():
@@ -253,8 +270,72 @@ class PogEditorTab(QtWidgets.QWidget):
 			self.isDirty = True
 			self.validateForm()
 
-	def pogDataChanged(self, pog):
-		pass
+	def useSelectedPicture(self):
+		self.copyResourceURL()
+		self.dataChanged()
 
-	def setupPicture(self):
-		pass
+	def copyResourceURL(self):
+		dm: DungeonManager = ServicesManager.getDungeonManager()
+		url = dm.assetURL
+		if dm.isValidPictureURL(url):
+			self.useSelectedPogPictureEdit.setText(url)
+
+	def cancelEdit(self):
+		self.selectPog()
+
+	def pogDataChanged(self, pog):
+		if pog is None:
+			return
+		if pog.isEqual(self.pogData):
+			self.selectPog()
+
+	def pictureDataChanged(self):
+		self.dataChanged()
+		self.checkLoadImage()
+
+	def checkLoadImage(self):
+		if self.imageLoading:
+			return
+		if ServicesManager.getDungeonManager().isValidPictureURL(self.pogData.pogImageUrl):
+			self.imageLoading = True
+			self.pogData.loadPogImage(self.successfulLoaded, self.failedLoad)
+
+	def successfulLoaded(self):
+		self.imageLoading = False
+		self.scene.clear()
+		image = self.pogData.image
+		gw = self.graphicsView_3.width()
+		gh = self.graphicsView_3.height()
+		pixMap = QtGui.QPixmap.fromImage(image)
+		scenePixMap = pixMap.scaled(gw, gh, QtCore.Qt.KeepAspectRatio,
+									QtCore.Qt.SmoothTransformation)
+		self.pictureDrag = MyPixmapItem()
+		self.pictureDrag.doNotDrag = self.isDirty
+		self.pictureDrag.setPixmap(scenePixMap)
+		self.scene.addItem(self.pictureDrag)
+		self.scene.setSceneRect(0, 0, scenePixMap.width(), scenePixMap.height())
+
+	def failedLoad(self, asynchReturn):
+		self.imageLoading = False
+
+	# noinspection PyMethodMayBeStatic
+	def deletePog(self):
+		ServicesManager.getDungeonManager().deleteSelectedPog()
+
+	def saveFormData(self):
+		self.isDirty = False
+		self.validateForm()
+		self.getDialogData()
+		pog = self.pogData
+		ServicesManager.getDungeonManager().addOrUpdatePog(pog, self.pogLocationComboBox.currentIndex())
+		ServicesManager.getDungeonManager().setSelectedPog(pog)
+
+	def getDialogData(self):
+		self.pogData.pogName = self.pogNameEdit.text()
+		self.pogData.pogType = self.pogTypeComboBox.currentText()
+		self.pogData.pogImageUrl = self.useSelectedPogPictureEdit.text()
+		self.pogData.pogSize = self.pogSizeComboBox.currentIndex() + 1
+		self.pogData.playerFlags = self.playerFlags
+		self.pogData.dungeonMasterFlags = self.dmFlags
+		self.pogData.notes = self.notes
+		self.pogData.dmNotes = self.dmNotes

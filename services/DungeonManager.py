@@ -42,7 +42,7 @@ class DungeonManager(PogManager):
 		self.fowToggle = False
 		self.computedGridWidth = 1.0
 		self.fowDirty = False
-		self.AssetURL = ''
+		self.assetURL = ''
 
 		self.dungeonLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
 		self.dungeonLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)

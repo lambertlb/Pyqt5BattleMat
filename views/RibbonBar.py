@@ -18,7 +18,7 @@ class MyPixmapItem(QtWidgets.QGraphicsPixmapItem):
 		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
 		fl |= QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable
 		self.setFlags(fl)
-	pass
+		self.doNotDrag = False
 
 	def mouseMoveEvent(self, event):
 		"""
@@ -26,6 +26,9 @@ class MyPixmapItem(QtWidgets.QGraphicsPixmapItem):
 		:param event: event
 		:return: None
 		"""
+		if self.doNotDrag:
+			return
+
 		if QtCore.QLineF(QtCore.QPointF(event.screenPos()),
 						QtCore.QPointF(event.buttonDownScreenPos(
 							Qt.LeftButton))).length() < QtWidgets.QApplication.startDragDistance():
@@ -140,7 +143,7 @@ class RibbonBar(QtWidgets.QGridLayout):
 		self.scene.addItem(pm)
 		pass
 
-	def failedLoad(self, asynchReturn):
+	def failedLoad(self):
 		pass
 
 	def setupView(self):

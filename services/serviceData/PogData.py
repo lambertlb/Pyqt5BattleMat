@@ -25,8 +25,8 @@ class PogData:
 		self.dungeonLevel = 0
 		self.playerFlags = 0
 		self.dungeonMasterFlags = 0
-		self.notes = None
-		self.dmNotes = None
+		self.notes = ''
+		self.dmNotes = ''
 		self.pogNumber = 0
 		self.pogPlace = 0
 
