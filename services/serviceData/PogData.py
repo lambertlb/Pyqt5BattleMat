@@ -126,7 +126,10 @@ class PogData:
 		self.pogColumn = withUpdates.pogColumn
 		self.pogRow = withUpdates.pogRow
 		self.dungeonLevel = withUpdates.dungeonLevel
-		self.notes = withUpdates.notes
-		self.dmNotes = withUpdates.dmNotes
+		if hasattr(withUpdates, 'notes'):
+			self.notes = withUpdates.notes
+		if hasattr(withUpdates, 'dmNotes'):
+			self.dmNotes = withUpdates.dmNotes
 		self.pogNumber = withUpdates.pogNumber
-		self.pogPlace = withUpdates.pogPlace
+		if hasattr(withUpdates, 'pogPlace'):
+			self.pogPlace = withUpdates.pogPlace

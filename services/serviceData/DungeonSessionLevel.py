@@ -20,19 +20,19 @@ class DungeonSessionLevel:
 		return dl
 
 	def cloneData(self, dl):
-		if 'fogOfWarVersion' in locals():
+		if hasattr(self, 'fogOfWarVersion'):
 			dl.fogOfWarVersion = self.fogOfWarVersion
 		else:
 			dl.fogOfWarVersion = None
-		if 'bitsPerColumn' in locals():
+		if hasattr(self, 'bitsPerColumn'):
 			dl.bitsPerColumn = self.bitsPerColumn
 		else:
-			dl.fogOfWarVersion = 0
-		if 'fogOfWarVersion' in locals():
+			dl.bitsPerColumn = 0
+		if hasattr(self, 'fogOfWar'):
 			dl.fogOfWar = self.fogOfWar
 		else:
 			dl.fogOfWar = None
-		if 'fogOfWarData' in locals():
+		if hasattr(self, 'fogOfWarData'):
 			dl.fogOfWarData = self.fogOfWarData
 		else:
 			dl.fogOfWarData = None
@@ -50,7 +50,7 @@ class DungeonSessionLevel:
 		if self.fogOfWarData is None:
 			return
 		bitIndex = (rows * self.bitsPerColumn) + columns
-		arrayIndex = bitIndex / 32
+		arrayIndex = bitIndex // 32
 		bitShift = bitIndex % 32
 		bitMask = 1 << bitShift
 		if value:
@@ -62,13 +62,14 @@ class DungeonSessionLevel:
 		if self.fogOfWarData is None:
 			return
 		bitIndex = (row * self.bitsPerColumn) + column
-		arrayIndex = bitIndex / 32
+		arrayIndex = bitIndex // 32
 		bitShift = bitIndex % 32
 		bitMask = 1 << bitShift
-		return (self.fogOfWarData[arrayIndex] & bitMask) != 0
+		ans = self.fogOfWarData[arrayIndex] & bitMask
+		return ans != 0
 
 	def migrateSession(self, dungeonLevel):
-		self.bitsPerColumn = dungeonLevel.rows
+		self.bitsPerColumn = dungeonLevel.columns
 		oldData = self.fogOfWar
 		if oldData is None:
 			return False
@@ -76,7 +77,7 @@ class DungeonSessionLevel:
 		for row in range(dungeonLevel.rows):
 			for column in range(dungeonLevel.columns):
 				bitIndex = (row * self.bitsPerColumn) + column
-				arrayIndex = bitIndex / 32
+				arrayIndex = bitIndex // 32
 				bitShift = bitIndex % 32
 				bitMask = 1 << bitShift
 				if oldData[column][row]:

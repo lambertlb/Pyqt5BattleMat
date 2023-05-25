@@ -25,8 +25,10 @@ class PogList:
 		for pog in self.pogList:
 			pd = PogData()
 			pd.__dict__ = pog
-			dl.pogList.append(pd)
-			pass
+			pd1 = PogData()
+			pd1.fullUpdate(pd)
+			pd1.uuid = pd.uuid
+			dl.pogList.append(pd1)
 
 	def getListVersion(self):
 		return self.listVersion

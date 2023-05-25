@@ -52,6 +52,7 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 			self.rubberBand.setGeometry(QtCore.QRect(self.origin, QtCore.QSize()))
 			self.rubberBand.show()
 			self.changeRubberBand = True
+			self.down = event.pos()
 		QtWidgets.QGraphicsView.mousePressEvent(self, event)
 		pass
 
@@ -71,10 +72,11 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 				gridWidth = (sw + sh) / 2
 				ServicesManager.getDungeonManager().computedGridWidth = gridWidth
 			else:
-				self.handleFOWSelection(rect)
+				self.up = event.pos()
+				print(f'down {self.down} up {self.up}')
+				rect_scene = self.mapToScene(rect).boundingRect()
+				self.scene.handleFOWSelection(rect_scene)
 			self.changeRubberBand = False
 			self.rubberBand.hide()
 		QtWidgets.QGraphicsView.mouseReleaseEvent(self, event)
 
-	def handleFOWSelection(self, rect):
-		pass

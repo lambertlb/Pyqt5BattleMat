@@ -21,6 +21,11 @@ from services.serviceData.SessionListData import SessionListData
 from services.serviceData.VersionedItem import VersionedItem
 
 
+class FogOfWarData:
+	def __init__(self, fowData):
+		self.fogOfWar = fowData
+
+
 class DungeonManager(PogManager):
 	"""
 	This will manage all dungeon related data
@@ -308,8 +313,8 @@ class DungeonManager(PogManager):
 			dataResponse.onSuccess = self.handleSuccessfulUpdateFogOfWar
 			dataResponse.onFailure = self.handleFailedUpdateFogOfWar
 			sessionLevel = self.getCurrentSessionLevelData()
-			fowData = json.dumps(sessionLevel.fogOfWarData, default=vars)
-			AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, fowData).submit()
+			fow = FogOfWarData(sessionLevel.fogOfWarData)
+			AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, fow).submit()
 			sessionLevel.fogOfWarVersion = sessionLevel.fogOfWarVersion + 1
 			self.dataVersion.setItemVersion(VersionedItem.FOG_OF_WAR, sessionLevel.fogOfWarVersion)
 
@@ -762,3 +767,9 @@ class DungeonManager(PogManager):
 		if collection is not None:
 			return collection.getSortedListOfPogs()
 		return None
+
+	def setFow(self, columns, rows, value):
+		sessionLevel = self.getCurrentSessionLevelData()
+		if self.isDungeonMaster and sessionLevel is not None:
+			sessionLevel.updateFOW(columns, rows, value)
+			self.fowDirty = True

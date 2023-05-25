@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 from services.AsyncTasks import AsyncImage
 from services.Constants import Constants
+from services.DungeonManager import DungeonManager
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
 from services.serviceData.DataVersions import DataVersions
@@ -43,6 +44,8 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		self._selectedColumn = 0
 		self._selectedRow = 0
 		self.selectedPogCanvas = None
+		self.toggleFOW = False
+		self.clearFOW = False
 
 		self.splitter = splitter
 		self.pixelMap = QtGui.QPixmap()
@@ -254,32 +257,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		# drawEverything();
 		ServicesManager.getDungeonManager().updateVersion(self._dataVersionsHistory)
 
-	def drawGrid(self, painter):
-		if not self._imageLoaded:
-				return
-		if ServicesManager.getDungeonManager().selectedDungeon is None:
-			return
-		self.calculateDimensions()
-		if not self._showGrid:
-			return
-		painter.setPen(QtGui.QColor(174, 173, 172))
-		line = QtCore.QLineF(QtCore.QPointF(self._gridOffsetX, self._gridOffsetY),
-							QtCore.QPointF(self._imageWidth, self._gridOffsetY))
-		for _ in range(self._horizontalLines):
-			painter.drawLine(line)
-			line.translate(0, self._gridSpacing)
-		line = QtCore.QLineF(QtCore.QPointF(self._gridOffsetX, self._gridOffsetY),
-							QtCore.QPointF(self._gridOffsetX, self._imageHeight))
-		for _ in range(self._verticalLines):
-			painter.drawLine(line)
-			line.translate(self._gridSpacing, 0)
-
-	def calculateDimensions(self):
-		self.getGridData()
-		self._verticalLines = int((self._imageWidth / self._gridSpacing) + 1)
-		self._horizontalLines = int((self._imageHeight / self._gridSpacing) + 1)
-		ServicesManager.getDungeonManager().setSessionLevelSize(self._verticalLines, self._horizontalLines)
-
 	def getGridData(self):
 		self._gridOffsetX = ServicesManager.getDungeonManager().getCurrentDungeonLevelData().gridOffsetX
 		self._gridOffsetY = ServicesManager.getDungeonManager().getCurrentDungeonLevelData().gridOffsetY
@@ -378,13 +355,90 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 				return pog
 		return None
 
-	def drawBackground(self, painter, rect):
-		pass
-
-	def drawForeground(self, painter, rect):
-		self.drawGrid(painter)
-		pass
-
 	def mousePressEvent(self, event):
 		super(BattleMatScene, self).mousePressEvent(event)
+
+	def drawForeground(self, painter, rect):
+		if not self._imageLoaded:
+			return
+		if ServicesManager.getDungeonManager().selectedDungeon is None:
+			return
+		self.calculateDimensions()
+		if not ServicesManager.getDungeonManager().editMode:
+			self.drawFOW(painter)
+		if self._showGrid:
+			self.drawGrid(painter)
+		pass
+
+	def drawGrid(self, painter):
+		painter.setPen(QtGui.QColor(174, 173, 172))
+		line = QtCore.QLineF(QtCore.QPointF(self._gridOffsetX, self._gridOffsetY),
+							QtCore.QPointF(self._imageWidth, self._gridOffsetY))
+		for _ in range(self._horizontalLines):
+			painter.drawLine(line)
+			line.translate(0, self._gridSpacing)
+		line = QtCore.QLineF(QtCore.QPointF(self._gridOffsetX, self._gridOffsetY),
+							QtCore.QPointF(self._gridOffsetX, self._imageHeight))
+		for _ in range(self._verticalLines):
+			painter.drawLine(line)
+			line.translate(self._gridSpacing, 0)
+
+	def calculateDimensions(self):
+		self.getGridData()
+		self._verticalLines = int((self._imageWidth / self._gridSpacing) + 1)
+		self._horizontalLines = int((self._imageHeight / self._gridSpacing) + 1)
+		ServicesManager.getDungeonManager().setSessionLevelSize(self._verticalLines, self._horizontalLines)
+
+	def drawFOW(self, painter):
+		dm: DungeonManager = ServicesManager.getDungeonManager()
+		isDM = dm.isDungeonMaster
+		for x in range(self._verticalLines):
+			left = (x * self._gridSpacing) + self._gridOffsetX
+			for y in range(self._horizontalLines):
+				top = (y * self._gridSpacing) + self._gridOffsetY
+				if dm.isFowSet(x, y):
+					if isDM:
+						painter.setOpacity(0.4)
+					else:
+						painter.setOpacity(1.0)
+				else:
+					painter.setOpacity(0.0)
+				painter.setBrush(QtGui.QBrush(QtCore.Qt.black, QtCore.Qt.SolidPattern))
+				painter.drawRect(int(left), int(top), int(self._gridSpacing), int(self._gridSpacing))
+
+	def computeColumnAndRow(self, clientX, clientY):
+		self._selectedColumn = int((clientX - self._gridOffsetX) / self._gridSpacing)
+		self._selectedRow = int((clientY - self._gridOffsetY) / self._gridSpacing)
+
+	def handleFOWSelection(self, rect):
+		dm: DungeonManager = ServicesManager.getDungeonManager()
+		if not dm.isDungeonMaster or dm.editMode:
+			return
+		where: QtCore.QRect = rect.normalized()
+		if where.left() < 0 or (where.left() + where.width()) > self.width():
+			return
+		if where.top() < 0 or (where.top() + where.height()) > self.height():
+			return
+		self.computeColumnAndRow(where.left(), where.top())
+		startingColumn = self._selectedColumn
+		startingRow = self._selectedRow
+		self.computeColumnAndRow(where.left() + where.width(), where.top() + where.height())
+		endingColumn = self._selectedColumn
+		endingRow = self._selectedRow
+		# use top left cell as reference. Toggle what it is currently set to
+		self.clearFOW = dm.isFowSet(startingColumn, startingRow)
+		self.toggleFOW = True
+		for column in range(startingColumn, endingColumn + 1):
+			for row in range(startingRow, endingRow + 1):
+				self._selectedColumn = column
+				self._selectedRow = row
+				self.handleProperFOWAtSelectedPosition()
+		self.update(0, 0, self.width(), self.height())
+		dm.saveFow()
+
+	def handleProperFOWAtSelectedPosition(self):
+		currentFOW = ServicesManager.getDungeonManager().isFowSet(self._selectedColumn, self._selectedRow)
+		# only adjust if different
+		if currentFOW == self.clearFOW:
+			ServicesManager.getDungeonManager().setFow(self._selectedColumn, self._selectedRow, not currentFOW)
 		pass

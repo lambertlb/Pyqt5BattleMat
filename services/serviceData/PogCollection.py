@@ -72,7 +72,7 @@ class PogCollection:
 		toRemove = self.pogList.pogList.copy()
 		toAdd = []
 		for pd in updateList.pogList:
-			pd.setPogPlace(self.pogPlace)
+			pd.pogPlace = self.pogPlace
 			found = self.pogMap.get(pd.uuid)
 			if found is not None:
 				found.fullUpdate(pd)

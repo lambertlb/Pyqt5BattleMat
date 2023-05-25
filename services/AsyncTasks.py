@@ -171,7 +171,7 @@ class AsyncJsonData(AsynchBase):
 		Runs in background thread to load image
 		:return: None
 		"""
-		headers = {'Content-type': 'text/plain', 'Accept': 'text/plain'}
+		headers = {'Content-type': 'text/plain', 'Accept': 'application/json'}
 		sendData = ''
 		if self.data is not None:
 			sendData = json.dumps(self.data, default=vars)
