@@ -8,7 +8,6 @@ class DungeonSessionLevel:
 
 	def __init__(self):
 		self.fogOfWarVersion = 0
-		self.fogOfWar = None  # deprecated used to support old format
 		self.fogOfWarData = []
 		self.bitsPerColumn = 0
 		self.monsters = PogList()
@@ -53,10 +52,12 @@ class DungeonSessionLevel:
 		arrayIndex = bitIndex // 32
 		bitShift = bitIndex % 32
 		bitMask = 1 << bitShift
+		word = self.fogOfWarData[arrayIndex] & 0xffffffff
 		if value:
-			self.fogOfWarData[arrayIndex] |= bitMask
+			word |= bitMask
 		else:
-			self.fogOfWarData[arrayIndex] &= ~bitMask
+			word &= ~bitMask
+		self.fogOfWarData[arrayIndex] = word
 
 	def isFowSet(self, column, row):
 		if self.fogOfWarData is None:
@@ -70,24 +71,8 @@ class DungeonSessionLevel:
 
 	def migrateSession(self, dungeonLevel):
 		self.bitsPerColumn = dungeonLevel.columns
-		oldData = self.fogOfWar
-		if oldData is None:
-			return False
-		newData = self.createNewFOWData(dungeonLevel.rows)
-		for row in range(dungeonLevel.rows):
-			for column in range(dungeonLevel.columns):
-				bitIndex = (row * self.bitsPerColumn) + column
-				arrayIndex = bitIndex // 32
-				bitShift = bitIndex % 32
-				bitMask = 1 << bitShift
-				if oldData[column][row]:
-					newData[arrayIndex] |= bitMask
-				else:
-					newData[arrayIndex] &= ~bitMask
-		self.fogOfWarData = newData
-		self.fogOfWar = None
-		return True
+		return False
 
 	# noinspection PyMethodMayBeStatic
 	def createNewFOWData(self, rows):
-		return [rows]
+		return [((self.bitsPerColumn * rows) / 32) + 1]
