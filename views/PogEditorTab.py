@@ -169,7 +169,6 @@ class PogEditorTab(QtWidgets.QWidget):
 	def createPog(self):
 		self.pogData = ServicesManager.getDungeonManager().createTemplatePog(Constants.POG_TYPE_MONSTER)
 		self.setupPogData()
-		pass
 
 	def selectPog(self):
 		self.isDirty = False
@@ -441,7 +440,6 @@ class PogEditorTab(QtWidgets.QWidget):
 	def clearBranch(self, branch):
 		for i in range(branch.childCount()):
 			branch.removeChild(branch.child(0))
-		pass
 
 	def nodeExpanded(self, index: QtCore.QModelIndex):
 		expandedItem = self.treeWidget_2.itemFromIndex(index)

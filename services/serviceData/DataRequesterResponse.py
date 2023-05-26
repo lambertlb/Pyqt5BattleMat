@@ -13,7 +13,6 @@ class DataRequesterResponse:
 		self._onFailure = None
 		self._userOnSuccess = None
 		self._userOnFailure = None
-		pass
 
 	@property
 	def data(self):

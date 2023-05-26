@@ -70,7 +70,6 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 
 	def setGridSize(self, size):
 		self.gridSize = size
-		pass
 
 	def boundingRect(self):
 		scaledGridSize = self.getScaledGridSize()
@@ -130,7 +129,6 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 	def drawOverlays(self, painter):
 		if self.pogData.isPlayerFlagSet(PlayerFlag.DEAD):
 			self.addDeadOverlay(painter)
-		pass
 
 	def addDeadOverlay(self, painter):
 		size = self.computePogBorderWidth()
@@ -138,7 +136,6 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		painter.setBrush(QtGui.QBrush())
 		painter.drawEllipse(0, 0, self.scaledGridSize, self.scaledGridSize)
 		painter.drawLine(0, 0, self.scaledGridSize, self.scaledGridSize)
-		pass
 
 	def computePogBorderWidth(self):
 		zoom = self.view.getZoom()

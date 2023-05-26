@@ -74,6 +74,7 @@ class RibbonBar(QtWidgets.QGridLayout):
 		self.gridLayout_2.addWidget(self.showSelectedPog_2, 0, 2, 1, 1)
 		self.hideFOW_2 = QtWidgets.QCheckBox(self.frame)
 		self.gridLayout_2.addWidget(self.hideFOW_2, 0, 3, 1, 1)
+		self.hideFOW_2.stateChanged.connect(self.toggleFOW)
 		self.scene = QtWidgets.QGraphicsScene(self.frame)
 		self.selectedPogArea_2 = QtWidgets.QGraphicsView(self.scene)
 		self.selectedPogArea_2.setMinimumSize(QtCore.QSize(self.pogSize, self.pogSize))
@@ -141,7 +142,6 @@ class RibbonBar(QtWidgets.QGridLayout):
 		pm = MyPixmapItem()
 		pm.setPixmap(scenePixMap)
 		self.scene.addItem(pm)
-		pass
 
 	def failedLoad(self):
 		pass
@@ -150,9 +150,9 @@ class RibbonBar(QtWidgets.QGridLayout):
 		editMode = ServicesManager.getDungeonManager().editMode
 		isDM = ServicesManager.getDungeonManager().isDungeonMaster
 		self.selectPlayer_2.setVisible(not editMode)
-		self.toggleFOW_2.setVisible(not editMode and isDM)
+		self.toggleFOW_2.setVisible(False)
+		# self.toggleFOW_2.setVisible(not editMode and isDM)
 		self.hideFOW_2.setVisible(not editMode and isDM)
-		pass
 
 	def dungeonDataLoaded(self):
 		self.selectDungeonLevel_2.clear()
@@ -160,7 +160,6 @@ class RibbonBar(QtWidgets.QGridLayout):
 		for levelName in levelNames:
 			self.selectDungeonLevel_2.addItem(levelName)
 		self.selectDungeonLevel_2.setCurrentIndex(ServicesManager.getDungeonManager().currentLevelIndex)
-		pass
 
 	def characterPogsLoaded(self):
 		self.selectPlayer_2.clear()
@@ -170,12 +169,10 @@ class RibbonBar(QtWidgets.QGridLayout):
 			return
 		for pogData in players:
 			self.selectPlayer_2.addItem(pogData.pogName, pogData.uuid)
-		pass
 
 	# noinspection PyUnusedLocal
 	def onLevelChanged(self, text):
 		ServicesManager.getDungeonManager().currentLevelIndex = self.selectDungeonLevel_2.currentIndex()
-		pass
 
 	# noinspection PyUnusedLocal
 	def onPlayerChanged(self, text):
@@ -203,3 +200,6 @@ class RibbonBar(QtWidgets.QGridLayout):
 			self.pogNotesDialog.show()
 		else:
 			self.pogNotesDialog.hide()
+
+	def toggleFOW(self):
+		ServicesManager.getDungeonManager().setHideFOW(self.hideFOW_2.isChecked())

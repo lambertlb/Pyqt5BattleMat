@@ -28,7 +28,6 @@ class PogManager:
 	def setSelectedPog(self, pogData):
 		self.selectedPog = pogData
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.PogWasSelected, None)
-		pass
 
 	def getSelectedPog(self):
 		return self.selectedPog
@@ -38,11 +37,9 @@ class PogManager:
 
 	def loadMonsterPogs(self):
 		self.monsterCollection.loadFromServer(self.makeURL(Constants.ServicePath), Constants.Monsters)
-		pass
 
 	def loadRoomObjectPogs(self):
 		self.roomCollection.loadFromServer(self.makeURL(Constants.ServicePath), Constants.RoomObjects)
-		pass
 
 	def makeURL(self, additions):
 		if self.baseURL is None:
@@ -76,4 +73,3 @@ class PogManager:
 	# noinspection PyMethodMayBeStatic
 	def getPogSizes(self):
 		return ["Normal", "Large", "Huge", "Gargantuan"]
-

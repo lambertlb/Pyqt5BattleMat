@@ -20,7 +20,6 @@ class MyConfigManager:
 			self.config.setValue(Constants.Login_Url, 'My url')
 			self.config.setValue(Constants.Login_USERNAME, 'My Username')
 			self.config.setValue(Constants.Login_PASSWORD, 'My Password')
-		pass
 
 	def setValue(self, key, value):
 		self.config.setValue(key, value)

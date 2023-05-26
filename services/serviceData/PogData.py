@@ -39,13 +39,13 @@ class PogData:
 			return False
 		return self.uuid == toCompare.uuid
 
-	def	togglePlayerFlag(self, flag):
+	def togglePlayerFlag(self, flag):
 		if self.isPlayerFlagSet(flag):
 			self.clearPlayerFlags(flag)
 		else:
 			self.setPlayerFlags(flag)
 
-	def	toggleDmFlag(self, flag):
+	def toggleDmFlag(self, flag):
 		if self.isDmFlagSet(flag):
 			self.clearDmFlags(flag)
 		else:
@@ -55,19 +55,19 @@ class PogData:
 		return PogData._IsFlagSet(self.playerFlags, flagToTest)
 
 	def clearPlayerFlags(self, flagToClear):
-		self.playerFlags =  PogData._ClearFlag(self.playerFlags, flagToClear)
+		self.playerFlags = PogData._ClearFlag(self.playerFlags, flagToClear)
 
 	def setPlayerFlags(self, flagToSet):
-		self.playerFlags =  PogData._SetFlag(self.playerFlags, flagToSet)
+		self.playerFlags = PogData._SetFlag(self.playerFlags, flagToSet)
 
 	def isDmFlagSet(self, flagToTest):
 		return PogData._IsFlagSet(self.dungeonMasterFlags, flagToTest)
 
 	def clearDmFlags(self, flagToClear):
-		self.playerFlags =  PogData._ClearFlag(self.dungeonMasterFlags, flagToClear)
+		self.playerFlags = PogData._ClearFlag(self.dungeonMasterFlags, flagToClear)
 
 	def setDmFlags(self, flagToSet):
-		self.playerFlags =  PogData._SetFlag(self.dungeonMasterFlags, flagToSet)
+		self.playerFlags = PogData._SetFlag(self.dungeonMasterFlags, flagToSet)
 
 	@staticmethod
 	def _IsFlagSet(flags, flag):
@@ -97,9 +97,10 @@ class PogData:
 		PogData.images[self.pogImageUrl] = asynchReturn.data
 		onSuccess()
 
+	# noinspection PyMethodMayBeStatic
+	# noinspection PyUnusedLocal
 	def failedLoad(self, onFailure, asynchReturn):
 		onFailure()
-		pass
 
 	def setPogPosition(self, column, row):
 		self.pogColumn = column

@@ -222,7 +222,7 @@ class AsyncDownload(AsynchBase):
 
 class AsyncUpload(AsynchBase):
 	"""
-	Task to asynchronously upload an file.
+	Task to asynchronously upload a file.
 	"""
 	def __init__(self, url, filePath, requestData, dataResponse):
 		self.url = url

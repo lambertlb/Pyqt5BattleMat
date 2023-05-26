@@ -32,6 +32,6 @@ class DungeonSessionData:
 		ds.players = players.construct()
 
 		for level in self.sessionLevels:
-				ld = DungeonSessionLevel()
-				ld.__dict__ = level
-				ds.sessionLevels.append(ld.construct())
+			ld = DungeonSessionLevel()
+			ld.__dict__ = level
+			ds.sessionLevels.append(ld.construct())

@@ -210,7 +210,6 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		url = ServicesManager.getDungeonManager().assetURL
 		if ServicesManager.getDungeonManager().isValidPictureURL(url):
 			self.selectedPictureEdit.setText(url)
-		pass
 
 	def drawPicture(self):
 		self.imageLoaded = False
@@ -224,7 +223,6 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.imageLoaded = True
 		self.image = data.data
 		self.showThePicture()
-		pass
 
 	def showThePicture(self):
 		if not self.imageLoaded:
@@ -243,7 +241,6 @@ class DungeonEditorTab(QtWidgets.QWidget):
 
 	def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
 		self.showThePicture()
-		pass
 
 	def createNewLevel(self):
 		self.initialize()

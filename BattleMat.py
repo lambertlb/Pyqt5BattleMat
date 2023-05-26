@@ -90,7 +90,6 @@ class MainWindow(QMainWindow):
 		self.loginDialog = LoginDialog()
 		self.loginDialog.show()
 		self.dungeonManagerDialog = DungeonManagerDialog(False)
-		pass
 
 	def eventFired(self, eventData):
 		if eventData.eventReason == ReasonForAction.LOGGED_IN:
@@ -121,7 +120,6 @@ class MainWindow(QMainWindow):
 	# noinspection PyMethodMayBeStatic
 	def doTimeBasedTasks(self):
 		ServicesManager.getDungeonManager().doTimeBasedTasks()
-		pass
 
 
 if __name__ == "__main__":

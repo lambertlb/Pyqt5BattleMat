@@ -70,7 +70,6 @@ class ArtAssetsTab(QtWidgets.QWidget):
 	def onSuccessGetFilelist(self, data):
 		fileList = json.loads(data)
 		self.buildTreeOfAssets(fileList)
-		pass
 
 	def onFailedGetFilelist(self):
 		pass
@@ -96,19 +95,16 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		self.clearBranch(self.dungeonAssets)
 		self.clearBranch(self.monsterAssets)
 		self.clearBranch(self.roomAssets)
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	def clearBranch(self, branch):
 		for i in range(branch.childCount()):
 			branch.removeChild(branch.child(0))
-		pass
 
 	def disableButtons(self):
 		self.downLoadAssetButton.setDisabled(True)
 		self.upLoadButton.setDisabled(True)
 		self.deleteAssetButton.setDisabled(True)
-		pass
 
 	# noinspection PyUnusedLocal
 	def treeItemSelected(self, *args):
@@ -131,7 +127,6 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		url = self.buildUrlToFilename(data)
 		self.filePath.setText(url)
 		ServicesManager.getDungeonManager().setAssetURL(url)
-		pass
 
 	def buildUrlToFilename(self, filename):
 		selected = self.treeWidget.selectedItems()[0]
@@ -178,11 +173,9 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		whereOnServer = selected.data(1, QtCore.Qt.EditRole)
 		ServicesManager.getDungeonManager().uploadFile(whereOnServer,
 													folder, filename, self.onSuccessfulUpload, self.onFailureUpload)
-		pass
 
 	def onSuccessfulUpload(self):
 		self.loadFiles()
-		pass
 
 	def onFailureUpload(self):
 		pass

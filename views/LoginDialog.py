@@ -27,7 +27,6 @@ class LoginDialog(QtWidgets.QDialog, Ui_Dialog):
 		self.username.setText(config.getValue(Constants.Login_USERNAME, ''))
 		self.password.setText(config.getValue(Constants.Login_PASSWORD, ''))
 		self.failed.setVisible(False)
-		pass
 
 	def accept(self):
 		config = ServicesManager.getConfigManager()
@@ -36,11 +35,9 @@ class LoginDialog(QtWidgets.QDialog, Ui_Dialog):
 		config.setValue(Constants.Login_PASSWORD, self.password.text())
 		ServicesManager.getDungeonManager().login(self.username.text(), self.password.text(),
 												self.onSuccess, self.onFailure)
-		pass
 
 	def reject(self):
 		self.loadSettings()
-		pass
 
 	def validate(self):
 		disabled = ServicesManager.getDungeonManager().isValidLoginData(self.serverURL.text(),
@@ -50,9 +47,7 @@ class LoginDialog(QtWidgets.QDialog, Ui_Dialog):
 	# noinspection PyUnusedLocal
 	def onSuccess(self, data):
 		self.done(0)
-		pass
 
 	# noinspection PyUnusedLocal
 	def onFailure(self, data):
 		self.failed.setVisible(True)
-		pass

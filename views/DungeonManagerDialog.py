@@ -51,7 +51,6 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 			button.setVisible(False)
 			button = self.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel)
 			button.setVisible(False)
-		pass
 
 	def show(self):
 		self.intialize()
@@ -115,7 +114,6 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		if self.isValidDungeonForSessions:
 			ServicesManager.getDungeonManager().getSessionList(self.selectedDungeonUUID)
 		self.setStates()
-		pass
 
 	def isValidDungeonTemplateForSessions(self, dungeonName):
 		self.isValidDungeonForSessions = not dungeonName.startswith("Select ") and not dungeonName.startswith("Template ")
@@ -135,7 +133,6 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.loadDungeonList()
 		self.setStates()
 		self.refreshSession()
-		pass
 
 	def resetDungeonLogic(self):
 		self.isOkToCreateDungeon = False
@@ -188,22 +185,18 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 	def editDungeon(self):
 		ServicesManager.getDungeonManager().editSelectedDungeonUUID(self.selectedDungeonUUID)
 		self.done(0)
-		pass
 
 	def newDungeonNameText(self, newName):
 		self.isOkToCreateDungeon = not newName.startswith("Enter ") and len(newName) > 4
 		self.dungeonToCreate = newName
 		self.setStates()
-		pass
 
 	def createDungeon(self):
 		ServicesManager.getDungeonManager().createNewDungeon(self.dungeonToCreate)
 		self.newDungeonName.setText("Enter Dungeon Name")
-		pass
 
 	def deleteDungeon(self):
 		ServicesManager.getDungeonManager().deleteTemplate(self.selectedDungeonUUID)
-		pass
 
 	def sessionSelected(self, index):
 		if index != 0:
@@ -220,23 +213,18 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		else:
 			ServicesManager.getDungeonManager().joinSession(self.selectedDungeonUUID, self.selectedSessionUUID)
 		self.done(0)
-		pass
 
 	def newSessionNameText(self, newSession):
 		self.isOkToCreateSession = ServicesManager.getDungeonManager().isNameValidForNewSession(newSession)
 		self.sessionToCreate = newSession
 		self.setStates()
-		pass
 
 	def createSession(self):
 		ServicesManager.getDungeonManager().createNewSession(self.selectedDungeonUUID, self.sessionToCreate)
 		self.isOkToCreateSession = False
 		_translate = QtCore.QCoreApplication.translate
 		self.newSessionName.setText(_translate("DungeonSelectDialog", "Enter Session Name"))
-		pass
 
 	def deleteSession(self):
 		ServicesManager.getDungeonManager().deleteSession(self.selectedDungeonUUID, self.selectedSessionUUID)
 		self.isOkToDeleteSession = False
-		pass
-

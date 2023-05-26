@@ -25,7 +25,6 @@ class PogNotesViewer(QtWidgets.QDialog, Ui_PogNotesDialog):
 		self.notesTextEdit.setText(self.notes)
 		self.dmNotesTextEdit.setText(self.dmNotes)
 		self.setFontSize()
-		pass
 
 	def show(self):
 		self.setupDisplayWithData()
@@ -34,7 +33,6 @@ class PogNotesViewer(QtWidgets.QDialog, Ui_PogNotesDialog):
 	def fontSizeChanged(self, text):
 		self.currentFontSize = int(text)
 		self.setFontSize()
-		pass
 
 	def setFontSize(self):
 		cursor = self.notesTextEdit.textCursor()

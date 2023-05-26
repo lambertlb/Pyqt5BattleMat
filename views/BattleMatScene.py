@@ -96,7 +96,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		proxy.pogData.dungeonLevel = ServicesManager.getDungeonManager().currentLevelIndex
 		ServicesManager.getDungeonManager().addOrUpdatePogWithoutPlace(proxy.pogData)
 		ServicesManager.getDungeonManager().setSelectedPog(proxy.pogData)
-		pass
 
 	def createPogCanvasForThisCell(self):
 		pogBeingDragged = ServicesManager.getDungeonManager().getSelectedPog()
@@ -127,7 +126,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 
 	def computeInitialZoom(self):
 		self.view.setZoom(1)
-		pass
 
 	def resetScroll(self):
 		self.view.verticalScrollBar().setValue(0)
@@ -188,7 +186,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(self._dungeonPicture)
 		self._imageLoaded = False
 		AsyncImage(imageUrl, self.imageWasLoaded, self.failedLoad).submit()
-		pass
 
 	def imageWasLoaded(self, asynchReturn):
 		"""
@@ -368,7 +365,6 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 			self.drawFOW(painter)
 		if self._showGrid:
 			self.drawGrid(painter)
-		pass
 
 	def drawGrid(self, painter):
 		painter.setPen(QtGui.QColor(174, 173, 172))
@@ -441,4 +437,3 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 		# only adjust if different
 		if currentFOW == self.clearFOW:
 			ServicesManager.getDungeonManager().setFow(self._selectedColumn, self._selectedRow, not currentFOW)
-		pass

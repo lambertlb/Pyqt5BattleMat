@@ -48,6 +48,7 @@ class DungeonManager(PogManager):
 		self.computedGridWidth = 1.0
 		self.fowDirty = False
 		self.assetURL = ''
+		self.savedFOW = None
 
 		self.dungeonLevelMonsters = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
 		self.dungeonLevelRoomObjects = PogCollection(ReasonForAction.LastReason, PogPlace.DUNGEON_LEVEL)
@@ -106,7 +107,6 @@ class DungeonManager(PogManager):
 			AsyncJsonData(url, request, dataResponse, None).submit()
 		else:
 			onFailure(None)
-		pass
 
 	def handleSuccessfulLogin(self, dataRequestResponse):
 		loginResponse = json.loads(dataRequestResponse.data.text)
@@ -115,12 +115,10 @@ class DungeonManager(PogManager):
 			return
 		RequestData.setToken(int(loginResponse['token']))
 		self.getDungeonList(dataRequestResponse.userOnSuccess, dataRequestResponse.userOnFailure)
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	def handleFailedLogin(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure('')
-		pass
 
 	def getDungeonList(self, onSuccess, onFailure):
 		request = RequestData(Constants.DungeonListRequest)
@@ -143,7 +141,6 @@ class DungeonManager(PogManager):
 
 		dataRequestResponse.userOnSuccess('')
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.LOGGED_IN, True)
-		pass
 
 	def handleFailedDungeonList(self, dataRequestResponse):
 		pass
@@ -160,7 +157,6 @@ class DungeonManager(PogManager):
 		self.sessionListData = SessionListData()
 		self.sessionListData.__dict__ = json.loads(dataRequestResponse.data.text)
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionListChanged, None)
-		pass
 
 	def handleFailedSessionList(self, dataRequestResponse):
 		pass
@@ -338,7 +334,6 @@ class DungeonManager(PogManager):
 	# noinspection PyUnusedLocal
 	def handleSuccessfulDungeonCreate(self, dataRequestResponse):
 		self.getDungeonList(self.gotDungeonList, self.failedDungeonList)
-		pass
 
 	def handleFailedDungeonCreate(self, dataRequestResponse):
 		pass
@@ -347,7 +342,6 @@ class DungeonManager(PogManager):
 	# noinspection PyUnusedLocal
 	def gotDungeonList(self, data):
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataCreated, None)
-		pass
 
 	def failedDungeonList(self, data):
 		pass
@@ -365,7 +359,6 @@ class DungeonManager(PogManager):
 	# noinspection PyUnusedLocal
 	def handleSuccessfulDungeonDelete(self, dataRequestResponse):
 		self.getDungeonList(self.gotDungeonList2, self.failedDungeonList)
-		pass
 
 	def handleFailedDungeonDelete(self, dataRequestResponse):
 		pass
@@ -374,7 +367,6 @@ class DungeonManager(PogManager):
 	# noinspection PyUnusedLocal
 	def gotDungeonList2(self, data):
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataDeleted, None)
-		pass
 
 	def dmSession(self, selectedDungeonUUID, sessionUUID):
 		self.selectedDungeonUUID = selectedDungeonUUID
@@ -409,7 +401,6 @@ class DungeonManager(PogManager):
 
 	def handleSuccessfulCreateSession(self, dataRequestResponse):
 		self.getSessionList(dataRequestResponse.dungeonUUID)
-		pass
 
 	def handleFailedCreateSession(self, dataRequestResponse):
 		pass
@@ -525,7 +516,6 @@ class DungeonManager(PogManager):
 
 	def addOrUpdatePogWithoutPlace(self, pog):
 		self.addOrUpdatePog(pog, self.computePlace(pog))
-		pass
 
 	def addOrUpdatePog(self, pog, place):
 		collection = self.getProperCollection(place, pog.pogType)
@@ -537,7 +527,6 @@ class DungeonManager(PogManager):
 			self.selectedPog = pog
 		self.updateDataVersion()
 		ServicesManager.getEventManager().fireEvent(ReasonForAction.PogDataChanged, pog)
-		pass
 
 	def addOrUpdatePogToServer(self, pog, place):
 		request = RequestData(Constants.AddOrUpdatePogRequest)
@@ -606,7 +595,6 @@ class DungeonManager(PogManager):
 		dataResponse.onSuccess = self.handleSuccessfulSaveDungeon
 		dataResponse.onFailure = self.handleFailedSaveDungeon
 		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, self.selectedDungeon).submit()
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
@@ -641,7 +629,6 @@ class DungeonManager(PogManager):
 		dataResponse.userOnSuccess = onSuccess
 		dataResponse.userOnFailure = onFailure
 		AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
@@ -651,7 +638,6 @@ class DungeonManager(PogManager):
 	# noinspection PyMethodMayBeStatic
 	def handleFailedGetFileList(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure()
-		pass
 
 	def setAssetURL(self, assetURL):
 		self.assetURL = assetURL
@@ -659,14 +645,12 @@ class DungeonManager(PogManager):
 	def downloadFile(self, url, fileName, dstFolder):
 		AsyncDownload(self.makeURL(url + '/' + fileName), partial(self.handleSuccessfulDownload,
 							fileName, dstFolder), self.handleFailedGetDownload).submit()
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
 	def handleSuccessfulDownload(self, filename, dstFolder, dataRequestResponse):
 		filePath = dstFolder + '/' + filename
 		open(filePath, 'wb').write(dataRequestResponse.data)
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	def handleFailedGetDownload(self, dataRequestResponse):
@@ -683,18 +667,15 @@ class DungeonManager(PogManager):
 		dataResponse.userOnFailure = onFailure
 		filePath = folder + '/' + filename
 		AsyncUpload(self.makeURL(Constants.ServicePath), filePath, request, dataResponse).submit()
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
 	def handleSuccessfulUpload(self, dataRequestResponse):
 		dataRequestResponse.userOnSuccess()
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	def handleFailedGetUpload(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure()
-		pass
 
 	def deleteFile(self, url, filename, onSuccess, onFailure):
 		request = RequestData(Constants.FileDeleteRequest)
@@ -706,18 +687,15 @@ class DungeonManager(PogManager):
 		dataResponse.userOnSuccess = onSuccess
 		dataResponse.userOnFailure = onFailure
 		AsyncCommand(self.makeURL(Constants.ServicePath), request, dataResponse).submit()
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	# noinspection PyUnusedLocal
 	def handleSuccessfulDeleteFile(self, dataRequestResponse):
 		dataRequestResponse.userOnSuccess()
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	def handleFailedDeleteFile(self, dataRequestResponse):
 		dataRequestResponse.userOnFailure()
-		pass
 
 	# noinspection PyMethodMayBeStatic
 	def isLegalDungeonName(self, nameToCheck):
@@ -743,7 +721,6 @@ class DungeonManager(PogManager):
 
 	def setIsDungeonGridVisible(self, visible):
 		self.selectedDungeon.showGrid = visible
-		pass
 
 	def setCurrentLevel(self, newIndex):
 		self.currentLevelIndex = newIndex
@@ -758,6 +735,7 @@ class DungeonManager(PogManager):
 	def removeCurrentLevel(self):
 		self.selectedDungeon.remove(self.currentLevelIndex)
 
+	# noinspection PyMethodMayBeStatic
 	def isValidNewMonsterName(self, monsterName):
 		isValid = not monsterName.startswith('Enter ') and len(monsterName) > 3
 		return isValid
@@ -773,3 +751,21 @@ class DungeonManager(PogManager):
 		if self.isDungeonMaster and sessionLevel is not None:
 			sessionLevel.updateFOW(columns, rows, value)
 			self.fowDirty = True
+
+	def setHideFOW(self, doHideFOW):
+		if doHideFOW:
+			self.hideFOW()
+		else:
+			self.showSavedFOW()
+		self.updateFogOfWar()
+
+	def hideFOW(self):
+		self.savedFOW = self.getCurrentSessionLevelData().fogOfWarData
+		fogOfWar = self.getCurrentSessionLevelData().createNewFOWData(self.getCurrentDungeonLevelData().rows)
+		self.getCurrentSessionLevelData().fogOfWarData = fogOfWar
+
+	def showSavedFOW(self):
+		if self.savedFOW is None:
+			return
+		self.getCurrentSessionLevelData().fogOfWarData = self.savedFOW
+		self.savedFOW = None

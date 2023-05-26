@@ -43,7 +43,6 @@ class DungeonSessionLevel:
 			roomObjects = PogList()
 			roomObjects.__dict__ = self.roomObjects
 			dl.roomObjects = roomObjects.construct()
-		pass
 
 	def updateFOW(self, columns, rows, value):
 		if self.fogOfWarData is None:
@@ -75,4 +74,7 @@ class DungeonSessionLevel:
 
 	# noinspection PyMethodMayBeStatic
 	def createNewFOWData(self, rows):
-		return [((self.bitsPerColumn * rows) / 32) + 1]
+		data = [((self.bitsPerColumn * rows) / 32) + 1]
+		for i in range(len(data)):
+			data[i] = 0
+		return
