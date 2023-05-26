@@ -1,8 +1,8 @@
 """
 GPL 3 file header
 """
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtGui import QTransform
+from PySide2 import QtWidgets, QtCore
+from PySide2.QtGui import QTransform
 
 from services.ServicesManager import ServicesManager
 

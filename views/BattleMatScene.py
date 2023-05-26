@@ -1,7 +1,7 @@
 """
 GPL 3 file header
 """
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PySide2 import QtWidgets, QtCore, QtGui
 
 from services.AsyncTasks import AsyncImage
 from services.Constants import Constants

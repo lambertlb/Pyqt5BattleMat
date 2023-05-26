@@ -5,9 +5,9 @@ import json
 import traceback
 
 import requests
-from PyQt5 import QtCore
-from PyQt5.QtCore import QRunnable, QThreadPool, QObject
-from PyQt5.QtGui import QImage
+from PySide2 import QtCore
+from PySide2.QtCore import QRunnable, QThreadPool, QObject
+from PySide2.QtGui import QImage
 
 from services.serviceData.DataRequesterResponse import DataRequesterResponse
 
@@ -16,7 +16,7 @@ class AsyncSignal(QObject):
 	"""
 	Small worker class so QRunnable can call signals
 	"""
-	finished = QtCore.pyqtSignal(DataRequesterResponse)
+	finished = QtCore.Signal(DataRequesterResponse)
 
 
 # global reference to thread pool
@@ -74,7 +74,7 @@ class AsynchBase(QRunnable):
 			asyncPool.setMaxThreadCount(30)
 		asyncPool.start(self)
 
-	@QtCore.pyqtSlot()
+	@QtCore.Slot()
 	def run(self):
 		"""
 		run the task and handle exception
@@ -102,7 +102,7 @@ class AsynchBase(QRunnable):
 		return self._returnData.hadException()
 
 
-@QtCore.pyqtSlot(DataRequesterResponse)
+@QtCore.Slot(DataRequesterResponse)
 def taskDone(dataRequesterResponse):
 	"""
 	target for signal and is run after task is finished
@@ -112,7 +112,7 @@ def taskDone(dataRequesterResponse):
 		task.onFailure(task.returnData)
 	else:
 		task.onSuccess(task.returnData)
-	task.signaler.finished.disconnect(task.connectToken)
+	task.signaler.finished.disconnect(taskDone)
 
 
 class AsyncImage(AsynchBase):

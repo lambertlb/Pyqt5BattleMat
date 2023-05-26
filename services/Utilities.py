@@ -1,7 +1,7 @@
 """
 GPL 3 file header
 """
-from PyQt5.QtCore import QSettings
+from PySide2.QtCore import QSettings
 
 from services.Constants import Constants
 
