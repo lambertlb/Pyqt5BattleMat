@@ -1,2 +1,6 @@
 # Pyqt5BattleMat
-Make an electronic battle mat using python and pyqt5
+Make an electronic battle mat using python and PySide2
+
+defendants
+pip install PySide2
+pip install event-bus
