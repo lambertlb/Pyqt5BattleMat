@@ -62,7 +62,7 @@ class ServerDataManager:
 	def addToDungeonCache(server, folder, dungeonName, uuid):
 		ServerDataManager.lock.acquire()
 		try:
-			path = ServerDataManager.getPathToDirectory(server, Constants.Dungeons) + folder
+			path = Constants.Dungeons + folder
 			ServerDataManager.uuidTemplatePathMap[uuid] = path
 			ServerDataManager.dungeonNameToUUIDMap[uuid] = dungeonName
 		finally:
