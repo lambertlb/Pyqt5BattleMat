@@ -6,12 +6,14 @@ from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
 from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
+from Server.RequestHandlers.SessionListHandler import SessionListHandler
 
 
 class BattleMatServer(SimpleHTTPRequestHandler):
 	handler = {
 		'LOGIN': LoginRequestHandler(),
-		'GETDUNGEONLIST': DungeonListHandler()
+		'GETDUNGEONLIST': DungeonListHandler(),
+		'GETSESSIONLIST': SessionListHandler()
 	}
 	webAppDirectory = None
 	topDirectory = None
@@ -45,6 +47,7 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 			if requestHandler is not None:
 				returnData = requestHandler.handleRequest(self, parameters, data)
 			else:
+				print(f'need handler {requestType}')
 				returnData = 'Bad request'
 		except (Exception,):
 			traceback.print_exc()

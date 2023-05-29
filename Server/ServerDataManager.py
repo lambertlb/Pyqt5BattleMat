@@ -67,3 +67,34 @@ class ServerDataManager:
 			ServerDataManager.dungeonNameToUUIDMap[uuid] = dungeonName
 		finally:
 			ServerDataManager.lock.release()
+
+	@staticmethod
+	def getSessionListData(server, dungeonUUID):
+		sessionListData = {}
+		ServerDataManager.lock.acquire()
+		try:
+			print(ServerDataManager.uuidTemplatePathMap)
+			pt = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
+			sessionsPath = pt + Constants.SessionFolder
+			directoryPath = ServerDataManager.getPathToDirectory(server, sessionsPath)
+			ServerDataManager.makeSureDirectoryExists(directoryPath)
+			files = os.listdir(directoryPath)
+			for file in files:
+				fullPath = directoryPath + file
+				if os.path.isdir(fullPath):
+					ServerDataManager.putSessionNameInCache(server, sessionsPath, file, sessionListData)
+		finally:
+			ServerDataManager.lock.release()
+		return sessionListData
+
+	@staticmethod
+	def makeSureDirectoryExists(directoryPath):
+		if not os.path.exists(directoryPath):
+			os.mkdir(directoryPath)
+
+	@staticmethod
+	def putSessionNameInCache(server, sessionsPath, possibleSession, sessionListData):
+		# SessionInformation sessionInformation = loadSessionInformation(possibleSession);
+		# DungeonSessionData sessionData = sessionInformation.getSessionData();
+		# sessionListData.put(sessionData.getSessionName(), sessionData.getSessionUUID());
+		pass

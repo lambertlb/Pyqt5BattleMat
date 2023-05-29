@@ -14,7 +14,7 @@ class Constants:
 	Dungeons = DungeonData + 'dungeons/'
 	Monsters = 'resources/monsters/'
 	RoomObjects = 'resources/roomObjects/'
-	SessionFolder = 'sessions/'
+	SessionFolder = '/sessions/'
 
 # requests to dungeon server
 	LoginRequest = 'LOGIN'

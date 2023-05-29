@@ -5,6 +5,8 @@ from Server.ServerDataManager import ServerDataManager
 
 class DungeonListResponseData:
 	def __init__(self, dungeonListData, dungeonDirectoryData):
+		print(dungeonListData)
+		print(dungeonDirectoryData)
 		self.dungeonNames = []
 		self.dungeonUUIDS = []
 		self.dungeonDirectories = []
