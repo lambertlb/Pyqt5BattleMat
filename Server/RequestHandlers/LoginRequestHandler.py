@@ -12,7 +12,7 @@ class LoginRequestHandler:
 
 	# noinspection PyUnusedLocal
 	# noinspection PyMethodMayBeStatic
-	def handleRequest(self, parameters, data):
+	def handleRequest(self, server, parameters, data):
 		response = LoginResponse()
 		username = parameters.get('username')[0]
 		password = parameters.get('password')[0]

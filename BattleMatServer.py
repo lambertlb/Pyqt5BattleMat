@@ -1,22 +1,38 @@
 import json
+import traceback
 import urllib
 from urllib import parse
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
-from RequestHandlers.LoginRequestHandler import LoginRequestHandler
+from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
+from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
 
 
 class BattleMatServer(SimpleHTTPRequestHandler):
 	handler = {
-		'LOGIN': LoginRequestHandler()
+		'LOGIN': LoginRequestHandler(),
+		'GETDUNGEONLIST': DungeonListHandler()
 	}
+	webAppDirectory = None
+	topDirectory = None
+
+	def __init__(self,  *args, **kwargs):
+		super(BattleMatServer, self).__init__(*args, directory=BattleMatServer.webAppDirectory, **kwargs)
+
+	def do_GET(self):
+		if BattleMatServer.topDirectory is None:
+			BattleMatServer.topDirectory = self.translate_path(self.path)
+			print(BattleMatServer.topDirectory)
+
+		super(BattleMatServer, self).do_GET()
 
 	def do_POST(self):
+		self.topDirectory = BattleMatServer.topDirectory
 		urlParts = urllib.parse.urlsplit(self.path)
 		parameters = urllib.parse.parse_qs(urlParts.query)
 
 		returnCode = 200
-		returnData = b''
+		returnData = ''
 		try:
 			content_length = int(self.headers["Content-Length"])
 			rawData = self.rfile.read(content_length)
@@ -27,8 +43,11 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 			requestType = parameters['request'][0]
 			requestHandler = BattleMatServer.handler.get(requestType)
 			if requestHandler is not None:
-				returnData = requestHandler.handleRequest(parameters, data)
+				returnData = requestHandler.handleRequest(self, parameters, data)
+			else:
+				returnData = 'Bad request'
 		except (Exception,):
+			traceback.print_exc()
 			returnCode = 400
 
 		self.send_response(returnCode)
@@ -36,8 +55,9 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		self.wfile.write(bytes(returnData, 'utf-8'))
 
 
-def run(server_class=HTTPServer, handler_class=BattleMatServer, host='localhost', port=8080):
+def run(server_class=HTTPServer, handler_class=BattleMatServer, host='localhost', port=8080, hostDirectory='./webApp'):
 	server_address = (host, port)
+	BattleMatServer.webAppDirectory = hostDirectory
 	httpd = server_class(server_address, handler_class)
 	print('Starting httpd...')
 	httpd.serve_forever()
