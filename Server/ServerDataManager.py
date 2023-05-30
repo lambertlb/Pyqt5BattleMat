@@ -201,3 +201,46 @@ class ServerDataManager:
 		ServerDataManager.uuidTemplatePathMap.clear()
 		ServerDataManager.dungeonNameToUUIDMap.clear()
 		ServerDataManager.getDungeonListData(server)
+
+	@staticmethod
+	def saveSessionData(server, jsonData, dungeonUUID, sessionUUID):
+		if not dungeonUUID:
+			return
+		ServerDataManager.lock.acquire()
+		try:
+			sessionInformation = ServerDataManager.getSessionInformation(server, dungeonUUID, sessionUUID)
+			if sessionInformation:
+				sessionInformation.fromJson(jsonData)
+				sessionJson = json.dumps(sessionInformation.sessionData, default=vars)
+				ServerDataManager.saveJsonFile(sessionJson, sessionInformation.sessionPath);
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def getSessionInformation(server, dungeonUUID, sessionUUID):
+		ServerDataManager.lock.acquire()
+		try:
+			sessionInformation = ServerDataManager.getSessionFromCache(sessionUUID)
+			if sessionInformation:
+				return sessionInformation
+			sessionsPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID) + Constants.SessionFolder
+			directoryPath = ServerDataManager.getPathToDirectory(server, sessionsPath)
+			files = os.listdir(directoryPath)
+			for file in files:
+				fullPath = directoryPath + '/' + file
+				if os.path.isdir(fullPath):
+					possibleSessionInformation: SessionInformation = ServerDataManager.loadSessionInformation(fullPath)
+					if possibleSessionInformation.sessionData.sessionUUID == sessionUUID:
+						ServerDataManager.addSessionToCache(possibleSessionInformation)
+						return possibleSessionInformation
+		finally:
+			ServerDataManager.lock.release()
+		return None
+
+	@staticmethod
+	def getSessionFromCache(sessionUUID):
+		return None
+
+	@staticmethod
+	def addSessionToCache(session):
+		pass

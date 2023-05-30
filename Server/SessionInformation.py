@@ -8,7 +8,7 @@ class SessionInformation:
 		self.dirty = False
 		self.sessionDirectory = sessionDirectory
 		self.sessionPath = sessionPath
-		self.sessionData = sessionData
+		self.sessionData: DungeonSessionData = sessionData
 
 	def load(self, sessionPath, sessionDirectory, jsonData):
 		self.sessionPath = sessionPath

@@ -10,6 +10,7 @@ from Server.RequestHandlers.DeleteDungeonHandler import DeleteDungeonHandler
 from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
 from Server.RequestHandlers.LoadJsonDataHandler import LoadJsonDataHandler
 from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
+from Server.RequestHandlers.SaveJsonDataHandler import SaveJsonDataHandler
 from Server.RequestHandlers.SessionListHandler import SessionListHandler
 
 
@@ -21,7 +22,8 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'LOADJSONFILE': LoadJsonDataHandler(),
 		'FILELISTER': FileLister(),
 		'CREATENEWDUNGEON': CreateNewDungeonHandler(),
-		'DELETEDUNGEON': DeleteDungeonHandler()
+		'DELETEDUNGEON': DeleteDungeonHandler(),
+		'SAVEJSONFILE': SaveJsonDataHandler()
 
 	}
 	webAppDirectory = None
@@ -43,14 +45,10 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		try:
 			content_length = int(self.headers["Content-Length"])
 			rawData = self.rfile.read(content_length)
-			if len(rawData) != 0:
-				data = json.loads(rawData)
-			else:
-				data = None
 			requestType = parameters['request'][0]
 			requestHandler = BattleMatServer.handler.get(requestType)
 			if requestHandler is not None:
-				returnData = requestHandler.handleRequest(self, parameters, data)
+				returnData = requestHandler.handleRequest(self, parameters, rawData)
 			else:
 				print(f'need handler {requestType}')
 				returnData = 'Bad request'
