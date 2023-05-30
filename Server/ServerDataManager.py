@@ -3,7 +3,9 @@ import os
 import threading
 
 from Server.DungeonData import DungeonData
+from Server.SessionInformation import SessionInformation
 from services.Constants import Constants
+from services.serviceData.DungeonSessionData import DungeonSessionData
 
 
 class ServerDataManager:
@@ -80,9 +82,9 @@ class ServerDataManager:
 			ServerDataManager.makeSureDirectoryExists(directoryPath)
 			files = os.listdir(directoryPath)
 			for file in files:
-				fullPath = directoryPath + file
+				fullPath = directoryPath + '/' + file
 				if os.path.isdir(fullPath):
-					ServerDataManager.putSessionNameInCache(server, sessionsPath, file, sessionListData)
+					ServerDataManager.putSessionNameInCache(server, directoryPath, file, sessionListData)
 		finally:
 			ServerDataManager.lock.release()
 		return sessionListData
@@ -94,7 +96,48 @@ class ServerDataManager:
 
 	@staticmethod
 	def putSessionNameInCache(server, sessionsPath, possibleSession, sessionListData):
-		# SessionInformation sessionInformation = loadSessionInformation(possibleSession);
-		# DungeonSessionData sessionData = sessionInformation.getSessionData();
-		# sessionListData.put(sessionData.getSessionName(), sessionData.getSessionUUID());
-		pass
+		sessionInformation = ServerDataManager.loadSessionInformation(sessionsPath + possibleSession)
+		sessionData: DungeonSessionData = sessionInformation.sessionData
+		sessionListData[sessionData.sessionName] = sessionData.sessionUUID
+
+	@staticmethod
+	def loadSessionInformation(possibleSession):
+		possibleSessionInformation = SessionInformation()
+		path = possibleSession + "/sessionData.json"
+		jsonData = ServerDataManager.readJsonFile(path)
+		possibleSessionInformation.load(path, possibleSession, jsonData)
+		return possibleSessionInformation
+
+	@staticmethod
+	def getFileAsString(server, fileName):
+		ServerDataManager.lock.acquire()
+		try:
+			filePath = ServerDataManager.getPathToDirectory(server, Constants.DungeonData) + fileName
+			return ServerDataManager.readJsonFile(filePath)
+		finally:
+			ServerDataManager.lock.release()
+		return None
+
+	@staticmethod
+	def getDungeonDataAsString(server, dungeonUUID):
+		ServerDataManager.lock.acquire()
+		tm = ServerDataManager.uuidTemplatePathMap
+		try:
+			if dungeonUUID not in ServerDataManager.uuidTemplatePathMap:
+				return None
+			dungeonPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
+			filePath = ServerDataManager.getPathToDirectory(server, dungeonPath + './dungeonData.json')
+			return ServerDataManager.readJsonFile(filePath)
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def getFilenamesInPath(server, folder):
+		foundFiles = []
+		directoryPath = ServerDataManager.getPathToDirectory(server, folder)
+		files = os.listdir(directoryPath)
+		for file in files:
+			fullPath = directoryPath + '/' + file
+			if not os.path.isdir(fullPath):
+				foundFiles.append(file)
+		return foundFiles

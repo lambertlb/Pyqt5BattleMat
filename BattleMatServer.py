@@ -4,7 +4,9 @@ import urllib
 from urllib import parse
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
+from Server.FileLister import FileLister
 from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
+from Server.RequestHandlers.LoadJsonDataHandler import LoadJsonDataHandler
 from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
 from Server.RequestHandlers.SessionListHandler import SessionListHandler
 
@@ -13,19 +15,18 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 	handler = {
 		'LOGIN': LoginRequestHandler(),
 		'GETDUNGEONLIST': DungeonListHandler(),
-		'GETSESSIONLIST': SessionListHandler()
+		'GETSESSIONLIST': SessionListHandler(),
+		'LOADJSONFILE': LoadJsonDataHandler(),
+		'FILELISTER': FileLister()
+
 	}
 	webAppDirectory = None
-	topDirectory = None
+	topDirectory = './webApp/'
 
 	def __init__(self,  *args, **kwargs):
 		super(BattleMatServer, self).__init__(*args, directory=BattleMatServer.webAppDirectory, **kwargs)
 
 	def do_GET(self):
-		if BattleMatServer.topDirectory is None:
-			BattleMatServer.topDirectory = self.translate_path(self.path)
-			print(BattleMatServer.topDirectory)
-
 		super(BattleMatServer, self).do_GET()
 
 	def do_POST(self):

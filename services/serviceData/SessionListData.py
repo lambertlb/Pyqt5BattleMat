@@ -5,10 +5,15 @@ GPL 3 file header
 
 class SessionListData:
 
-	def __init__(self):
-		self.dungeonUUID = None
+	def __init__(self, sessionListData=None, dungeonUUID=None):
+		self.dungeonUUID = dungeonUUID
 		self.sessionNames = []
 		self.sessionUUIDs = []
+		if sessionListData is None:
+			return
+		for key, value in sessionListData.items():
+			self.sessionNames.append(key)
+			self.sessionUUIDs.append(value)
 
 	def getDungeonUUID(self):
 		return self.dungeonUUID
