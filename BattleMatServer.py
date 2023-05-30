@@ -5,6 +5,7 @@ from urllib import parse
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 from Server.FileLister import FileLister
+from Server.RequestHandlers.CreateNewDungeonHandler import CreateNewDungeonHandler
 from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
 from Server.RequestHandlers.LoadJsonDataHandler import LoadJsonDataHandler
 from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
@@ -17,7 +18,8 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'GETDUNGEONLIST': DungeonListHandler(),
 		'GETSESSIONLIST': SessionListHandler(),
 		'LOADJSONFILE': LoadJsonDataHandler(),
-		'FILELISTER': FileLister()
+		'FILELISTER': FileLister(),
+		'CREATENEWDUNGEON': CreateNewDungeonHandler()
 
 	}
 	webAppDirectory = None

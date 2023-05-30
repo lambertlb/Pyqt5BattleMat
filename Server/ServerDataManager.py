@@ -1,6 +1,9 @@
 import json
 import os
+import re
+import shutil
 import threading
+import uuid
 
 from Server.DungeonData import DungeonData
 from Server.SessionInformation import SessionInformation
@@ -30,7 +33,7 @@ class ServerDataManager:
 			ServerDataManager.lock.release()
 
 	@staticmethod
-	def	getPathToDirectory(server, partial):
+	def getPathToDirectory(server, partial):
 		path = server.topDirectory + partial
 		return path
 
@@ -38,17 +41,17 @@ class ServerDataManager:
 	def getDungeonName(server, folder):
 		dungeonData = ServerDataManager.getDungeonData(server, folder)
 		dungeonName = dungeonData.dungeonName
-		uuid = dungeonData.uuid
-		ServerDataManager.addToDungeonCache(server, folder, dungeonName, uuid)
+		dungeonUUID = dungeonData.uuid
+		ServerDataManager.addToDungeonCache(folder, dungeonName, dungeonUUID)
 		pass
 
 	@staticmethod
 	def getDungeonData(server, folder):
 		path = ServerDataManager.getPathToDirectory(server, Constants.Dungeons) + folder
-		return ServerDataManager.getDungeonDataFromPath(server, path)
+		return ServerDataManager.getDungeonDataFromPath(path)
 
 	@staticmethod
-	def getDungeonDataFromPath(server, folder):
+	def getDungeonDataFromPath(folder):
 		filePath = folder + '/dungeonData.json'
 		jsonData = ServerDataManager.readJsonFile(filePath)
 		dungeonData = DungeonData()
@@ -61,12 +64,12 @@ class ServerDataManager:
 			return f.read()
 
 	@staticmethod
-	def addToDungeonCache(server, folder, dungeonName, uuid):
+	def addToDungeonCache(folder, dungeonName, dungeonUUID):
 		ServerDataManager.lock.acquire()
 		try:
 			path = Constants.Dungeons + folder
-			ServerDataManager.uuidTemplatePathMap[uuid] = path
-			ServerDataManager.dungeonNameToUUIDMap[uuid] = dungeonName
+			ServerDataManager.uuidTemplatePathMap[dungeonUUID] = path
+			ServerDataManager.dungeonNameToUUIDMap[dungeonUUID] = dungeonName
 		finally:
 			ServerDataManager.lock.release()
 
@@ -84,7 +87,7 @@ class ServerDataManager:
 			for file in files:
 				fullPath = directoryPath + '/' + file
 				if os.path.isdir(fullPath):
-					ServerDataManager.putSessionNameInCache(server, directoryPath, file, sessionListData)
+					ServerDataManager.putSessionNameInCache(directoryPath, file, sessionListData)
 		finally:
 			ServerDataManager.lock.release()
 		return sessionListData
@@ -95,7 +98,7 @@ class ServerDataManager:
 			os.mkdir(directoryPath)
 
 	@staticmethod
-	def putSessionNameInCache(server, sessionsPath, possibleSession, sessionListData):
+	def putSessionNameInCache(sessionsPath, possibleSession, sessionListData):
 		sessionInformation = ServerDataManager.loadSessionInformation(sessionsPath + possibleSession)
 		sessionData: DungeonSessionData = sessionInformation.sessionData
 		sessionListData[sessionData.sessionName] = sessionData.sessionUUID
@@ -116,12 +119,10 @@ class ServerDataManager:
 			return ServerDataManager.readJsonFile(filePath)
 		finally:
 			ServerDataManager.lock.release()
-		return None
 
 	@staticmethod
 	def getDungeonDataAsString(server, dungeonUUID):
 		ServerDataManager.lock.acquire()
-		tm = ServerDataManager.uuidTemplatePathMap
 		try:
 			if dungeonUUID not in ServerDataManager.uuidTemplatePathMap:
 				return None
@@ -141,3 +142,44 @@ class ServerDataManager:
 			if not os.path.isdir(fullPath):
 				foundFiles.append(file)
 		return foundFiles
+
+	@staticmethod
+	def copyDungeon(server, dungeonUUID, newDungeonName):
+		ServerDataManager.lock.acquire()
+		try:
+			dstDirectory = re.sub("[^a-zA-Z0-9]", "_", newDungeonName)
+			dungeonPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
+			dungeonFullPath = ServerDataManager.getPathToDirectory(server, dungeonPath)
+			copyPath = ServerDataManager.getPathToDirectory(server, Constants.Dungeons + dstDirectory)
+			shutil.copytree(dungeonFullPath, copyPath)
+			ServerDataManager.deleteAnyOldSessions(copyPath)
+			dungeonData = ServerDataManager.getDungeonData(server, dstDirectory)
+			dungeonData.dungeonName = newDungeonName
+			dungeonData.uuid = str(uuid.uuid4())
+			ServerDataManager.addToDungeonCache(dstDirectory, newDungeonName, dungeonData.uuid)
+			jsonData = json.dumps(dungeonData, default=vars)
+			ServerDataManager.saveDungeonData(server, jsonData, dungeonData.uuid)
+			pass
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def deleteAnyOldSessions(destinationDirectory):
+		sessionsPath = destinationDirectory + "/" + Constants.SessionFolder
+		ServerDataManager.lock.acquire()
+		try:
+			if os.path.exists(sessionsPath):
+				shutil.rmtree(sessionsPath)
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def saveDungeonData(server, jsonData, dungeonUUID):
+		filePath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID) + "/dungeonData.json"
+		fullPath = ServerDataManager.getPathToDirectory(server, filePath)
+		ServerDataManager.saveJsonFile(jsonData, fullPath)
+
+	@staticmethod
+	def saveJsonFile(jsonData, fullPath):
+		with open(fullPath, "w") as text_file:
+			text_file.write(jsonData)
