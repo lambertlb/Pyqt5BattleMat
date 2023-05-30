@@ -6,6 +6,7 @@ from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 from Server.FileLister import FileLister
 from Server.RequestHandlers.CreateNewDungeonHandler import CreateNewDungeonHandler
+from Server.RequestHandlers.DeleteDungeonHandler import DeleteDungeonHandler
 from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
 from Server.RequestHandlers.LoadJsonDataHandler import LoadJsonDataHandler
 from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
@@ -19,7 +20,8 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'GETSESSIONLIST': SessionListHandler(),
 		'LOADJSONFILE': LoadJsonDataHandler(),
 		'FILELISTER': FileLister(),
-		'CREATENEWDUNGEON': CreateNewDungeonHandler()
+		'CREATENEWDUNGEON': CreateNewDungeonHandler(),
+		'DELETEDUNGEON': DeleteDungeonHandler()
 
 	}
 	webAppDirectory = None

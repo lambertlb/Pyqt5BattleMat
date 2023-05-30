@@ -183,3 +183,21 @@ class ServerDataManager:
 	def saveJsonFile(jsonData, fullPath):
 		with open(fullPath, "w") as text_file:
 			text_file.write(jsonData)
+
+	@staticmethod
+	def deleteDungeon(server, dungeonUUID):
+		ServerDataManager.lock.acquire()
+		try:
+			dungeonPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
+			dungeonFullPath = ServerDataManager.getPathToDirectory(server, dungeonPath)
+			if os.path.exists(dungeonFullPath):
+				shutil.rmtree(dungeonFullPath)
+			ServerDataManager.rebuildDungeonList(server)
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def rebuildDungeonList(server):
+		ServerDataManager.uuidTemplatePathMap.clear()
+		ServerDataManager.dungeonNameToUUIDMap.clear()
+		ServerDataManager.getDungeonListData(server)
