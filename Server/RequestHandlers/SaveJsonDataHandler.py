@@ -14,7 +14,7 @@ class SaveJsonDataHandler:
 		if ss:
 			sessionUUID = ss[0]
 		if sessionUUID:
-			ServerDataManager.saveSessionData(server, data.decode('utf-8'), dungeonUUID, sessionUUID)
+			ServerDataManager.saveSessionData(server, data, dungeonUUID, sessionUUID)
 		else:
-			ServerDataManager.saveDungeonData(server, data.decode('utf-8'), dungeonUUID)
+			ServerDataManager.saveDungeonData(server, data, dungeonUUID)
 		return ''

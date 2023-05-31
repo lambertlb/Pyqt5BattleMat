@@ -21,3 +21,8 @@ class SessionInformation:
 			sessionData = DungeonSessionData()
 			sessionData.__dict__ = json.loads(jsonData)
 			self.sessionData = sessionData.construct()
+
+	def getUUID(self):
+		if self.sessionData:
+			return self.sessionData.sessionUUID
+		return None

@@ -1,10 +1,10 @@
-import json
 import traceback
 import urllib
 from urllib import parse
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
-from Server.FileLister import FileLister
+from Server.RequestHandlers.DeleteFileHandler import DeleteFileHandler
+from Server.RequestHandlers.FileListerHandler import FileListerHandler
 from Server.RequestHandlers.CreateNewDungeonHandler import CreateNewDungeonHandler
 from Server.RequestHandlers.DeleteDungeonHandler import DeleteDungeonHandler
 from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
@@ -13,6 +13,17 @@ from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
 from Server.RequestHandlers.SaveJsonDataHandler import SaveJsonDataHandler
 from Server.RequestHandlers.SessionListHandler import SessionListHandler
 
+"""
+		webServices.put("CREATENEWSESSION", new CreateNewSessionHandler());
+		webServices.put("DELETESESSION", new DeleteSessionHandler());
+		webServices.put("LOADSESSION", new LoadSessionHandler());
+		webServices.put("UPDATEFOW", new UpdateFOWHander());
+		webServices.put("FILEUPLOAD", new FileUploadHandler());
+		webServices.put("ADDORUPDATEPOG", new AddOrUpdatePogHandler());
+		webServices.put("DELETEPOG", new DeletePogHandler());
+		webServices.put("DELETEFILE", new DeleteFile());
+"""
+
 
 class BattleMatServer(SimpleHTTPRequestHandler):
 	handler = {
@@ -20,12 +31,14 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'GETDUNGEONLIST': DungeonListHandler(),
 		'GETSESSIONLIST': SessionListHandler(),
 		'LOADJSONFILE': LoadJsonDataHandler(),
-		'FILELISTER': FileLister(),
+		'FILELISTER': FileListerHandler(),
 		'CREATENEWDUNGEON': CreateNewDungeonHandler(),
 		'DELETEDUNGEON': DeleteDungeonHandler(),
-		'SAVEJSONFILE': SaveJsonDataHandler()
+		'SAVEJSONFILE': SaveJsonDataHandler(),
+		'DELETEFILE': DeleteFileHandler()
 
 	}
+
 	webAppDirectory = None
 	topDirectory = './webApp/'
 
@@ -55,7 +68,6 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		except (Exception,):
 			traceback.print_exc()
 			returnCode = 400
-
 		self.send_response(returnCode)
 		self.end_headers()
 		self.wfile.write(bytes(returnData, 'utf-8'))

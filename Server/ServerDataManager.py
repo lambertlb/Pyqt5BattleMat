@@ -15,6 +15,7 @@ class ServerDataManager:
 	lock = threading.RLock()
 	uuidTemplatePathMap = {}
 	dungeonNameToUUIDMap = {}
+	sessionCache = {}
 
 	@staticmethod
 	def getDungeonListData(server):
@@ -181,7 +182,7 @@ class ServerDataManager:
 
 	@staticmethod
 	def saveJsonFile(jsonData, fullPath):
-		with open(fullPath, "w") as text_file:
+		with open(fullPath, "wb") as text_file:
 			text_file.write(jsonData)
 
 	@staticmethod
@@ -239,8 +240,27 @@ class ServerDataManager:
 
 	@staticmethod
 	def getSessionFromCache(sessionUUID):
-		return None
+		ServerDataManager.lock.acquire()
+		try:
+			return ServerDataManager.sessionCache.get(sessionUUID)
+		finally:
+			ServerDataManager.lock.release()
 
 	@staticmethod
 	def addSessionToCache(session):
-		pass
+		ServerDataManager.lock.acquire()
+		try:
+			if session.getUUID() in ServerDataManager.sessionCache:
+				ServerDataManager.sessionCache.pop(session.getUUID())
+			ServerDataManager.sessionCache[session.getUUID()] = session
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def deleteFile(server, filePath):
+		ServerDataManager.lock.acquire()
+		try:
+			path = ServerDataManager.getPathToDirectory(server, filePath)
+			os.remove(path)
+		finally:
+			ServerDataManager.lock.release()

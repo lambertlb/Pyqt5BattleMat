@@ -9,7 +9,7 @@ class FileListResponse:
 		self.fileNames = []
 
 
-class FileLister:
+class FileListerHandler:
 
 	# noinspection PyUnusedLocal
 	# noinspection PyMethodMayBeStatic
