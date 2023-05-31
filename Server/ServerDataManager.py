@@ -5,10 +5,11 @@ import shutil
 import threading
 import uuid
 
-from Server.DungeonData import DungeonData
 from Server.SessionInformation import SessionInformation
 from services.Constants import Constants
+from services.serviceData.DungeonData import DungeonData
 from services.serviceData.DungeonSessionData import DungeonSessionData
+from services.serviceData.DungeonSessionLevel import DungeonSessionLevel
 
 
 class ServerDataManager:
@@ -57,7 +58,7 @@ class ServerDataManager:
 		jsonData = ServerDataManager.readJsonFile(filePath)
 		dungeonData = DungeonData()
 		dungeonData.__dict__ = json.loads(jsonData)
-		return dungeonData
+		return dungeonData.construct()
 
 	@staticmethod
 	def readJsonFile(path):
@@ -79,7 +80,6 @@ class ServerDataManager:
 		sessionListData = {}
 		ServerDataManager.lock.acquire()
 		try:
-			print(ServerDataManager.uuidTemplatePathMap)
 			pt = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
 			sessionsPath = pt + Constants.SessionFolder
 			directoryPath = ServerDataManager.getPathToDirectory(server, sessionsPath)
@@ -264,3 +264,36 @@ class ServerDataManager:
 			os.remove(path)
 		finally:
 			ServerDataManager.lock.release()
+
+	@staticmethod
+	def createSession(server, dungeonUUID, newSessionName):
+		ServerDataManager.lock.acquire()
+		try:
+			dungeonPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
+			templateDirectory = ServerDataManager.getPathToDirectory(server, dungeonPath)
+			newSessionNameSub = re.sub("[^a-zA-Z0-9]", "_", newSessionName)
+			sessionDirectory = templateDirectory + Constants.SessionFolder + newSessionNameSub
+			ServerDataManager.makeSureDirectoryExists(sessionDirectory)
+			dungeonData = ServerDataManager.getDungeonDataFromUUID(server, dungeonUUID)
+			sessionData = ServerDataManager.createSessionData(server, sessionDirectory, dungeonUUID, newSessionName, dungeonData)
+			filePath = sessionDirectory + '/' + 'sessionData.json'
+			sessionInformation = SessionInformation(sessionData, filePath, sessionDirectory)
+			sessionInformation.save()
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def getDungeonDataFromUUID(server, dungeonUUID):
+		directoryPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
+		return ServerDataManager.getDungeonDataFromPath(ServerDataManager.getPathToDirectory(server, directoryPath))
+
+	@staticmethod
+	def createSessionData(server, sessionDirectory, dungeonUUID, newSessionName, dungeonData):
+		uuidString = str(uuid.uuid4())
+		newSessionData = DungeonSessionData(newSessionName, dungeonUUID, uuidString)
+		sessionLevels = []
+		newSessionData.setSessionLevels(sessionLevels)
+		for i in range(len(dungeonData.dungeonLevels)):
+			sessionLevel = DungeonSessionLevel(dungeonData.dungeonLevels[i])
+			sessionLevels.append(sessionLevel)
+		return newSessionData

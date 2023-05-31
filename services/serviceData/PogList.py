@@ -1,6 +1,9 @@
 """
 GPL 3 file header
 """
+import copy
+import uuid
+
 from services.serviceData.PogData import PogData
 
 
@@ -14,6 +17,15 @@ class PogList:
 		dl = PogList()
 		self.cloneData(dl)
 		return dl
+
+	def clone(self):
+		pl = PogList()
+		pl.listVersion = self.listVersion
+		for pog in self.pogList:
+			np = copy.copy(pog)
+			np.uuid = str(uuid.uuid4())
+			pl.pogList.append(np)
+		return pl
 
 	def cloneData(self, dl):
 		if 'listVersion' in locals():

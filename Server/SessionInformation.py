@@ -26,3 +26,9 @@ class SessionInformation:
 		if self.sessionData:
 			return self.sessionData.sessionUUID
 		return None
+
+	def save(self):
+		sessionJson = json.dumps(self.sessionData, default=vars)
+		with open(self.sessionPath, "wb") as text_file:
+			text_file.write(sessionJson.encode())
+		self.dirty = False

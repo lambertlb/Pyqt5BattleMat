@@ -6,12 +6,17 @@ from services.serviceData.PogList import PogList
 
 class DungeonSessionLevel:
 
-	def __init__(self):
+	def __init__(self, dungeonLevel=None):
 		self.fogOfWarVersion = 0
 		self.fogOfWarData = []
 		self.bitsPerColumn = 0
 		self.monsters = PogList()
 		self.roomObjects = PogList()
+		if dungeonLevel:
+			self.monsters = dungeonLevel.monsters.clone()
+			self.roomObjects = dungeonLevel.roomObjects.clone()
+			self.bitsPerColumn = dungeonLevel.columns
+			self.fogOfWarData = self.createNewFOWData(dungeonLevel.rows, -1)
 
 	def construct(self):
 		dl = DungeonSessionLevel()
@@ -22,27 +27,27 @@ class DungeonSessionLevel:
 		if hasattr(self, 'fogOfWarVersion'):
 			dl.fogOfWarVersion = self.fogOfWarVersion
 		else:
-			dl.fogOfWarVersion = None
+			dl.fogOfWarVersion = 0
 		if hasattr(self, 'bitsPerColumn'):
 			dl.bitsPerColumn = self.bitsPerColumn
 		else:
 			dl.bitsPerColumn = 0
 		if hasattr(self, 'fogOfWar'):
 			dl.fogOfWar = self.fogOfWar
-		else:
-			dl.fogOfWar = None
 		if hasattr(self, 'fogOfWarData'):
 			dl.fogOfWarData = self.fogOfWarData
 		else:
-			dl.fogOfWarData = None
-		if self.monsters is not None:
-			monsters = PogList()
-			monsters.__dict__ = self.monsters
-			dl.monsters = monsters.construct()
-		if self.roomObjects is not None:
-			roomObjects = PogList()
-			roomObjects.__dict__ = self.roomObjects
-			dl.roomObjects = roomObjects.construct()
+			dl.fogOfWarData = []
+		if hasattr(self, 'monsters'):
+			if self.monsters is not None:
+				monsters = PogList()
+				monsters.__dict__ = self.monsters
+				dl.monsters = monsters.construct()
+		if hasattr(self, 'roomObjects'):
+			if self.roomObjects is not None:
+				roomObjects = PogList()
+				roomObjects.__dict__ = self.roomObjects
+				dl.roomObjects = roomObjects.construct()
 
 	def updateFOW(self, columns, rows, value):
 		if self.fogOfWarData is None:
@@ -73,8 +78,9 @@ class DungeonSessionLevel:
 		return False
 
 	# noinspection PyMethodMayBeStatic
-	def createNewFOWData(self, rows):
-		data = [((self.bitsPerColumn * rows) / 32) + 1]
-		for i in range(len(data)):
-			data[i] = 0
-		return
+	def createNewFOWData(self, rows, fillData=0):
+		size = int(((self.bitsPerColumn * rows) / 32) + 1)
+		data = []
+		for _ in range(size):
+			data.append(fillData)
+		return data

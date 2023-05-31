@@ -3,6 +3,7 @@ import urllib
 from urllib import parse
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
+from Server.RequestHandlers.CreateNewSessionHandler import CreateNewSessionHandler
 from Server.RequestHandlers.DeleteFileHandler import DeleteFileHandler
 from Server.RequestHandlers.FileListerHandler import FileListerHandler
 from Server.RequestHandlers.CreateNewDungeonHandler import CreateNewDungeonHandler
@@ -35,7 +36,8 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'DELETEDUNGEON': DeleteDungeonHandler(),
 		'SAVEJSONFILE': SaveJsonDataHandler(),
 		'DELETEFILE': DeleteFileHandler(),
-		'FILEUPLOAD': FileUploadHandler()
+		'FILEUPLOAD': FileUploadHandler(),
+		'CREATENEWSESSION': CreateNewSessionHandler()
 
 	}
 

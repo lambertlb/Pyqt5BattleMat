@@ -7,11 +7,11 @@ from services.serviceData.PogList import PogList
 
 class DungeonSessionData:
 
-	def __init__(self):
-		self.version = 0
-		self.sessionName = ''
-		self.dungeonUUID = ''
-		self.sessionUUID = ''
+	def __init__(self, newSessionName='', dungeonUUID='', sessionUUID=''):
+		self.version = 1
+		self.sessionName = newSessionName
+		self.dungeonUUID = dungeonUUID
+		self.sessionUUID = sessionUUID
 		self.players = PogList()
 		self.sessionLevels = []
 		self.bitsPerColumn = 32
@@ -35,3 +35,6 @@ class DungeonSessionData:
 			ld = DungeonSessionLevel()
 			ld.__dict__ = level
 			ds.sessionLevels.append(ld.construct())
+
+	def setSessionLevels(self, sessionLevels):
+		self.sessionLevels = sessionLevels
