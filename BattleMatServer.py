@@ -8,6 +8,7 @@ from Server.RequestHandlers.FileListerHandler import FileListerHandler
 from Server.RequestHandlers.CreateNewDungeonHandler import CreateNewDungeonHandler
 from Server.RequestHandlers.DeleteDungeonHandler import DeleteDungeonHandler
 from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
+from Server.RequestHandlers.FileUploadHandler import FileUploadHandler
 from Server.RequestHandlers.LoadJsonDataHandler import LoadJsonDataHandler
 from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
 from Server.RequestHandlers.SaveJsonDataHandler import SaveJsonDataHandler
@@ -18,10 +19,8 @@ from Server.RequestHandlers.SessionListHandler import SessionListHandler
 		webServices.put("DELETESESSION", new DeleteSessionHandler());
 		webServices.put("LOADSESSION", new LoadSessionHandler());
 		webServices.put("UPDATEFOW", new UpdateFOWHander());
-		webServices.put("FILEUPLOAD", new FileUploadHandler());
 		webServices.put("ADDORUPDATEPOG", new AddOrUpdatePogHandler());
 		webServices.put("DELETEPOG", new DeletePogHandler());
-		webServices.put("DELETEFILE", new DeleteFile());
 """
 
 
@@ -35,7 +34,8 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'CREATENEWDUNGEON': CreateNewDungeonHandler(),
 		'DELETEDUNGEON': DeleteDungeonHandler(),
 		'SAVEJSONFILE': SaveJsonDataHandler(),
-		'DELETEFILE': DeleteFileHandler()
+		'DELETEFILE': DeleteFileHandler(),
+		'FILEUPLOAD': FileUploadHandler()
 
 	}
 
@@ -55,9 +55,12 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 
 		returnCode = 200
 		returnData = ''
+		rawData = ''
 		try:
-			content_length = int(self.headers["Content-Length"])
-			rawData = self.rfile.read(content_length)
+			content_type = self.headers['content-type']
+			if 'multi' not in content_type:
+				content_length = int(self.headers["Content-Length"])
+				rawData = self.rfile.read(content_length)
 			requestType = parameters['request'][0]
 			requestHandler = BattleMatServer.handler.get(requestType)
 			if requestHandler is not None:
