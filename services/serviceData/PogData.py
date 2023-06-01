@@ -134,3 +134,37 @@ class PogData:
 		self.pogNumber = withUpdates.pogNumber
 		if hasattr(withUpdates, 'pogPlace'):
 			self.pogPlace = withUpdates.pogPlace
+
+	@staticmethod
+	def load(data):
+		pog = PogData()
+		pog.__dict__ = data
+		if not hasattr(pog, 'pogName'):
+			pog.pogName = ''
+		if not hasattr(pog, 'pogImageUrl'):
+			pog.pogImageUrl = ''
+		if not hasattr(pog, 'pogType'):
+			pog.pogType = None
+		if not hasattr(pog, 'pogSize'):
+			pog.pogSize = 1
+		if not hasattr(pog, 'pogColumn'):
+			pog.pogColumn = -1
+		if not hasattr(pog, 'pogRow'):
+			pog.pogRow = -1
+		if not hasattr(pog, 'uuid'):
+			pog.uuid = None
+		if not hasattr(pog, 'dungeonLevel'):
+			pog.dungeonLevel = 0
+		if not hasattr(pog, 'playerFlags'):
+			pog.playerFlags = 0
+		if not hasattr(pog, 'dungeonMasterFlags'):
+			pog.dungeonMasterFlags = 0
+		if not hasattr(pog, 'notes'):
+			pog.notes = 0
+		if not hasattr(pog, 'dmNotes'):
+			pog.dmNotes = 0
+		if not hasattr(pog, 'pogNumber'):
+			pog.pogNumber = 0
+		if not hasattr(pog, 'pogPlace'):
+			pog.pogPlace = 0
+		return pog

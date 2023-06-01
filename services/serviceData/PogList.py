@@ -35,8 +35,7 @@ class PogList:
 		if self.pogList is None:
 			return
 		for pog in self.pogList:
-			pd = PogData()
-			pd.__dict__ = pog
+			pd = PogData.load(pog)
 			pd1 = PogData()
 			pd1.fullUpdate(pd)
 			pd1.uuid = pd.uuid
@@ -60,3 +59,11 @@ class PogList:
 	def update(self, src, dst):
 		dst.fullUpdate(src)
 		self.listVersion = self.listVersion + 1
+
+	def addOrUpdate(self, pog):
+		for pogInList in self.pogList:
+			if pogInList.isEqual(pog):
+				pogInList.fullUpdate(pog)
+				self.listVersion += 1
+				return
+		self.addPog(pog)

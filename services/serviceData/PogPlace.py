@@ -19,3 +19,10 @@ class PogPlace:
 	@staticmethod
 	def displayName(value):
 		return PogPlace.DisplayNames[value]
+
+	@staticmethod
+	def getKey(value):
+		for x in PogPlace.DisplayNames.keys():
+			if PogPlace.DisplayNames[x] == value:
+				return x
+		return 0

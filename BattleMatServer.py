@@ -1,8 +1,10 @@
 import traceback
 import urllib
+from threading import Timer
 from urllib import parse
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
+from Server.RequestHandlers.AddOrUpdatePogHandler import AddOrUpdatePogHandler
 from Server.RequestHandlers.CreateNewSessionHandler import CreateNewSessionHandler
 from Server.RequestHandlers.DeleteFileHandler import DeleteFileHandler
 from Server.RequestHandlers.DeleteSessionHandler import DeleteSessionHandler
@@ -17,9 +19,9 @@ from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
 from Server.RequestHandlers.SaveJsonDataHandler import SaveJsonDataHandler
 from Server.RequestHandlers.SessionListHandler import SessionListHandler
 from Server.RequestHandlers.UpdateFOWHandler import UpdateFOWHandler
+from Server.ServerDataManager import ServerDataManager
 
 """
-		webServices.put("ADDORUPDATEPOG", new AddOrUpdatePogHandler());
 		webServices.put("DELETEPOG", new DeletePogHandler());
 """
 
@@ -39,7 +41,8 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'CREATENEWSESSION': CreateNewSessionHandler(),
 		'DELETESESSION': DeleteSessionHandler(),
 		'LOADSESSION': LoadSessionHandler(),
-		'UPDATEFOW': UpdateFOWHandler()
+		'UPDATEFOW': UpdateFOWHandler(),
+		'ADDORUPDATEPOG': AddOrUpdatePogHandler()
 
 	}
 
@@ -79,14 +82,24 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		self.end_headers()
 		self.wfile.write(bytes(returnData, 'utf-8'))
 
+	@staticmethod
+	def startTimer():
+		t = Timer(5.0, BattleMatServer.periodicTimer)
+		t.start()
+
+	@staticmethod
+	def periodicTimer():
+		ServerDataManager.periodicTimer()
+		BattleMatServer.startTimer()
+
 
 def run(server_class=HTTPServer, handler_class=BattleMatServer, host='localhost', port=8080, hostDirectory='./webApp'):
 	server_address = (host, port)
 	BattleMatServer.webAppDirectory = hostDirectory
 	httpd = server_class(server_address, handler_class)
-	print('Starting httpd...')
+	print(f'Starting battle mat server {host}:{port}')
+	BattleMatServer.startTimer()
 	httpd.serve_forever()
-
 
 if __name__ == "__main__":
 	from sys import argv

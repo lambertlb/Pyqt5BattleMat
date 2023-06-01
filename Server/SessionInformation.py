@@ -1,6 +1,9 @@
 import json
+import traceback
 
+from services.Constants import Constants
 from services.serviceData.DungeonSessionData import DungeonSessionData
+from services.serviceData.DungeonSessionLevel import DungeonSessionLevel
 
 
 class SessionInformation:
@@ -48,3 +51,22 @@ class SessionInformation:
 		sessionLevel.setFogOfWar(fowData)
 		self.sessionData.incrementVersion()
 		self.dirty = True
+
+	def addOrUpdatePog(self, pogData, currentLevel):
+		sessionLevel: DungeonSessionLevel = self.getSessionLevel(currentLevel)
+		if pogData.pogType == Constants.POG_TYPE_MONSTER:
+			sessionLevel.monsters.addOrUpdate(pogData)
+		elif pogData.pogType == Constants.POG_TYPE_ROOMOBJECT:
+			sessionLevel.roomObjects.addOrUpdate(pogData)
+		elif pogData.pogType == Constants.POG_TYPE_PLAYER:
+			self.sessionData.players.addOrUpdate(pogData)
+		self.sessionData.incrementVersion()
+		self.dirty = True
+
+	def saveIfDirty(self):
+		if self.dirty:
+			try:
+				self.save()
+			except (Exception,):
+				traceback.print_exc()
+		self.dirty = False

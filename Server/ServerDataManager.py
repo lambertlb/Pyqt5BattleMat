@@ -8,8 +8,12 @@ import uuid
 from Server.SessionInformation import SessionInformation
 from services.Constants import Constants
 from services.serviceData.DungeonData import DungeonData
+from services.serviceData.DungeonLevel import DungeonLevel
 from services.serviceData.DungeonSessionData import DungeonSessionData
 from services.serviceData.DungeonSessionLevel import DungeonSessionLevel
+from services.serviceData.PogData import PogData
+from services.serviceData.PogList import PogList
+from services.serviceData.PogPlace import PogPlace
 
 
 class ServerDataManager:
@@ -183,7 +187,10 @@ class ServerDataManager:
 	@staticmethod
 	def saveJsonFile(jsonData, fullPath):
 		with open(fullPath, "wb") as text_file:
-			text_file.write(jsonData)
+			if type(jsonData) is str:
+				text_file.write(jsonData.encode())
+			else:
+				text_file.write(jsonData)
 
 	@staticmethod
 	def deleteDungeon(server, dungeonUUID):
@@ -213,7 +220,7 @@ class ServerDataManager:
 			if sessionInformation:
 				sessionInformation.fromJson(jsonData)
 				sessionJson = json.dumps(sessionInformation.sessionData, default=vars)
-				ServerDataManager.saveJsonFile(sessionJson, sessionInformation.sessionPath);
+				ServerDataManager.saveJsonFile(sessionJson, sessionInformation.sessionPath)
 		finally:
 			ServerDataManager.lock.release()
 
@@ -275,7 +282,7 @@ class ServerDataManager:
 			sessionDirectory = templateDirectory + Constants.SessionFolder + newSessionNameSub
 			ServerDataManager.makeSureDirectoryExists(sessionDirectory)
 			dungeonData = ServerDataManager.getDungeonDataFromUUID(server, dungeonUUID)
-			sessionData = ServerDataManager.createSessionData(server, sessionDirectory, dungeonUUID, newSessionName, dungeonData)
+			sessionData = ServerDataManager.createSessionData(server, dungeonUUID, newSessionName, dungeonData)
 			filePath = sessionDirectory + '/' + 'sessionData.json'
 			sessionInformation = SessionInformation(sessionData, filePath, sessionDirectory)
 			sessionInformation.save()
@@ -287,8 +294,9 @@ class ServerDataManager:
 		directoryPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
 		return ServerDataManager.getDungeonDataFromPath(ServerDataManager.getPathToDirectory(server, directoryPath))
 
+	# noinspection PyUnusedLocal
 	@staticmethod
-	def createSessionData(server, sessionDirectory, dungeonUUID, newSessionName, dungeonData):
+	def createSessionData(server, dungeonUUID, newSessionName, dungeonData):
 		uuidString = str(uuid.uuid4())
 		newSessionData = DungeonSessionData(newSessionName, dungeonUUID, uuidString)
 		sessionLevels = []
@@ -325,6 +333,7 @@ class ServerDataManager:
 		finally:
 			ServerDataManager.lock.release()
 
+	# noinspection PyUnusedLocal
 	@staticmethod
 	def updateFOW(server, sessionUUID, currentLevel, fogOfWar):
 		ServerDataManager.lock.acquire()
@@ -334,3 +343,78 @@ class ServerDataManager:
 				sessionInformation.updateFOW(fogOfWar, currentLevel)
 		finally:
 			ServerDataManager.lock.release()
+
+	@staticmethod
+	def savePog(server, dungeonUUID, sessionUUID, level, place, pogJsonData):
+		ServerDataManager.lock.acquire()
+		try:
+			pogData = PogData.load(json.loads(pogJsonData.decode()))
+			if place == PogPlace.COMMON_RESOURCE:
+				ServerDataManager.addOrUpdatePogToCommonResource(server, pogData)
+			elif place == PogPlace.DUNGEON_LEVEL:
+				ServerDataManager.addOrUpdatePogToDungeonInstance(server, pogData, dungeonUUID, level)
+			elif place == PogPlace.SESSION_RESOURCE:
+				ServerDataManager.addOrUpdatePogToSessionResource(server, pogData, dungeonUUID, sessionUUID, level)
+			elif place == PogPlace.SESSION_LEVEL:
+				ServerDataManager.addOrUpdatePogToSessionInstance(server, pogData, dungeonUUID, sessionUUID, level)
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def addOrUpdatePogToCommonResource(server, pogData):
+		if pogData.pogType == Constants.POG_TYPE_MONSTER:
+			ServerDataManager.addOrUpdatePogToCommon(server, pogData, Constants.Monsters)
+		elif pogData.pogType == Constants.POG_TYPE_ROOMOBJECT:
+			ServerDataManager.addOrUpdatePogToCommon(server, pogData, Constants.RoomObjects)
+
+	@staticmethod
+	def addOrUpdatePogToCommon(server, pogData, folder):
+		resourcePath = Constants.DungeonData + folder + "pogs.json"
+		filePath = ServerDataManager.getPathToDirectory(server, resourcePath)
+		fileData = ServerDataManager.readJsonFile(filePath)
+		pl = PogList()
+		pl.__dict__ = json.loads(fileData)
+		pogList = pl.construct()
+		pogList.addOrUpdate(pogData)
+		updatedData = json.dumps(pogList, default=vars)
+		ServerDataManager.saveJsonFile(updatedData, filePath)
+
+	@staticmethod
+	def addOrUpdatePogToDungeonInstance(server, pogData, dungeonUUID, level):
+		dungeonData: DungeonData = ServerDataManager.getDungeonDataFromUUID(server, dungeonUUID)
+		dungeonLevel: DungeonLevel = dungeonData.dungeonLevels[level]
+		if pogData.pogType == Constants.POG_TYPE_MONSTER:
+			dungeonLevel.monsters.addOrUpdate(pogData)
+		elif pogData.pogType == Constants.POG_TYPE_ROOMOBJECT:
+			dungeonLevel.roomObjects.addOrUpdate(pogData)
+		jsonData = json.dumps(dungeonData, default=vars)
+		ServerDataManager.saveDungeonData(server, jsonData, dungeonUUID)
+
+	@staticmethod
+	def addOrUpdatePogToSessionResource(server, pogData, dungeonUUID, sessionUUID, level):
+		sessionInformation: SessionInformation = ServerDataManager.getSessionInformation(server, dungeonUUID, sessionUUID)
+		if pogData.pogType == Constants.POG_TYPE_PLAYER:
+			sessionInformation.addOrUpdatePog(pogData, level)
+
+	@staticmethod
+	def addOrUpdatePogToSessionInstance(server, pogData, dungeonUUID, sessionUUID, level):
+		sessionInformation: SessionInformation = ServerDataManager.getSessionInformation(server, dungeonUUID, sessionUUID)
+		sessionInformation.addOrUpdatePog(pogData, level)
+
+	@staticmethod
+	def periodicTimer():
+		ServerDataManager.lock.acquire()
+		try:
+			ServerDataManager.checkIfTimeToSaveSessionData()
+			ServerDataManager.checkIfNeedToPurgeCachedData()
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def checkIfTimeToSaveSessionData():
+		for sessionInformation in ServerDataManager.sessionCache.values():
+			sessionInformation.saveIfDirty()
+
+	@staticmethod
+	def checkIfNeedToPurgeCachedData():
+		pass		# add code to purge cache after stale time
