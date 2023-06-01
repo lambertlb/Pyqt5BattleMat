@@ -418,3 +418,60 @@ class ServerDataManager:
 	@staticmethod
 	def checkIfNeedToPurgeCachedData():
 		pass		# add code to purge cache after stale time
+
+	@staticmethod
+	def deletePog(server, dungeonUUID, sessionUUID, level, place, pogJsonData):
+		ServerDataManager.lock.acquire()
+		try:
+			pogData = PogData.load(json.loads(pogJsonData.decode()))
+			if place == PogPlace.COMMON_RESOURCE:
+				ServerDataManager.deletePogInCommonResource(server, pogData)
+			elif place == PogPlace.DUNGEON_LEVEL:
+				ServerDataManager.deletePogInDungeonInstance(server, pogData, dungeonUUID, level)
+			elif place == PogPlace.SESSION_RESOURCE:
+				ServerDataManager.deletePogInSessionResource(server, pogData, dungeonUUID, sessionUUID, level)
+			elif place == PogPlace.SESSION_LEVEL:
+				ServerDataManager.deletePogInSessionInstance(server, pogData, dungeonUUID, sessionUUID, level)
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def deletePogInCommonResource(server, pogData):
+		if pogData.pogType == Constants.POG_TYPE_MONSTER:
+			ServerDataManager.deletePogInCommon(server, pogData, Constants.Monsters)
+		elif pogData.pogType == Constants.POG_TYPE_ROOMOBJECT:
+			ServerDataManager.deletePogInCommon(server, pogData, Constants.RoomObjects)
+
+	@staticmethod
+	def deletePogInCommon(server, pogData, folder):
+		resourcePath = Constants.DungeonData + folder + "pogs.json"
+		filePath = ServerDataManager.getPathToDirectory(server, resourcePath)
+		fileData = ServerDataManager.readJsonFile(filePath)
+		pl = PogList()
+		pl.__dict__ = json.loads(fileData)
+		pogList = pl.construct()
+		pogList.remove(pogData)
+		updatedData = json.dumps(pogList, default=vars)
+		ServerDataManager.saveJsonFile(updatedData, filePath)
+
+	@staticmethod
+	def deletePogInDungeonInstance(server, pogData, dungeonUUID, level):
+		dungeonData: DungeonData = ServerDataManager.getDungeonDataFromUUID(server, dungeonUUID)
+		dungeonLevel: DungeonLevel = dungeonData.dungeonLevels[level]
+		if pogData.pogType == Constants.POG_TYPE_MONSTER:
+			dungeonLevel.monsters.remove(pogData)
+		elif pogData.pogType == Constants.POG_TYPE_ROOMOBJECT:
+			dungeonLevel.roomObjects.remove(pogData)
+		jsonData = json.dumps(dungeonData, default=vars)
+		ServerDataManager.saveDungeonData(server, jsonData, dungeonUUID)
+
+	@staticmethod
+	def deletePogInSessionResource(server, pogData, dungeonUUID, sessionUUID, level):
+		sessionInformation: SessionInformation = ServerDataManager.getSessionInformation(server, dungeonUUID, sessionUUID)
+		if pogData.pogType == Constants.POG_TYPE_PLAYER:
+			sessionInformation.removePog(pogData, level)
+
+	@staticmethod
+	def deletePogInSessionInstance(server, pogData, dungeonUUID, sessionUUID, level):
+		sessionInformation: SessionInformation = ServerDataManager.getSessionInformation(server, dungeonUUID, sessionUUID)
+		sessionInformation.removePog(pogData, level)

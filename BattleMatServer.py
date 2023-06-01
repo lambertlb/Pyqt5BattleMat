@@ -7,6 +7,7 @@ from http.server import SimpleHTTPRequestHandler, HTTPServer
 from Server.RequestHandlers.AddOrUpdatePogHandler import AddOrUpdatePogHandler
 from Server.RequestHandlers.CreateNewSessionHandler import CreateNewSessionHandler
 from Server.RequestHandlers.DeleteFileHandler import DeleteFileHandler
+from Server.RequestHandlers.DeletePogHandler import DeletePogHandler
 from Server.RequestHandlers.DeleteSessionHandler import DeleteSessionHandler
 from Server.RequestHandlers.FileListerHandler import FileListerHandler
 from Server.RequestHandlers.CreateNewDungeonHandler import CreateNewDungeonHandler
@@ -20,10 +21,6 @@ from Server.RequestHandlers.SaveJsonDataHandler import SaveJsonDataHandler
 from Server.RequestHandlers.SessionListHandler import SessionListHandler
 from Server.RequestHandlers.UpdateFOWHandler import UpdateFOWHandler
 from Server.ServerDataManager import ServerDataManager
-
-"""
-		webServices.put("DELETEPOG", new DeletePogHandler());
-"""
 
 
 class BattleMatServer(SimpleHTTPRequestHandler):
@@ -42,7 +39,8 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'DELETESESSION': DeleteSessionHandler(),
 		'LOADSESSION': LoadSessionHandler(),
 		'UPDATEFOW': UpdateFOWHandler(),
-		'ADDORUPDATEPOG': AddOrUpdatePogHandler()
+		'ADDORUPDATEPOG': AddOrUpdatePogHandler(),
+		'DELETEPOG': DeletePogHandler()
 
 	}
 

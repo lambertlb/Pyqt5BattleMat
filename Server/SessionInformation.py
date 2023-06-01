@@ -70,3 +70,14 @@ class SessionInformation:
 			except (Exception,):
 				traceback.print_exc()
 		self.dirty = False
+
+	def removePog(self, pogData, level):
+		sessionLevel: DungeonSessionLevel = self.getSessionLevel(level)
+		if pogData.pogType == Constants.POG_TYPE_MONSTER:
+			sessionLevel.monsters.remove(pogData);
+		elif pogData.pogType == Constants.POG_TYPE_ROOMOBJECT:
+			sessionLevel.roomObjects.remove(pogData)
+		elif pogData.pogType == Constants.POG_TYPE_PLAYER:
+			self.sessionData.players.remove(pogData)
+		self.sessionData.incrementVersion()
+		self.dirty = True
