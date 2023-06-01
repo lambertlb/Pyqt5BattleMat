@@ -5,19 +5,19 @@ from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 from Server.RequestHandlers.CreateNewSessionHandler import CreateNewSessionHandler
 from Server.RequestHandlers.DeleteFileHandler import DeleteFileHandler
+from Server.RequestHandlers.DeleteSessionHandler import DeleteSessionHandler
 from Server.RequestHandlers.FileListerHandler import FileListerHandler
 from Server.RequestHandlers.CreateNewDungeonHandler import CreateNewDungeonHandler
 from Server.RequestHandlers.DeleteDungeonHandler import DeleteDungeonHandler
 from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
 from Server.RequestHandlers.FileUploadHandler import FileUploadHandler
 from Server.RequestHandlers.LoadJsonDataHandler import LoadJsonDataHandler
+from Server.RequestHandlers.LoadSessionHandler import LoadSessionHandler
 from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
 from Server.RequestHandlers.SaveJsonDataHandler import SaveJsonDataHandler
 from Server.RequestHandlers.SessionListHandler import SessionListHandler
 
 """
-		webServices.put("CREATENEWSESSION", new CreateNewSessionHandler());
-		webServices.put("DELETESESSION", new DeleteSessionHandler());
 		webServices.put("LOADSESSION", new LoadSessionHandler());
 		webServices.put("UPDATEFOW", new UpdateFOWHander());
 		webServices.put("ADDORUPDATEPOG", new AddOrUpdatePogHandler());
@@ -37,7 +37,9 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'SAVEJSONFILE': SaveJsonDataHandler(),
 		'DELETEFILE': DeleteFileHandler(),
 		'FILEUPLOAD': FileUploadHandler(),
-		'CREATENEWSESSION': CreateNewSessionHandler()
+		'CREATENEWSESSION': CreateNewSessionHandler(),
+		'DELETESESSION': DeleteSessionHandler(),
+		'LOADSESSION': LoadSessionHandler()
 
 	}
 

@@ -297,3 +297,30 @@ class ServerDataManager:
 			sessionLevel = DungeonSessionLevel(dungeonData.dungeonLevels[i])
 			sessionLevels.append(sessionLevel)
 		return newSessionData
+
+	@staticmethod
+	def deleteSession(server, dungeonUUID, sessionUUID):
+		ServerDataManager.lock.acquire()
+		try:
+			sessionInformation = ServerDataManager.getSessionInformation(server, dungeonUUID, sessionUUID)
+			if sessionInformation:
+				if sessionUUID in ServerDataManager.sessionCache:
+					ServerDataManager.sessionCache.pop(sessionUUID)
+				if os.path.exists(sessionInformation.sessionDirectory):
+					shutil.rmtree(sessionInformation.sessionDirectory)
+		finally:
+			ServerDataManager.lock.release()
+
+	@staticmethod
+	def getSessionDataAsString(server, dungeonUUID, sessionUUID, version):
+		ServerDataManager.lock.acquire()
+		try:
+			if version != -1:
+				sessionInformation = ServerDataManager.getSessionFromCache(sessionUUID)
+			else:
+				sessionInformation = ServerDataManager.getSessionInformation(server, dungeonUUID, sessionUUID)
+			if sessionInformation and sessionInformation.sessionData.version != version:
+				return sessionInformation.toJson()
+			return ''
+		finally:
+			ServerDataManager.lock.release()
