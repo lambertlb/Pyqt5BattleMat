@@ -1,3 +1,6 @@
+"""
+GPL 3 file header
+"""
 import json
 
 from Server.ServerDataManager import ServerDataManager

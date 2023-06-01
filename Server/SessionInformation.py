@@ -1,3 +1,6 @@
+"""
+GPL 3 file header
+"""
 import json
 import traceback
 
@@ -74,7 +77,7 @@ class SessionInformation:
 	def removePog(self, pogData, level):
 		sessionLevel: DungeonSessionLevel = self.getSessionLevel(level)
 		if pogData.pogType == Constants.POG_TYPE_MONSTER:
-			sessionLevel.monsters.remove(pogData);
+			sessionLevel.monsters.remove(pogData)
 		elif pogData.pogType == Constants.POG_TYPE_ROOMOBJECT:
 			sessionLevel.roomObjects.remove(pogData)
 		elif pogData.pogType == Constants.POG_TYPE_PLAYER:

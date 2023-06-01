@@ -75,23 +75,20 @@ class DungeonEditorTab(QtWidgets.QWidget):
 		self.setupEvents()
 
 	def localize(self):
-		_translate = QtCore.QCoreApplication.translate
-
-		self.newLevelButton.setText(_translate("MainWindow", "New Level"))
-		self.manageDungeonsButton.setText(_translate("MainWindow", "Manage Dungeons"))
-		self.deleteLevelButton.setText(_translate("MainWindow", "DELETE Level"))
-		self.levelNameLabel.setText(_translate("MainWindow", "Level Name"))
-		self.showGridCheckBox.setText(_translate("MainWindow", "Show Grid"))
-		self.gridSizeButton.setText(_translate("MainWindow", "Grid Size"))
-		self.gridSizeEdit.setText(_translate("MainWindow", "30"))
-		self.offsetXLabel.setText(_translate("MainWindow", "Offset X"))
-		self.offsetXEdit.setText(_translate("MainWindow", "0"))
-		self.offsetYLabel.setText(_translate("MainWindow", "Offset Y"))
-		self.offsetYEdit.setText(_translate("MainWindow", "0"))
-		self.useSelectedPictureButton.setText(_translate("MainWindow", "Use Selected\n"
-												"Picture Resource"))
-		self.saveButton.setText(_translate("MainWindow", "Save"))
-		self.cancelButton.setText(_translate("MainWindow", "Cancel"))
+		self.newLevelButton.setText("New Level")
+		self.manageDungeonsButton.setText("Manage Dungeons")
+		self.deleteLevelButton.setText("DELETE Level")
+		self.levelNameLabel.setText("Level Name")
+		self.showGridCheckBox.setText("Show Grid")
+		self.gridSizeButton.setText("Grid Size")
+		self.gridSizeEdit.setText("30")
+		self.offsetXLabel.setText("Offset X")
+		self.offsetXEdit.setText("0")
+		self.offsetYLabel.setText("Offset Y")
+		self.offsetYEdit.setText("0")
+		self.useSelectedPictureButton.setText("Use Selected\n" "Picture Resource")
+		self.saveButton.setText("Save")
+		self.cancelButton.setText("Cancel")
 
 	def setupEvents(self):
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)

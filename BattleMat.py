@@ -69,13 +69,10 @@ class MainWindow(QMainWindow):
 
 	def localize(self):
 		_translate = QtCore.QCoreApplication.translate
-		self.setWindowTitle(_translate("MainWindow", "MainWindow"))
-		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.artAssetsTab),
-											_translate("MainWindow", "Art Assets"))
-		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.monsterEditorTab),
-											_translate("MainWindow", "Dungeon Editor"))
-		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.pogEditorTab),
-											_translate("MainWindow", "Pog Editor"))
+		self.setWindowTitle("MainWindow")
+		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.artAssetsTab), "MainWindow")
+		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.monsterEditorTab), "Dungeon Editor")
+		self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.pogEditorTab), "Pog Editor")
 
 	def mouseDoubleClickEvent(self, event):
 		self.scene.computeInitialZoom()

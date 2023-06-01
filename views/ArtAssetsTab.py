@@ -48,10 +48,9 @@ class ArtAssetsTab(QtWidgets.QWidget):
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
 	def localize(self):
-		_translate = QtCore.QCoreApplication.translate
-		self.downLoadAssetButton.setText(_translate("MainWindow", "Download Asset"))
-		self.upLoadButton.setText(_translate("MainWindow", "Upload Asset"))
-		self.deleteAssetButton.setText(_translate("MainWindow", "Delete Asset"))
+		self.downLoadAssetButton.setText("Download Asset")
+		self.upLoadButton.setText("Upload Asset")
+		self.deleteAssetButton.setText("Delete Asset")
 
 	def eventFired(self, eventData):
 		if eventData.eventReason == ReasonForAction.DungeonDataLoaded:

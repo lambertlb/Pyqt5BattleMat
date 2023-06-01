@@ -150,7 +150,7 @@ class PogCanvas(QtWidgets.QGraphicsItem):
 		modifiers = QtWidgets.QApplication.keyboardModifiers()
 		dm = ServicesManager.getDungeonManager()
 		em = ServicesManager.getEventManager()
-		if dm.getFowToggle() or modifiers & QtCore.Qt.ShiftModifier:
+		if dm.getFowToggle() or modifiers and QtCore.Qt.ShiftModifier:
 			em.fireEvent(ReasonForAction.MouseDownEventBubble, event)
 			return
 		if not dm.isDungeonMaster and not dm.editMode and dm.isFowSet(

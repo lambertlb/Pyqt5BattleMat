@@ -48,7 +48,7 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
 	def mousePressEvent(self, event):
 		modifierPressed = QtWidgets.QApplication.keyboardModifiers()
 		self.origin = event.pos()
-		if (modifierPressed & QtCore.Qt.ControlModifier) == QtCore.Qt.ControlModifier:
+		if (modifierPressed and QtCore.Qt.ControlModifier) == QtCore.Qt.ControlModifier:
 			self.rubberBand.setGeometry(QtCore.QRect(self.origin, QtCore.QSize()))
 			self.rubberBand.show()
 			self.changeRubberBand = True

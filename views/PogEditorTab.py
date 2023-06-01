@@ -91,19 +91,17 @@ class PogEditorTab(QtWidgets.QWidget):
 		self.setupTree()
 
 	def localize(self):
-		_translate = QtCore.QCoreApplication.translate
-		self.createPogButton.setText(_translate("MainWindow", "Create Pog"))
-		self.deletePogButton.setText(_translate("MainWindow", "DELETE Pog"))
-		self.savePogButton.setText(_translate("MainWindow", "Save"))
-		self.cancelPogButton.setText(_translate("MainWindow", "Cancel"))
-		self.pogNameLabel.setText(_translate("MainWindow", "Pog Name"))
-		self.useSelectedPogPictureButton.setText(_translate("MainWindow", "Use Selected\n"
-"Picture Resource"))
-		self.pogLocationLabel.setText(_translate("MainWindow", "Pog Location"))
-		self.pogTypeLabel.setText(_translate("MainWindow", "Pog Type"))
-		self.playerFlagsButton.setText(_translate("MainWindow", "Player Flags"))
-		self.editNotesButton.setText(_translate("MainWindow", "Edit Notes"))
-		self.dmFlagsButton.setText(_translate("MainWindow", "DM Flags"))
+		self.createPogButton.setText("Create Pog")
+		self.deletePogButton.setText("DELETE Pog")
+		self.savePogButton.setText("Save")
+		self.cancelPogButton.setText("Cancel")
+		self.pogNameLabel.setText("Pog Name")
+		self.useSelectedPogPictureButton.setText("Use Selected\n" "Picture Resource")
+		self.pogLocationLabel.setText("Pog Location")
+		self.pogTypeLabel.setText("Pog Type")
+		self.playerFlagsButton.setText("Player Flags")
+		self.editNotesButton.setText("Edit Notes")
+		self.dmFlagsButton.setText("DM Flags")
 
 	def setupEvents(self):
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)

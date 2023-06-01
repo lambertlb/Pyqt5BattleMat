@@ -3,6 +3,7 @@ GPL 3 file header
 """
 
 
+# noinspection SpellCheckingInspection
 class Constants:
 	Login_Url = 'Login_Url'
 	Login_USERNAME = 'Login_USERNAME'

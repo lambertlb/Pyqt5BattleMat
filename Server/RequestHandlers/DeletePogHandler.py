@@ -1,3 +1,6 @@
+"""
+GPL 3 file header
+"""
 from Server.ServerDataManager import ServerDataManager
 from services.serviceData.PogPlace import PogPlace
 

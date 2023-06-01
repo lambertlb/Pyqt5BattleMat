@@ -1,3 +1,6 @@
+"""
+GPL 3 file header
+"""
 import traceback
 import urllib
 from threading import Timer
@@ -24,6 +27,7 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class BattleMatServer(SimpleHTTPRequestHandler):
+	# noinspection SpellCheckingInspection
 	handler = {
 		'LOGIN': LoginRequestHandler(),
 		'GETDUNGEONLIST': DungeonListHandler(),
@@ -41,7 +45,6 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'UPDATEFOW': UpdateFOWHandler(),
 		'ADDORUPDATEPOG': AddOrUpdatePogHandler(),
 		'DELETEPOG': DeletePogHandler()
-
 	}
 
 	webAppDirectory = None
@@ -98,6 +101,7 @@ def run(server_class=HTTPServer, handler_class=BattleMatServer, host='localhost'
 	print(f'Starting battle mat server {host}:{port}')
 	BattleMatServer.startTimer()
 	httpd.serve_forever()
+
 
 if __name__ == "__main__":
 	from sys import argv

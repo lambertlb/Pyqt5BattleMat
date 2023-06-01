@@ -95,11 +95,10 @@ class RibbonBar(QtWidgets.QGridLayout):
 		ServicesManager.getEventManager().subscribeToEvent(self.eventFired)
 
 	def localize(self):
-		_translate = QtCore.QCoreApplication.translate
-		self.toggleFOW_2.setText(_translate("MainWindow", "Toggle FOW"))
-		self.showSelectedPog_2.setText(_translate("MainWindow", "Show Selected Pog"))
-		self.hideFOW_2.setText(_translate("MainWindow", "Hide FOW"))
-		self.showPogNotes_2.setText(_translate("MainWindow", "Show Pog Notes"))
+		self.toggleFOW_2.setText("Toggle FOW")
+		self.showSelectedPog_2.setText("Show Selected Pog")
+		self.hideFOW_2.setText("Hide FOW")
+		self.showPogNotes_2.setText("Show Pog Notes")
 
 	def eventFired(self, eventData):
 		if eventData.eventReason == ReasonForAction.DMStateChange:

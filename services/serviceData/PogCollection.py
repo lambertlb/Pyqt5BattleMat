@@ -124,4 +124,3 @@ def compare(left: PogData, right: PogData):
 	if left.pogName < right.pogName:
 		return -1
 	return 0
-

@@ -1,7 +1,7 @@
 """
 GPL 3 file header
 """
-from PySide2 import QtWidgets, QtCore
+from PySide2 import QtWidgets
 
 from generated.dungeonManagerDialog import Ui_DungeonSelectDialog
 from services.ReasonForAction import ReasonForAction
@@ -58,9 +58,8 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		super(DungeonManagerDialog, self).show()
 
 	def intialize(self):
-		_translate = QtCore.QCoreApplication.translate
-		self.newDungeonName.setText(_translate("DungeonSelectDialog", "Enter Dungeon Name"))
-		self.newSessionName.setText(_translate("DungeonSelectDialog", "Enter Session Name"))
+		self.newDungeonName.setText("Enter Dungeon Name")
+		self.newSessionName.setText("Enter Session Name")
 		self.hideItem(self.deleteSessionButton)
 		self.hideItem(self.createSessionButton)
 		self.hideItem(self.newSessionName)
@@ -70,9 +69,9 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 		self.hideItem(self.createDungeonButton)
 		self.hideItem(self.newDungeonName)
 		if self.isDM:
-			self.dmSessionButton.setText(_translate("DungeonSelectDialog", "DM the Session"))
+			self.dmSessionButton.setText("DM the Session")
 		else:
-			self.dmSessionButton.setText(_translate("DungeonSelectDialog", "Join the Session"))
+			self.dmSessionButton.setText("Join the Session")
 		self.setStates()
 
 	def setStates(self):
@@ -222,8 +221,7 @@ class DungeonManagerDialog(QtWidgets.QDialog, Ui_DungeonSelectDialog):
 	def createSession(self):
 		ServicesManager.getDungeonManager().createNewSession(self.selectedDungeonUUID, self.sessionToCreate)
 		self.isOkToCreateSession = False
-		_translate = QtCore.QCoreApplication.translate
-		self.newSessionName.setText(_translate("DungeonSelectDialog", "Enter Session Name"))
+		self.newSessionName.setText("Enter Session Name")
 
 	def deleteSession(self):
 		ServicesManager.getDungeonManager().deleteSession(self.selectedDungeonUUID, self.selectedSessionUUID)
