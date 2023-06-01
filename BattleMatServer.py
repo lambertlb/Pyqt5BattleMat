@@ -16,10 +16,9 @@ from Server.RequestHandlers.LoadSessionHandler import LoadSessionHandler
 from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
 from Server.RequestHandlers.SaveJsonDataHandler import SaveJsonDataHandler
 from Server.RequestHandlers.SessionListHandler import SessionListHandler
+from Server.RequestHandlers.UpdateFOWHandler import UpdateFOWHandler
 
 """
-		webServices.put("LOADSESSION", new LoadSessionHandler());
-		webServices.put("UPDATEFOW", new UpdateFOWHander());
 		webServices.put("ADDORUPDATEPOG", new AddOrUpdatePogHandler());
 		webServices.put("DELETEPOG", new DeletePogHandler());
 """
@@ -39,7 +38,8 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		'FILEUPLOAD': FileUploadHandler(),
 		'CREATENEWSESSION': CreateNewSessionHandler(),
 		'DELETESESSION': DeleteSessionHandler(),
-		'LOADSESSION': LoadSessionHandler()
+		'LOADSESSION': LoadSessionHandler(),
+		'UPDATEFOW': UpdateFOWHandler()
 
 	}
 

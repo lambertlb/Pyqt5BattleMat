@@ -324,3 +324,13 @@ class ServerDataManager:
 			return ''
 		finally:
 			ServerDataManager.lock.release()
+
+	@staticmethod
+	def updateFOW(server, sessionUUID, currentLevel, fogOfWar):
+		ServerDataManager.lock.acquire()
+		try:
+			sessionInformation = ServerDataManager.getSessionFromCache(sessionUUID)
+			if sessionInformation:
+				sessionInformation.updateFOW(fogOfWar, currentLevel)
+		finally:
+			ServerDataManager.lock.release()

@@ -14,16 +14,12 @@ from services.serviceData.DataVersions import DataVersions
 from services.serviceData.DungeonData import DungeonData
 from services.serviceData.DungeonListData import DungeonListData
 from services.serviceData.DungeonSessionData import DungeonSessionData
+from services.serviceData.FogOfWarData import FogOfWarData
 from services.serviceData.PogCollection import PogCollection
 from services.serviceData.PogPlace import PogPlace
 from services.serviceData.RequestData import RequestData
 from services.serviceData.SessionListData import SessionListData
 from services.serviceData.VersionedItem import VersionedItem
-
-
-class FogOfWarData:
-	def __init__(self, fowData):
-		self.fogOfWar = fowData
 
 
 class DungeonManager(PogManager):

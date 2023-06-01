@@ -84,3 +84,7 @@ class DungeonSessionLevel:
 		for _ in range(size):
 			data.append(fillData)
 		return data
+
+	def setFogOfWar(self, newFogOfWar):
+		self.fogOfWarData = newFogOfWar
+		self.fogOfWarVersion += 1

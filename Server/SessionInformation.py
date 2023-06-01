@@ -35,3 +35,16 @@ class SessionInformation:
 		with open(self.sessionPath, "wb") as text_file:
 			text_file.write(sessionJson.encode())
 		self.dirty = False
+
+	def getSessionLevel(self, currentLevel):
+		if currentLevel < 0 or currentLevel >= len(self.sessionData.sessionLevels):
+			return None
+		return self.sessionData.sessionLevels[currentLevel]
+
+	def updateFOW(self, fowData, currentLevel):
+		sessionLevel = self.getSessionLevel(currentLevel)
+		if not sessionLevel:
+			return None
+		sessionLevel.setFogOfWar(fowData)
+		self.sessionData.incrementVersion()
+		self.dirty = True

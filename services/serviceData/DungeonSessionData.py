@@ -1,6 +1,8 @@
 """
 GPL 3 file header
 """
+import sys
+
 from services.serviceData.DungeonSessionLevel import DungeonSessionLevel
 from services.serviceData.PogList import PogList
 
@@ -38,3 +40,8 @@ class DungeonSessionData:
 
 	def setSessionLevels(self, sessionLevels):
 		self.sessionLevels = sessionLevels
+
+	def incrementVersion(self):
+		self.version += 1
+		if self.version == sys.maxsize:
+			self.version = 1
