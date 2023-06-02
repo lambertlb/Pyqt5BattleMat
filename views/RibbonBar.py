@@ -202,6 +202,7 @@ class RibbonBar(QtWidgets.QGridLayout):
         if self.pogNotesDialog is None:
             mainWindow = QtCore.QCoreApplication.instance().mainWindow
             self.pogNotesDialog = PogNotesViewer(mainWindow)
+            self.pogNotesDialog.showButtons(False)
         if self.showPogNotes_2.isChecked():
             self.pogNotesDialog.show()
         else:

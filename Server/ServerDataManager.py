@@ -135,7 +135,7 @@ class ServerDataManager:
             if dungeonUUID not in ServerDataManager.uuidTemplatePathMap:
                 return None
             dungeonPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
-            filePath = ServerDataManager.getPathToDirectory(server, dungeonPath + './dungeonData.json')
+            filePath = ServerDataManager.getPathToDirectory(server, dungeonPath + '/dungeonData.json')
             return ServerDataManager.readJsonFile(filePath)
         finally:
             ServerDataManager.lock.release()

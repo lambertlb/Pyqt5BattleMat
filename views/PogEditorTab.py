@@ -321,7 +321,7 @@ class PogEditorTab(QtWidgets.QWidget):
         self.scene.setSceneRect(0, 0, scenePixMap.width(), scenePixMap.height())
 
     # noinspection PyUnusedLocal
-    def failedLoad(self, asynchReturn):
+    def failedLoad(self):
         self.imageLoading = False
 
     # noinspection PyMethodMayBeStatic

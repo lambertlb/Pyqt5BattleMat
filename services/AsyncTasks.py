@@ -2,6 +2,7 @@
 GPL 3 file header
 """
 import json
+import re
 import traceback
 
 import requests
@@ -71,7 +72,7 @@ class AsynchBase(QRunnable):
         global asyncPool
         if asyncPool is None:
             asyncPool = QThreadPool.globalInstance()
-            asyncPool.setMaxThreadCount(30)
+            asyncPool.setMaxThreadCount(100)
         asyncPool.start(self)
 
     @QtCore.Slot()
@@ -123,7 +124,7 @@ class AsyncImage(AsynchBase):
     """
 
     def __init__(self, url, onSuccess, onFailure):
-        self.url = url
+        self.url =  re.sub("\\\\", "/", url)
         self.reply = None
         super(AsyncImage, self).__init__(onSuccess, onFailure, DataRequesterResponse())
 

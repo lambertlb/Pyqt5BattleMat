@@ -65,7 +65,7 @@ class PogCanvas(QtWidgets.QGraphicsItem):
         self.imageLoaded = self.image is not None
         self.update()
 
-    def failedLoad(self, asynchReturn):
+    def failedLoad(self):
         pass
 
     def setGridSize(self, size):

@@ -15,7 +15,6 @@ class PogNotesViewer(QtWidgets.QDialog, Ui_PogNotesDialog):
 
         self.setupUi(self)
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
-        self.buttonBox.setVisible(False)
         self.fontSizeControl.setRange(8, 20)
         self.fontSizeControl.setValue(8)
         self.fontSizeControl.valueChanged.connect(self.fontSizeChanged)
@@ -46,12 +45,10 @@ class PogNotesViewer(QtWidgets.QDialog, Ui_PogNotesDialog):
         self.dmNotesTextEdit.setTextCursor(cursor)
 
     def setNotes(self, notes):
-        self.buttonBox.setVisible(True)
         self.notes = notes
         self.setupDisplayWithData()
 
     def setDmNotes(self, dmNotes):
-        self.buttonBox.setVisible(True)
         self.dmNotes = dmNotes
         self.setupDisplayWithData()
 
@@ -60,3 +57,6 @@ class PogNotesViewer(QtWidgets.QDialog, Ui_PogNotesDialog):
 
     def getDmNotes(self):
         return self.dmNotesTextEdit.toPlainText()
+
+    def showButtons(self, areVisible):
+        self.buttonBox.setVisible(areVisible)

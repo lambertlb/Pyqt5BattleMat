@@ -23,9 +23,9 @@ class BattleMatCanvas(QtWidgets.QGraphicsView):
     def wheelEvent(self, event):
         delta = event.angleDelta().y() / 120
         if delta > 0:
-            self.zoom *= 1.05
+            self.zoom *= 1.1
         elif delta < 0:
-            self.zoom /= 1.05
+            self.zoom /= 1.1
         self.transform()
 
     def transform(self):

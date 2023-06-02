@@ -46,7 +46,7 @@ class PogViewer(QtWidgets.QDialog, Ui_PogDialog):
                                     QtCore.Qt.SmoothTransformation)
         self.scene.addPixmap(scenePixMap)
 
-    def failedLoad(self, asynchReturn):
+    def failedLoad(self):
         pass
 
     def resizeEvent(self, newSize):
