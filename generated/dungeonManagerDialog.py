@@ -115,13 +115,13 @@ class Ui_DungeonSelectDialog(object):
         self.gridLayout.addItem(spacerItem, 5, 1, 1, 1)
         self.buttonBox = QtWidgets.QDialogButtonBox(DungeonSelectDialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.gridLayout.addWidget(self.buttonBox, 6, 0, 1, 2)
 
         self.retranslateUi(DungeonSelectDialog)
-        self.buttonBox.accepted.connect(DungeonSelectDialog.accept) # type: ignore
-        self.buttonBox.rejected.connect(DungeonSelectDialog.reject) # type: ignore
+        self.buttonBox.accepted.connect(DungeonSelectDialog.accept)  # type: ignore
+        self.buttonBox.rejected.connect(DungeonSelectDialog.reject)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(DungeonSelectDialog)
 
     def retranslateUi(self, DungeonSelectDialog):
@@ -142,6 +142,7 @@ class Ui_DungeonSelectDialog(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     DungeonSelectDialog = QtWidgets.QDialog()
     ui = Ui_DungeonSelectDialog()

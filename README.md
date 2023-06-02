@@ -1,4 +1,5 @@
 # Pyqt5BattleMat
+
 Make an electronic battle mat using python and PySide2
 
 I did this as a learning experiment to learn Python and QT
@@ -11,8 +12,10 @@ BattleMat.py will start the client.
 You can also use a browser as a client.
 
 ## Defendants
+
 pip install PySide2
 pip install event-bus
 
 ## Software License
+
 GPL 3

@@ -1,450 +1,455 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>832</width>
-    <height>644</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QFrame" name="frame">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="1" column="1">
-            <widget class="QComboBox" name="selectPlayer_2"/>
-           </item>
-           <item row="1" column="4">
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="3">
-            <widget class="QCheckBox" name="toggleFOW_2">
-             <property name="text">
-              <string>Toggle FOW</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QCheckBox" name="showSelectedPog_2">
-             <property name="text">
-              <string>Show Selected Pog</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <widget class="QCheckBox" name="hideFOW_2">
-             <property name="text">
-              <string>Hide FOW</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0" rowspan="2">
-            <widget class="QGraphicsView" name="selectedPogArea_2">
-             <property name="minimumSize">
-              <size>
-               <width>50</width>
-               <height>50</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>50</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="selectDungeonLevel_2">
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QCheckBox" name="showPogNotes_2">
-             <property name="text">
-              <string>Show Pog Notes</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QSplitter" name="splitter">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>500</height>
-          </size>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="handleWidth">
-          <number>5</number>
-         </property>
-         <widget class="QGraphicsView" name="dungeonPictureArea"/>
-         <widget class="QTabWidget" name="assetManagementTabs">
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <widget class="QWidget" name="artAssestsTab">
-           <attribute name="title">
-            <string>Art Assest</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <layout class="QGridLayout" name="gridLayout_3">
-              <item row="0" column="0">
-               <widget class="QPushButton" name="downLoadAssetButton">
-                <property name="text">
-                 <string>Download Asset</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QPushButton" name="upLoadButton">
-                <property name="text">
-                 <string>Upload Asset</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QPushButton" name="deleteAssetButton">
-                <property name="text">
-                 <string>Delete Asset</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QTreeWidget" name="treeWidget">
-              <column>
-               <property name="text">
-                <string notr="true">1</string>
-               </property>
-              </column>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="filePath">
-              <property name="readOnly">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="monsterEditorTab">
-           <attribute name="title">
-            <string>Monster Editor</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item>
-             <layout class="QGridLayout" name="gridLayout_5">
-              <item row="0" column="0" colspan="4">
-               <layout class="QGridLayout" name="gridLayout_4">
-                <item row="0" column="1">
-                 <widget class="QPushButton" name="newLevelButton">
-                  <property name="text">
-                   <string>New Level</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QPushButton" name="manageDungeonsButton">
-                  <property name="text">
-                   <string>Manage Dungeons</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QPushButton" name="deleteLevelButton">
-                  <property name="text">
-                   <string>DELETE Level</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="levelNameLabel">
-                <property name="text">
-                 <string>Level Name</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1" colspan="3">
-               <widget class="QLineEdit" name="levelNameEdit"/>
-              </item>
-              <item row="2" column="0" colspan="2">
-               <widget class="QCheckBox" name="showGridCheckBox">
-                <property name="text">
-                 <string>Show Grid</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0" colspan="2">
-               <widget class="QPushButton" name="gridSizeButton">
-                <property name="text">
-                 <string>Grid Size</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="2" colspan="2">
-               <widget class="QLineEdit" name="gridSizeEdit">
-                <property name="text">
-                 <string>30</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="0" colspan="3">
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>832</width>
+                <height>644</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>MainWindow</string>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
-                 <widget class="QLabel" name="offsetXLabel">
-                  <property name="text">
-                   <string>Offset X</string>
-                  </property>
-                 </widget>
+                    <widget class="QFrame" name="frame">
+                        <property name="frameShape">
+                            <enum>QFrame::StyledPanel</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout">
+                            <item>
+                                <layout class="QHBoxLayout" name="horizontalLayout">
+                                    <item>
+                                        <layout class="QGridLayout" name="gridLayout_2">
+                                            <item row="1" column="1">
+                                                <widget class="QComboBox" name="selectPlayer_2"/>
+                                            </item>
+                                            <item row="1" column="4">
+                                                <spacer name="horizontalSpacer_2">
+                                                    <property name="orientation">
+                                                        <enum>Qt::Horizontal</enum>
+                                                    </property>
+                                                    <property name="sizeHint" stdset="0">
+                                                        <size>
+                                                            <width>40</width>
+                                                            <height>20</height>
+                                                        </size>
+                                                    </property>
+                                                </spacer>
+                                            </item>
+                                            <item row="1" column="3">
+                                                <widget class="QCheckBox" name="toggleFOW_2">
+                                                    <property name="text">
+                                                        <string>Toggle FOW</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="0" column="2">
+                                                <widget class="QCheckBox" name="showSelectedPog_2">
+                                                    <property name="text">
+                                                        <string>Show Selected Pog</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="0" column="3">
+                                                <widget class="QCheckBox" name="hideFOW_2">
+                                                    <property name="text">
+                                                        <string>Hide FOW</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="0" column="0" rowspan="2">
+                                                <widget class="QGraphicsView" name="selectedPogArea_2">
+                                                    <property name="minimumSize">
+                                                        <size>
+                                                            <width>50</width>
+                                                            <height>50</height>
+                                                        </size>
+                                                    </property>
+                                                    <property name="maximumSize">
+                                                        <size>
+                                                            <width>50</width>
+                                                            <height>50</height>
+                                                        </size>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="0" column="1">
+                                                <widget class="QComboBox" name="selectDungeonLevel_2">
+                                                    <property name="minimumSize">
+                                                        <size>
+                                                            <width>200</width>
+                                                            <height>0</height>
+                                                        </size>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="1" column="2">
+                                                <widget class="QCheckBox" name="showPogNotes_2">
+                                                    <property name="text">
+                                                        <string>Show Pog Notes</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                        </layout>
+                                    </item>
+                                </layout>
+                            </item>
+                            <item>
+                                <widget class="QSplitter" name="splitter">
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>0</width>
+                                            <height>500</height>
+                                        </size>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                    </property>
+                                    <property name="handleWidth">
+                                        <number>5</number>
+                                    </property>
+                                    <widget class="QGraphicsView" name="dungeonPictureArea"/>
+                                    <widget class="QTabWidget" name="assetManagementTabs">
+                                        <property name="currentIndex">
+                                            <number>0</number>
+                                        </property>
+                                        <widget class="QWidget" name="artAssestsTab">
+                                            <attribute name="title">
+                                                <string>Art Assest</string>
+                                            </attribute>
+                                            <layout class="QVBoxLayout" name="verticalLayout_3">
+                                                <item>
+                                                    <layout class="QGridLayout" name="gridLayout_3">
+                                                        <item row="0" column="0">
+                                                            <widget class="QPushButton" name="downLoadAssetButton">
+                                                                <property name="text">
+                                                                    <string>Download Asset</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="0" column="2">
+                                                            <widget class="QPushButton" name="upLoadButton">
+                                                                <property name="text">
+                                                                    <string>Upload Asset</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="0" column="1">
+                                                            <widget class="QPushButton" name="deleteAssetButton">
+                                                                <property name="text">
+                                                                    <string>Delete Asset</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                    </layout>
+                                                </item>
+                                                <item>
+                                                    <widget class="QTreeWidget" name="treeWidget">
+                                                        <column>
+                                                            <property name="text">
+                                                                <string notr="true">1</string>
+                                                            </property>
+                                                        </column>
+                                                    </widget>
+                                                </item>
+                                                <item>
+                                                    <widget class="QLineEdit" name="filePath">
+                                                        <property name="readOnly">
+                                                            <bool>false</bool>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                            </layout>
+                                        </widget>
+                                        <widget class="QWidget" name="monsterEditorTab">
+                                            <attribute name="title">
+                                                <string>Monster Editor</string>
+                                            </attribute>
+                                            <layout class="QVBoxLayout" name="verticalLayout_4">
+                                                <item>
+                                                    <layout class="QGridLayout" name="gridLayout_5">
+                                                        <item row="0" column="0" colspan="4">
+                                                            <layout class="QGridLayout" name="gridLayout_4">
+                                                                <item row="0" column="1">
+                                                                    <widget class="QPushButton" name="newLevelButton">
+                                                                        <property name="text">
+                                                                            <string>New Level</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                                <item row="0" column="0">
+                                                                    <widget class="QPushButton"
+                                                                            name="manageDungeonsButton">
+                                                                        <property name="text">
+                                                                            <string>Manage Dungeons</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                                <item row="0" column="2">
+                                                                    <widget class="QPushButton"
+                                                                            name="deleteLevelButton">
+                                                                        <property name="text">
+                                                                            <string>DELETE Level</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                            </layout>
+                                                        </item>
+                                                        <item row="1" column="0">
+                                                            <widget class="QLabel" name="levelNameLabel">
+                                                                <property name="text">
+                                                                    <string>Level Name</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="1" column="1" colspan="3">
+                                                            <widget class="QLineEdit" name="levelNameEdit"/>
+                                                        </item>
+                                                        <item row="2" column="0" colspan="2">
+                                                            <widget class="QCheckBox" name="showGridCheckBox">
+                                                                <property name="text">
+                                                                    <string>Show Grid</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="3" column="0" colspan="2">
+                                                            <widget class="QPushButton" name="gridSizeButton">
+                                                                <property name="text">
+                                                                    <string>Grid Size</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="3" column="2" colspan="2">
+                                                            <widget class="QLineEdit" name="gridSizeEdit">
+                                                                <property name="text">
+                                                                    <string>30</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="4" column="0" colspan="3">
+                                                            <layout class="QHBoxLayout" name="horizontalLayout_2">
+                                                                <item>
+                                                                    <widget class="QLabel" name="offsetXLabel">
+                                                                        <property name="text">
+                                                                            <string>Offset X</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                                <item>
+                                                                    <widget class="QLineEdit" name="offsetXEdit">
+                                                                        <property name="text">
+                                                                            <string>0</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                            </layout>
+                                                        </item>
+                                                        <item row="4" column="3">
+                                                            <layout class="QHBoxLayout" name="horizontalLayout_3">
+                                                                <item>
+                                                                    <widget class="QLabel" name="offsetYLabel">
+                                                                        <property name="text">
+                                                                            <string>Offset Y</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                                <item>
+                                                                    <widget class="QLineEdit" name="offsetYEdit">
+                                                                        <property name="text">
+                                                                            <string>0</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                            </layout>
+                                                        </item>
+                                                        <item row="5" column="0" colspan="2">
+                                                            <widget class="QPushButton" name="useSelectedPictureButton">
+                                                                <property name="text">
+                                                                    <string>Use Selected
+                                                                        Picture Resource
+                                                                    </string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="5" column="2" colspan="2">
+                                                            <widget class="QLineEdit" name="selectedPictureEdit"/>
+                                                        </item>
+                                                        <item row="6" column="0" colspan="3">
+                                                            <layout class="QHBoxLayout" name="horizontalLayout_4">
+                                                                <item>
+                                                                    <widget class="QPushButton" name="saveButton">
+                                                                        <property name="text">
+                                                                            <string>Save</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                                <item>
+                                                                    <widget class="QPushButton" name="cancelButton">
+                                                                        <property name="text">
+                                                                            <string>Cancel</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                            </layout>
+                                                        </item>
+                                                        <item row="7" column="0" colspan="4">
+                                                            <widget class="QGraphicsView" name="graphicsView_2"/>
+                                                        </item>
+                                                    </layout>
+                                                </item>
+                                            </layout>
+                                        </widget>
+                                        <widget class="QWidget" name="pogEditorTab">
+                                            <attribute name="title">
+                                                <string>Pog Editor</string>
+                                            </attribute>
+                                            <layout class="QVBoxLayout" name="verticalLayout_5">
+                                                <item>
+                                                    <layout class="QGridLayout" name="gridLayout_7">
+                                                        <item row="5" column="2">
+                                                            <widget class="QComboBox" name="sizeComboBox"/>
+                                                        </item>
+                                                        <item row="0" column="0" colspan="3">
+                                                            <layout class="QGridLayout" name="gridLayout_6">
+                                                                <item row="0" column="0">
+                                                                    <widget class="QPushButton" name="createPogButton">
+                                                                        <property name="text">
+                                                                            <string>Create Pog</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                                <item row="0" column="1">
+                                                                    <widget class="QPushButton" name="deletePogButton">
+                                                                        <property name="text">
+                                                                            <string>DELETE Pog</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                            </layout>
+                                                        </item>
+                                                        <item row="7" column="0" colspan="3">
+                                                            <layout class="QHBoxLayout" name="horizontalLayout_5">
+                                                                <item>
+                                                                    <widget class="QPushButton" name="savePogButton">
+                                                                        <property name="text">
+                                                                            <string>Save</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                                <item>
+                                                                    <widget class="QPushButton" name="cancelPogButton">
+                                                                        <property name="text">
+                                                                            <string>Cancel</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                            </layout>
+                                                        </item>
+                                                        <item row="1" column="0">
+                                                            <widget class="QLabel" name="pogNameLabel">
+                                                                <property name="text">
+                                                                    <string>Pog Name</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="4" column="0" colspan="2">
+                                                            <widget class="QPushButton"
+                                                                    name="useSelectedPogPictureButton">
+                                                                <property name="text">
+                                                                    <string>Use Selected
+                                                                        Picture Resource
+                                                                    </string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="2" column="1" colspan="2">
+                                                            <widget class="QComboBox" name="pogTypeComboBox"/>
+                                                        </item>
+                                                        <item row="3" column="0">
+                                                            <widget class="QLabel" name="pogLocationLabel">
+                                                                <property name="text">
+                                                                    <string>Pog Location</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="8" column="0" colspan="3">
+                                                            <widget class="QTreeWidget" name="treeWidget_2">
+                                                                <column>
+                                                                    <property name="text">
+                                                                        <string notr="true">1</string>
+                                                                    </property>
+                                                                </column>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="1" column="1" colspan="2">
+                                                            <widget class="QLineEdit" name="pogNameEdit"/>
+                                                        </item>
+                                                        <item row="4" column="2">
+                                                            <widget class="QLineEdit" name="useSelectedPogPictureEdit"/>
+                                                        </item>
+                                                        <item row="2" column="0">
+                                                            <widget class="QLabel" name="pogTypeLabel">
+                                                                <property name="text">
+                                                                    <string>Pog Type</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="6" column="0" colspan="2">
+                                                            <widget class="QPushButton" name="playerFlagsButton">
+                                                                <property name="text">
+                                                                    <string>Player Flags</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="9" column="0">
+                                                            <widget class="QGraphicsView" name="graphicsView_3">
+                                                                <property name="maximumSize">
+                                                                    <size>
+                                                                        <width>50</width>
+                                                                        <height>50</height>
+                                                                    </size>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="5" column="0" colspan="2">
+                                                            <widget class="QPushButton" name="editNotesButton">
+                                                                <property name="text">
+                                                                    <string>Edit Notes</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                        <item row="3" column="1" colspan="2">
+                                                            <widget class="QComboBox" name="pogLocationComboBox"/>
+                                                        </item>
+                                                        <item row="6" column="2">
+                                                            <widget class="QPushButton" name="dmFlagsButton">
+                                                                <property name="text">
+                                                                    <string>DM Flags</string>
+                                                                </property>
+                                                            </widget>
+                                                        </item>
+                                                    </layout>
+                                                </item>
+                                            </layout>
+                                        </widget>
+                                    </widget>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
                 </item>
-                <item>
-                 <widget class="QLineEdit" name="offsetXEdit">
-                  <property name="text">
-                   <string>0</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="4" column="3">
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <widget class="QLabel" name="offsetYLabel">
-                  <property name="text">
-                   <string>Offset Y</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="offsetYEdit">
-                  <property name="text">
-                   <string>0</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="5" column="0" colspan="2">
-               <widget class="QPushButton" name="useSelectedPictureButton">
-                <property name="text">
-                 <string>Use Selected
-Picture Resource</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="2" colspan="2">
-               <widget class="QLineEdit" name="selectedPictureEdit"/>
-              </item>
-              <item row="6" column="0" colspan="3">
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <item>
-                 <widget class="QPushButton" name="saveButton">
-                  <property name="text">
-                   <string>Save</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cancelButton">
-                  <property name="text">
-                   <string>Cancel</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="7" column="0" colspan="4">
-               <widget class="QGraphicsView" name="graphicsView_2"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="pogEditorTab">
-           <attribute name="title">
-            <string>Pog Editor</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
-            <item>
-             <layout class="QGridLayout" name="gridLayout_7">
-              <item row="5" column="2">
-               <widget class="QComboBox" name="sizeComboBox"/>
-              </item>
-              <item row="0" column="0" colspan="3">
-               <layout class="QGridLayout" name="gridLayout_6">
-                <item row="0" column="0">
-                 <widget class="QPushButton" name="createPogButton">
-                  <property name="text">
-                   <string>Create Pog</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QPushButton" name="deletePogButton">
-                  <property name="text">
-                   <string>DELETE Pog</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="7" column="0" colspan="3">
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
-                <item>
-                 <widget class="QPushButton" name="savePogButton">
-                  <property name="text">
-                   <string>Save</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cancelPogButton">
-                  <property name="text">
-                   <string>Cancel</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="pogNameLabel">
-                <property name="text">
-                 <string>Pog Name</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="0" colspan="2">
-               <widget class="QPushButton" name="useSelectedPogPictureButton">
-                <property name="text">
-                 <string>Use Selected
-Picture Resource</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1" colspan="2">
-               <widget class="QComboBox" name="pogTypeComboBox"/>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="pogLocationLabel">
-                <property name="text">
-                 <string>Pog Location</string>
-                </property>
-               </widget>
-              </item>
-              <item row="8" column="0" colspan="3">
-               <widget class="QTreeWidget" name="treeWidget_2">
-                <column>
-                 <property name="text">
-                  <string notr="true">1</string>
-                 </property>
-                </column>
-               </widget>
-              </item>
-              <item row="1" column="1" colspan="2">
-               <widget class="QLineEdit" name="pogNameEdit"/>
-              </item>
-              <item row="4" column="2">
-               <widget class="QLineEdit" name="useSelectedPogPictureEdit"/>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="pogTypeLabel">
-                <property name="text">
-                 <string>Pog Type</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="0" colspan="2">
-               <widget class="QPushButton" name="playerFlagsButton">
-                <property name="text">
-                 <string>Player Flags</string>
-                </property>
-               </widget>
-              </item>
-              <item row="9" column="0">
-               <widget class="QGraphicsView" name="graphicsView_3">
-                <property name="maximumSize">
-                 <size>
-                  <width>50</width>
-                  <height>50</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="0" colspan="2">
-               <widget class="QPushButton" name="editNotesButton">
-                <property name="text">
-                 <string>Edit Notes</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1" colspan="2">
-               <widget class="QComboBox" name="pogLocationComboBox"/>
-              </item>
-              <item row="6" column="2">
-               <widget class="QPushButton" name="dmFlagsButton">
-                <property name="text">
-                 <string>DM Flags</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </widget>
+            </layout>
         </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
- </widget>
- <resources/>
- <connections/>
+        <widget class="QStatusBar" name="statusbar"/>
+    </widget>
+    <resources/>
+    <connections/>
 </ui>

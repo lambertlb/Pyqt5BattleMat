@@ -1,16 +1,16 @@
 {
-	"uuid": "template-dungeon",
-	"dungeonName": "Template Dungeon",
-	"dungeonLevels": [
-		{
-			"levelDrawing": "level1.jpg",
-			"levelName": "level 1",
-			"gridSize": 50,
-			"gridOffsetX": 0,
-			"gridOffsetY": 0,
-			"columns": 39,
-			"rows": 22
-		}
-	],
-	"showGrid": true
+  "uuid": "template-dungeon",
+  "dungeonName": "Template Dungeon",
+  "dungeonLevels": [
+    {
+      "levelDrawing": "level1.jpg",
+      "levelName": "level 1",
+      "gridSize": 50,
+      "gridOffsetX": 0,
+      "gridOffsetY": 0,
+      "columns": 39,
+      "rows": 22
+    }
+  ],
+  "showGrid": true
 }

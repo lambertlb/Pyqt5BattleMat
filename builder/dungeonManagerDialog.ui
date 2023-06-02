@@ -1,324 +1,324 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DungeonSelectDialog</class>
- <widget class="QDialog" name="DungeonSelectDialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>622</width>
-    <height>347</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Dungeon Select</string>
-  </property>
-  <property name="autoFillBackground">
-   <bool>false</bool>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
-  </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QCheckBox" name="iAmDungeonMaster">
-     <property name="text">
-      <string>I am DM</string>
-     </property>
+    <class>DungeonSelectDialog</class>
+    <widget class="QDialog" name="DungeonSelectDialog">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>622</width>
+                <height>347</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Dungeon Select</string>
+        </property>
+        <property name="autoFillBackground">
+            <bool>false</bool>
+        </property>
+        <property name="modal">
+            <bool>true</bool>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+                <widget class="QCheckBox" name="iAmDungeonMaster">
+                    <property name="text">
+                        <string>I am DM</string>
+                    </property>
+                </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+                <widget class="QLabel" name="label">
+                    <property name="palette">
+                        <palette>
+                            <active>
+                                <colorrole role="WindowText">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                                <colorrole role="Base">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>149</red>
+                                            <green>149</green>
+                                            <blue>149</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                            </active>
+                            <inactive>
+                                <colorrole role="WindowText">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                                <colorrole role="Base">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>149</red>
+                                            <green>149</green>
+                                            <blue>149</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                            </inactive>
+                            <disabled>
+                                <colorrole role="WindowText">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>120</red>
+                                            <green>120</green>
+                                            <blue>120</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                                <colorrole role="Base">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>240</red>
+                                            <green>240</green>
+                                            <blue>240</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                            </disabled>
+                        </palette>
+                    </property>
+                    <property name="autoFillBackground">
+                        <bool>true</bool>
+                    </property>
+                    <property name="text">
+                        <string>Template Management</string>
+                    </property>
+                    <property name="textFormat">
+                        <enum>Qt::PlainText</enum>
+                    </property>
+                    <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                    </property>
+                </widget>
+            </item>
+            <item row="2" column="0" colspan="2">
+                <layout class="QFormLayout" name="formLayout">
+                    <item row="0" column="0" colspan="2">
+                        <widget class="QComboBox" name="templateList">
+                            <property name="currentText">
+                                <string/>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="1" column="0">
+                        <widget class="QPushButton" name="createDungeonButton">
+                            <property name="text">
+                                <string>Create New Dungeon -&gt;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="1" column="1">
+                        <widget class="QLineEdit" name="newDungeonName">
+                            <property name="text">
+                                <string>Enter Dungeon Name</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="2" column="0">
+                        <widget class="QPushButton" name="editDungeonButton">
+                            <property name="text">
+                                <string>Edit Dungeon</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="3" column="0">
+                        <widget class="QPushButton" name="deleteDungeonButton">
+                            <property name="text">
+                                <string>Delete Dungeon</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item row="3" column="0" colspan="2">
+                <widget class="QLabel" name="label_2">
+                    <property name="palette">
+                        <palette>
+                            <active>
+                                <colorrole role="WindowText">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                                <colorrole role="Base">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>149</red>
+                                            <green>149</green>
+                                            <blue>149</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                            </active>
+                            <inactive>
+                                <colorrole role="WindowText">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                                <colorrole role="Base">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>149</red>
+                                            <green>149</green>
+                                            <blue>149</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                            </inactive>
+                            <disabled>
+                                <colorrole role="WindowText">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>120</red>
+                                            <green>120</green>
+                                            <blue>120</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                                <colorrole role="Base">
+                                    <brush brushstyle="SolidPattern">
+                                        <color alpha="255">
+                                            <red>240</red>
+                                            <green>240</green>
+                                            <blue>240</blue>
+                                        </color>
+                                    </brush>
+                                </colorrole>
+                            </disabled>
+                        </palette>
+                    </property>
+                    <property name="autoFillBackground">
+                        <bool>true</bool>
+                    </property>
+                    <property name="text">
+                        <string>Session Management</string>
+                    </property>
+                    <property name="textFormat">
+                        <enum>Qt::PlainText</enum>
+                    </property>
+                    <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                    </property>
+                </widget>
+            </item>
+            <item row="4" column="0" colspan="2">
+                <layout class="QFormLayout" name="formLayout_2">
+                    <item row="0" column="0" colspan="2">
+                        <widget class="QComboBox" name="sessionList"/>
+                    </item>
+                    <item row="1" column="0">
+                        <widget class="QPushButton" name="dmSessionButton">
+                            <property name="text">
+                                <string>DM the Session</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="2" column="0">
+                        <widget class="QPushButton" name="deleteSessionButton">
+                            <property name="text">
+                                <string>Delete Session</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="3" column="0">
+                        <widget class="QPushButton" name="createSessionButton">
+                            <property name="text">
+                                <string>Create Session -&gt;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="3" column="1">
+                        <widget class="QLineEdit" name="newSessionName">
+                            <property name="text">
+                                <string>Enter Session Name</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item row="5" column="1">
+                <spacer name="verticalSpacer">
+                    <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                        <size>
+                            <width>20</width>
+                            <height>5</height>
+                        </size>
+                    </property>
+                </spacer>
+            </item>
+            <item row="6" column="0" colspan="2">
+                <widget class="QDialogButtonBox" name="buttonBox">
+                    <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="standardButtons">
+                        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+                    </property>
+                </widget>
+            </item>
+        </layout>
     </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLabel" name="label">
-     <property name="palette">
-      <palette>
-       <active>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>149</red>
-           <green>149</green>
-           <blue>149</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>149</red>
-           <green>149</green>
-           <blue>149</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>120</red>
-           <green>120</green>
-           <blue>120</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>240</red>
-           <green>240</green>
-           <blue>240</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
-     </property>
-     <property name="autoFillBackground">
-      <bool>true</bool>
-     </property>
-     <property name="text">
-      <string>Template Management</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0" colspan="2">
-      <widget class="QComboBox" name="templateList">
-       <property name="currentText">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="createDungeonButton">
-       <property name="text">
-        <string>Create New Dungeon -&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="newDungeonName">
-       <property name="text">
-        <string>Enter Dungeon Name</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="editDungeonButton">
-       <property name="text">
-        <string>Edit Dungeon</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QPushButton" name="deleteDungeonButton">
-       <property name="text">
-        <string>Delete Dungeon</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="label_2">
-     <property name="palette">
-      <palette>
-       <active>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>149</red>
-           <green>149</green>
-           <blue>149</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>149</red>
-           <green>149</green>
-           <blue>149</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>120</red>
-           <green>120</green>
-           <blue>120</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>240</red>
-           <green>240</green>
-           <blue>240</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
-     </property>
-     <property name="autoFillBackground">
-      <bool>true</bool>
-     </property>
-     <property name="text">
-      <string>Session Management</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <layout class="QFormLayout" name="formLayout_2">
-     <item row="0" column="0" colspan="2">
-      <widget class="QComboBox" name="sessionList"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="dmSessionButton">
-       <property name="text">
-        <string>DM the Session</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="deleteSessionButton">
-       <property name="text">
-        <string>Delete Session</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QPushButton" name="createSessionButton">
-       <property name="text">
-        <string>Create Session -&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="newSessionName">
-       <property name="text">
-        <string>Enter Session Name</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>5</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-  </layout>
- </widget>
- <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>DungeonSelectDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>DungeonSelectDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+    <resources/>
+    <connections>
+        <connection>
+            <sender>buttonBox</sender>
+            <signal>accepted()</signal>
+            <receiver>DungeonSelectDialog</receiver>
+            <slot>accept()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>248</x>
+                    <y>254</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>157</x>
+                    <y>274</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>buttonBox</sender>
+            <signal>rejected()</signal>
+            <receiver>DungeonSelectDialog</receiver>
+            <slot>reject()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>316</x>
+                    <y>260</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>286</x>
+                    <y>274</y>
+                </hint>
+            </hints>
+        </connection>
+    </connections>
 </ui>

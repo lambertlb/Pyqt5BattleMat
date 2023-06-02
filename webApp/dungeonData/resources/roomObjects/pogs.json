@@ -1,1 +1,91 @@
-{"listVersion":1,"pogList":[{"pogName":"Secret Door Right","pogImageUrl":"dungeonData/resources/roomObjects/SecretDoor.png","pogType":"ROOMOBJECT","pogSize":1,"pogColumn":0,"pogRow":0,"uuid":"Secret_Door_Right","dungeonLevel":0,"dungeonMasterFlags":23,"playerFlags":0,"notes":"","pogNumber":0},{"pogName":"Secret Door Top","pogImageUrl":"dungeonData/resources/roomObjects/SecretDoorTop.png","pogType":"ROOMOBJECT","pogSize":1,"pogColumn":0,"pogRow":0,"uuid":"Secret_Door_Top","dungeonLevel":0,"dungeonMasterFlags":27,"playerFlags":0,"pogNumber":0},{"pogName":"Notes","pogImageUrl":"dungeonData/resources/roomObjects/Notes.png","pogType":"ROOMOBJECT","pogSize":1,"pogColumn":0,"pogRow":0,"uuid":"11a35391-e498-4217-90d3-125d0b2ea089","dungeonLevel":0,"dungeonMasterFlags":18,"playerFlags":0,"notes":"","dmNotes":"","pogNumber":0},{"pogName":"Trap","pogImageUrl":"dungeonData/resources/roomObjects/Trap.png","pogType":"ROOMOBJECT","pogSize":1,"pogColumn":0,"pogRow":0,"uuid":"df427e70-07fd-491b-9913-5c00918b9e72","dungeonLevel":0,"dungeonMasterFlags":3,"playerFlags":0,"notes":"","pogNumber":0},{"pogName":"Secret Door Right Dark","pogImageUrl":"dungeonData/resources/roomObjects/SecretDoorDark.png","pogType":"ROOMOBJECT","pogSize":1,"pogColumn":0,"pogRow":0,"uuid":"9a9093cc-c541-4d40-a589-d0bf9274b908","dungeonLevel":0,"dungeonMasterFlags":7,"playerFlags":0,"notes":"","dmNotes":"","pogNumber":0},{"pogName":"Secret Door Top Dark","pogImageUrl":"dungeonData/resources/roomObjects/SecretDoorTopDark.png","pogType":"ROOMOBJECT","pogSize":1,"pogColumn":0,"pogRow":0,"uuid":"4b141191-4ac3-48f9-b08d-233df7102fbd","dungeonLevel":0,"dungeonMasterFlags":11,"playerFlags":0,"notes":"","dmNotes":"","pogNumber":0}]}
+{
+  "listVersion": 1,
+  "pogList": [
+    {
+      "pogName": "Secret Door Right",
+      "pogImageUrl": "dungeonData/resources/roomObjects/SecretDoor.png",
+      "pogType": "ROOMOBJECT",
+      "pogSize": 1,
+      "pogColumn": 0,
+      "pogRow": 0,
+      "uuid": "Secret_Door_Right",
+      "dungeonLevel": 0,
+      "dungeonMasterFlags": 23,
+      "playerFlags": 0,
+      "notes": "",
+      "pogNumber": 0
+    },
+    {
+      "pogName": "Secret Door Top",
+      "pogImageUrl": "dungeonData/resources/roomObjects/SecretDoorTop.png",
+      "pogType": "ROOMOBJECT",
+      "pogSize": 1,
+      "pogColumn": 0,
+      "pogRow": 0,
+      "uuid": "Secret_Door_Top",
+      "dungeonLevel": 0,
+      "dungeonMasterFlags": 27,
+      "playerFlags": 0,
+      "pogNumber": 0
+    },
+    {
+      "pogName": "Notes",
+      "pogImageUrl": "dungeonData/resources/roomObjects/Notes.png",
+      "pogType": "ROOMOBJECT",
+      "pogSize": 1,
+      "pogColumn": 0,
+      "pogRow": 0,
+      "uuid": "11a35391-e498-4217-90d3-125d0b2ea089",
+      "dungeonLevel": 0,
+      "dungeonMasterFlags": 18,
+      "playerFlags": 0,
+      "notes": "",
+      "dmNotes": "",
+      "pogNumber": 0
+    },
+    {
+      "pogName": "Trap",
+      "pogImageUrl": "dungeonData/resources/roomObjects/Trap.png",
+      "pogType": "ROOMOBJECT",
+      "pogSize": 1,
+      "pogColumn": 0,
+      "pogRow": 0,
+      "uuid": "df427e70-07fd-491b-9913-5c00918b9e72",
+      "dungeonLevel": 0,
+      "dungeonMasterFlags": 3,
+      "playerFlags": 0,
+      "notes": "",
+      "pogNumber": 0
+    },
+    {
+      "pogName": "Secret Door Right Dark",
+      "pogImageUrl": "dungeonData/resources/roomObjects/SecretDoorDark.png",
+      "pogType": "ROOMOBJECT",
+      "pogSize": 1,
+      "pogColumn": 0,
+      "pogRow": 0,
+      "uuid": "9a9093cc-c541-4d40-a589-d0bf9274b908",
+      "dungeonLevel": 0,
+      "dungeonMasterFlags": 7,
+      "playerFlags": 0,
+      "notes": "",
+      "dmNotes": "",
+      "pogNumber": 0
+    },
+    {
+      "pogName": "Secret Door Top Dark",
+      "pogImageUrl": "dungeonData/resources/roomObjects/SecretDoorTopDark.png",
+      "pogType": "ROOMOBJECT",
+      "pogSize": 1,
+      "pogColumn": 0,
+      "pogRow": 0,
+      "uuid": "4b141191-4ac3-48f9-b08d-233df7102fbd",
+      "dungeonLevel": 0,
+      "dungeonMasterFlags": 11,
+      "playerFlags": 0,
+      "notes": "",
+      "dmNotes": "",
+      "pogNumber": 0
+    }
+  ]
+}

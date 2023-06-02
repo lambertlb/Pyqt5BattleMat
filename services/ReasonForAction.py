@@ -6,29 +6,29 @@ from enum import auto
 
 
 class ReasonForAction(Enum):
-	LOGGED_IN = auto()
-	LOAD_IMAGE = auto()
+    LOGGED_IN = auto()
+    LOAD_IMAGE = auto()
 
-	DungeonDataDeleted = auto()
-	DungeonDataLoaded = auto()
-	DungeonDataCreated = auto()
-	DungeonDataSaved = auto()
-	DungeonSelected = auto()
-	DungeonDataReadyToEdit = auto()
-	DungeonDataReadyToJoin = auto()
-	DungeonSelectedLevelChanged = auto()
+    DungeonDataDeleted = auto()
+    DungeonDataLoaded = auto()
+    DungeonDataCreated = auto()
+    DungeonDataSaved = auto()
+    DungeonSelected = auto()
+    DungeonDataReadyToEdit = auto()
+    DungeonDataReadyToJoin = auto()
+    DungeonSelectedLevelChanged = auto()
 
-	SessionListChanged = auto()
-	SessionDataChanged = auto()
-	SessionDataSaved = auto()
+    SessionListChanged = auto()
+    SessionDataChanged = auto()
+    SessionDataSaved = auto()
 
-	DMStateChange = auto()
-	MonsterPogsLoaded = auto()
-	RoomObjectPogsLoaded = auto()
+    DMStateChange = auto()
+    MonsterPogsLoaded = auto()
+    RoomObjectPogsLoaded = auto()
 
-	PogDataChanged = auto()
-	PogWasSelected = auto()
+    PogDataChanged = auto()
+    PogWasSelected = auto()
 
-	MouseDownEventBubble = auto()
+    MouseDownEventBubble = auto()
 
-	LastReason = auto()
+    LastReason = auto()
