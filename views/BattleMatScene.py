@@ -163,13 +163,14 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
         elif dungeonManager.getCurrentDungeonLevelData().levelDrawing != self._dungeonPicture:
             initView = True
 
+        self._currentDungeonID = dungeonManager.selectedDungeonUUID
+        self._currentSessionID = dungeonManager.getCurrentSessionUUID()
+        self._currentLevel = dungeonManager.currentLevelIndex
+
         if initView:
             self.intializeView()
         else:
             self.dungeonDataUpdated()
-        self._currentDungeonID = dungeonManager.selectedDungeonUUID
-        self._currentSessionID = dungeonManager.getCurrentSessionUUID()
-        self._currentLevel = dungeonManager.currentLevelIndex
         self.update(0, 0, self.width(), self.height())
 
     def intializeView(self):

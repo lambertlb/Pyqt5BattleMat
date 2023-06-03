@@ -63,7 +63,6 @@ class PogCanvas(QtWidgets.QGraphicsItem):
     def successfulLoaded(self):
         self.image = self.pogData.image
         self.imageLoaded = self.image is not None
-        self.update()
 
     def failedLoad(self):
         pass

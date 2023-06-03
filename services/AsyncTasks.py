@@ -3,6 +3,8 @@ GPL 3 file header
 """
 import json
 import re
+import threading
+import time
 import traceback
 
 import requests
@@ -37,6 +39,7 @@ class AsynchBase(QRunnable):
         self._returnData = dataResponse
         self._returnData.task = self
         self._connectToken = None
+        self._executeTask = True
 
     @property
     def signaler(self):
@@ -67,6 +70,8 @@ class AsynchBase(QRunnable):
         self._onFailure = value
 
     def submit(self):
+        if not self._executeTask:
+            return
         self._signaler = AsyncSignal()  # so we can call signals
         self._connectToken = self._signaler.finished.connect(taskDone)
         global asyncPool
@@ -84,7 +89,7 @@ class AsynchBase(QRunnable):
         try:
             self.runTask()
         except (Exception,):
-            self._returnData.hadException(True)
+            self._returnData.hadException = True
             traceback.print_exc()
         self._signaler.finished.emit(self._returnData)
 
@@ -122,11 +127,36 @@ class AsyncImage(AsynchBase):
     if the URL starts with http it assumes a web request
     else if tries to load from file
     """
+    lock = threading.RLock()
+    imageCache = {}
+    imagesBeingLoaded = {}
 
     def __init__(self, url, onSuccess, onFailure):
-        self.url =  re.sub("\\\\", "/", url)
+        self.url = re.sub("\\\\", "/", url)
         self.reply = None
+        self.pending = []
+        self.saveOnSuccess = onSuccess
+        self.saveOnFailure = onFailure
         super(AsyncImage, self).__init__(onSuccess, onFailure, DataRequesterResponse())
+        AsyncImage.lock.acquire()
+        cachedImage = AsyncImage.imageCache.get(self.url)
+        try:
+            if cachedImage:
+                self._executeTask = False
+                self._returnData.data = cachedImage
+                onSuccess(self._returnData)
+                return
+            pendingLoad = AsyncImage.imagesBeingLoaded.get(self.url)
+            if pendingLoad:
+                self._executeTask = False
+                pendingLoad.pending.append(self)
+                return
+            AsyncImage.imagesBeingLoaded[self.url] = self
+            # override normal callbacks
+            self.onSuccess = self.hadSuccess
+            self.onFailure = self.hadFailure
+        finally:
+            AsyncImage.lock.release()
 
     def runTask(self):
         """
@@ -154,6 +184,30 @@ class AsyncImage(AsynchBase):
         :return: QImage
         """
         return self._returnData.data
+
+    def hadSuccess(self, data):
+        AsyncImage.lock.acquire()
+        try:
+            AsyncImage.imagesBeingLoaded.pop(self.url)
+            AsyncImage.imageCache[self.url] = self.getImage()
+        finally:
+            AsyncImage.lock.release()
+        self.saveOnSuccess(self._returnData)
+        for pendingTasks in self.pending:
+            pendingTasks.returnData.data = self._returnData.data
+            pendingTasks.saveOnSuccess(pendingTasks.returnData)
+        pass
+
+    def hadFailure(self, data):
+        AsyncImage.lock.acquire()
+        try:
+            AsyncImage.imagesBeingLoaded.pop(self.url)
+        finally:
+            AsyncImage.lock.release()
+        self.saveOnFailure(self._returnData)
+        for pendingTasks in self.pending:
+            pendingTasks.saveOnFailure(pendingTasks.returnData)
+        pass
 
 
 class AsyncJsonData(AsynchBase):
