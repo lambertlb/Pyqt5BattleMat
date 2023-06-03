@@ -7,16 +7,17 @@ I did this as a learning experiment to learn Python and QT
 This is basically a conversion of the ElectronicBattleMat project done in GWT
 
 ## Items to run
-    BattleMatServer.py will start a web service in your local network. It will print the ip and host in console window
-    BattleMat.py will start the python client.
-    You can also use a browser as a client by choosing your address and port I.E. http://192.168.109.2:8080
+- BattleMatServer.py will start a web service in your local network.
+  It will print the ip and host in console window
+- BattleMat.py will start the python client.
+- You can also use a browser as a client by choosing your address and port I.E. http://192.168.109.2:8080
 
 
 ## Dependencies
-    Beside python 10 or later you will need the following items.
-        I used these instead of newer ones because PyCharm gave fewer erroneous warnings
-    pip install PySide2
-    pip install event-bus
+- Beside python 10 or later you will need the following items.
+    I used these instead of newer ones because PyCharm gave fewer erroneous warnings
+- pip install PySide2 
+- pip install event-bus
 
 ## Things of interest
 I learned many things about Python and Qt while doing this project. Some of them were very painful.
