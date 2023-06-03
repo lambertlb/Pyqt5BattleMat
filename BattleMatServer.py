@@ -1,6 +1,7 @@
 """
 GPL 3 file header
 """
+import socket
 import traceback
 import urllib
 from http.server import SimpleHTTPRequestHandler, HTTPServer
@@ -94,11 +95,13 @@ class BattleMatServer(SimpleHTTPRequestHandler):
         BattleMatServer.startTimer()
 
 
-def run(server_class=HTTPServer, handler_class=BattleMatServer, host='localhost', port=8080, hostDirectory='./webApp'):
+def run(server_class=HTTPServer, handler_class=BattleMatServer, host=None, port=8080, hostDirectory='./webApp'):
+    if not host:
+        host = socket.gethostbyname(socket.gethostname())
     server_address = (host, port)
     BattleMatServer.webAppDirectory = hostDirectory
     httpd = server_class(server_address, handler_class)
-    print(f'Starting battle mat server {host}:{port}')
+    print(f'Starting battle mat server http://{host}:{port}')
     BattleMatServer.startTimer()
     httpd.serve_forever()
 
