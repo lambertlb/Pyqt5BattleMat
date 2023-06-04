@@ -6,9 +6,16 @@ from services.serviceData.PogPlace import PogPlace
 
 
 class AddOrUpdatePogHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the ADDORUPDATEPOG request.
+    We have been requested to update pog data in the proper spot
+    """
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
     def handleRequest(self, server, parameters: dict, data):
+        # parameters can be used in different combinations
+        # so need to make sure to handle properly if not supplied
         dungeonUUID = None
         dd = parameters.get('dungeonUUID')
         if dd:

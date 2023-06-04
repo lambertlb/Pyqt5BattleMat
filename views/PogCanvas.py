@@ -19,7 +19,7 @@ class PogCanvas(QtWidgets.QGraphicsItem):
         if PogCanvas.popup is None:
             PogCanvas.popup = PopupMenu()
         self.view = view
-        self.image = None
+        self.image: QtGui.QImage | None = None
         self.pogData = None
         self.badURL = False
         self.imageLoaded = False
@@ -63,6 +63,10 @@ class PogCanvas(QtWidgets.QGraphicsItem):
     def successfulLoaded(self):
         self.image = self.pogData.image
         self.imageLoaded = self.image is not None
+        try:
+            self.update(0, 0, self.scaledGridSize, self.scaledGridSize)
+        except (Exception,):  # needed this to handle switching scenes before load done
+            pass
 
     def failedLoad(self):
         pass

@@ -5,6 +5,10 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class CreateNewDungeonHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the CREATENEWDUNGEON request.
+    """
 
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic

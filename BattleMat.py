@@ -21,6 +21,14 @@ from views.RibbonBar import RibbonBar
 
 
 class MainWindow(QMainWindow):
+    """
+    This is the main window for the application.
+    It was originally generated from builder/MainWindow.ui
+    I edited it so that I could split oot the various parts
+    of the window into separate components line RibbonBar,
+    BattMatArea, and one component for each tab in the
+    tabbed panel
+    """
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -81,6 +89,10 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).show()
 
     def appStarted(self):
+        """
+        Application has start so start up time based tasks
+        and bring up the login window
+        """
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.doTimeBasedTasks)
         self.timer.start(1000)
@@ -89,6 +101,9 @@ class MainWindow(QMainWindow):
         self.dungeonManagerDialog = DungeonManagerDialog(False)
 
     def eventFired(self, eventData):
+        """
+        Handle event bus signals
+        """
         if eventData.eventReason == ReasonForAction.LOGGED_IN:
             self.loggedIn(eventData.eventData)
         elif eventData.eventReason == ReasonForAction.DungeonDataReadyToEdit:
@@ -111,6 +126,9 @@ class MainWindow(QMainWindow):
 
     # noinspection PyUnusedLocal
     def loggedIn(self, succeeded):
+        """
+        We successfully logged in so select a dungeon
+        """
         self.loginDialog = None
         self.dungeonManagerDialog.show()
 
@@ -121,6 +139,9 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    # add various managers to the Services manager
+    # I find doing this easier that doing dependency injection
+    # everywhere in the application
     ServicesManager.setEventManager(EventManager())
     ServicesManager.setConfigManager(MyConfigManager())
     ServicesManager.setDungeonManager(DungeonManager())

@@ -5,6 +5,11 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class DeleteFileHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the DELETEFILE request.
+    """
+
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
     def handleRequest(self, server, parameters: dict, data):

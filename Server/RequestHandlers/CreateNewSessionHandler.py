@@ -5,6 +5,11 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class CreateNewSessionHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the CREATENEWSESSION request.
+    """
+
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
     def handleRequest(self, server, parameters: dict, data):

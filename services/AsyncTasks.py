@@ -2,6 +2,7 @@
 GPL 3 file header
 """
 import json
+import os
 import re
 import threading
 import time
@@ -296,8 +297,11 @@ class AsyncUpload(AsynchBase):
             Runs in background thread to upload file
             :return: None
             """
-        data = open(self.filePath, "rb")
-        results = requests.post(self.url, files={"form_field_name": data}, params=self.requestData.__dict__)
+        with open(self.filePath, 'rb') as img:
+            name_img = os.path.basename(self.filePath)
+            files = {'image': (name_img, img, 'multipart/form-data')}
+            with requests.Session() as s:
+                results = s.post(self.url, files=files, params=self.requestData.__dict__)
         if results.ok:
             self.returnData.data = 'good'
         else:

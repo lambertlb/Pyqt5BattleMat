@@ -28,6 +28,11 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class BattleMatServer(SimpleHTTPRequestHandler):
+    """
+    This class manages a web service
+    """
+
+    # Following is a list of all services and their corresponding handler
     # noinspection SpellCheckingInspection
     handler = {
         'LOGIN': LoginRequestHandler(),
@@ -49,7 +54,7 @@ class BattleMatServer(SimpleHTTPRequestHandler):
     }
 
     webAppDirectory = None
-    topDirectory = './webApp/'
+    topDirectory = './webApp/'  # path to top of file tree
 
     def __init__(self, *args, **kwargs):
         super(BattleMatServer, self).__init__(*args, directory=BattleMatServer.webAppDirectory, **kwargs)
@@ -58,6 +63,11 @@ class BattleMatServer(SimpleHTTPRequestHandler):
         super(BattleMatServer, self).do_GET()
 
     def do_POST(self):
+        """
+        Handle POST requests.
+        Ths expects a request and it parameters to be included in the parts.
+        It will use the request data to look up the proper handler
+        """
         self.topDirectory = BattleMatServer.topDirectory
         urlParts = urllib.parse.urlsplit(self.path)
         parameters = urllib.parse.parse_qs(urlParts.query)
@@ -67,10 +77,11 @@ class BattleMatServer(SimpleHTTPRequestHandler):
         rawData = ''
         try:
             content_type = self.headers['content-type']
-            if 'multi' not in content_type:
+            if 'multi' not in content_type: # if not multipart then just read the data for the handlers
                 content_length = int(self.headers["Content-Length"])
                 rawData = self.rfile.read(content_length)
             requestType = parameters['request'][0]
+            # look up proper handler for request
             requestHandler = BattleMatServer.handler.get(requestType)
             if requestHandler is not None:
                 returnData = requestHandler.handleRequest(self, parameters, rawData)
@@ -86,6 +97,10 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 
     @staticmethod
     def startTimer():
+        """
+        Run a periodic timer to handle time based tasks.
+        This can include saving dirty data or flushing stale caches
+        """
         t = Timer(5.0, BattleMatServer.periodicTimer)
         t.start()
 

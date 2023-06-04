@@ -14,7 +14,7 @@ This is basically a conversion of the ElectronicBattleMat project done in GWT
 
 
 ## Dependencies
-- Beside python 10 or later you will need the following items.
+- Beside python 3.10 or later you will need the following items.
     I used these instead of newer ones because PyCharm gave fewer erroneous warnings
 - pip install PySide2 
 - pip install event-bus
@@ -31,13 +31,13 @@ They also manage a cache of images, so they ever have to be loaded just once fro
 ### How to handle Posts in a Python server
 My web service is mostly driven be POST requests from my application.
 For each request type I created a handler. These can be found under Server/RequestHandlers.
-FileUploadHandler is the most complicated and deals with multipart uploads.
+FileUploadHandler.py is the most complicated and deals with multipart uploads.
 ### Handling zooming sub images in a scene
 QGraphicsScene has a lot of nice things for handling panning and zooming, but I have a lot of
-issues with overlay images getting pixelated when zoomed. I solved this sub-classing QGraphicsItem
-and doing al the painting by myself. You can find this under views/PogCanvas.
+issues with overlay images getting pixelated when zoomed. I solved this by sub-classing QGraphicsItem
+and doing all the painting by myself. You can find this under views/PogCanvas.py.
 ### Using mouse wheel to zoom image
-view/BattleMatCanvas is a subclass of QGraphicsView and shows how I use the mouse wheel to zoom an image.
+view/BattleMatCanvas.py is a subclass of QGraphicsView and shows how I use the mouse wheel to zoom an image.
 
 ## Issues
 ### Hand Cursor

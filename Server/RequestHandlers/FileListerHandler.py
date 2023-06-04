@@ -7,12 +7,19 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class FileListResponse:
+    """
+    response for file list request
+    """
     def __init__(self, filePath):
         self.filePath = filePath
         self.fileNames = []
 
 
 class FileListerHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the FILELISTER request.
+    """
 
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic

@@ -6,9 +6,15 @@ from services.serviceData.PogPlace import PogPlace
 
 
 class DeletePogHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the DELETEPOG request.
+    """
+
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
     def handleRequest(self, server, parameters: dict, data):
+        # make sure to handle optional parameters correctly
         dungeonUUID = None
         dd = parameters.get('dungeonUUID')
         if dd:

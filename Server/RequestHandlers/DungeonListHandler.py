@@ -8,6 +8,11 @@ from services.serviceData.DungeonListData import DungeonListData
 
 
 class DungeonListHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the GETDUNGEONLIST request.
+    """
+
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
     def handleRequest(self, server, parameters, data):

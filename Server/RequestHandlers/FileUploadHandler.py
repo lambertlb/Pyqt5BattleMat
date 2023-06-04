@@ -6,6 +6,12 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class FileUploadHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the FILEUPLOAD request.
+    This will handle multipart file uploads
+    """
+
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
     def handleRequest(self, server, parameters: dict, data):
@@ -16,26 +22,23 @@ class FileUploadHandler:
 
     # noinspection PyMethodMayBeStatic
     def parseDataToFile(self, server, filePath):
+        """
+        Take all the file parts in the POST request and save them to a file
+        """
         content_type = server.headers['content-type']
-        if not content_type:
-            return False, "Content-Type header doesn't contain boundary"
+        assert content_type, "Content-Type header doesn't contain boundary"
         boundary = content_type.split("=")[1].encode()
         remainingBytes = int(server.headers['content-length'])
         line = server.rfile.readline()
         remainingBytes -= len(line)
-        if boundary not in line:
-            return False, "Content NOT begin with boundary"
+        assert (boundary in line), "Content NOT begin with boundary"
         line = server.rfile.readline()
         remainingBytes -= len(line)
         line = server.rfile.readline()
         remainingBytes -= len(line)
         line = server.rfile.readline()
         remainingBytes -= len(line)
-        try:
-            out = open(filePath, 'wb')
-        except IOError:
-            return False, "Can't create file to write, do you have permission to write?"
-
+        out = open(filePath, 'wb')
         nextLine = server.rfile.readline()
         remainingBytes -= len(nextLine)
         while remainingBytes > 0:
@@ -45,10 +48,12 @@ class FileUploadHandler:
                 nextLine = nextLine[0:-1]
                 if nextLine.endswith(b'\r'):
                     nextLine = nextLine[0:-1]
+                print(nextLine)
                 out.write(nextLine)
                 out.close()
-                return True, "File '%s' upload success!" % filePath
+                return
             else:
+                print(nextLine)
                 out.write(nextLine)
                 nextLine = line
-        return False, "Unexpected Ends of data."
+        raise Exception("Unexpected Ends of data")
