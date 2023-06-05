@@ -6,7 +6,7 @@ from PySide2.QtCore import QSettings
 from services.Constants import Constants
 
 
-class MyConfigManager:
+class ConfigManager:
     """
     Class to contain application configuration
     """

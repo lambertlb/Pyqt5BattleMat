@@ -4,6 +4,13 @@ GPL 3 file header
 
 
 class PogPlace:
+    """
+    Manage the places a Pog can reside
+
+    Ended up treating these as constants instead of as an enum.
+    This is because I had a lot of issues with enums in json data
+    and this turned out to be a lot easier.
+    """
     DisplayNames = {
         0: 'Dungeon Level',
         1: 'Session Level',

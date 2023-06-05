@@ -60,8 +60,8 @@ class DungeonManager(PogManager):
     @currentLevelIndex.setter
     def currentLevelIndex(self, value):
         self._currentLevelIndex = value
-        self.loadDungeonData()
-        self.loadSessionData()
+        self.updateWithNewDungeonData()
+        self.updateWithSessionData()
         ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonSelectedLevelChanged, None)
 
     # noinspection PyMethodMayBeStatic
@@ -79,6 +79,7 @@ class DungeonManager(PogManager):
 
     def doTimeBasedTasks(self):
         if self.selectedSession is not None:
+            # periodically see if data changed on server
             self.requestLoadSessionData(self.selectedSession.version)
 
     def getCurrentSessionUUID(self):
@@ -117,6 +118,9 @@ class DungeonManager(PogManager):
         dataRequestResponse.userOnFailure('')
 
     def getDungeonList(self, onSuccess, onFailure):
+        """
+        get list of dungeons from server
+        """
         request = RequestData(Constants.DungeonListRequest)
         dataResponse = DataRequesterResponse()
         dataResponse.onSuccess = self.handleSuccessfulDungeonList
@@ -131,6 +135,7 @@ class DungeonManager(PogManager):
         self.dungeonToUUIDMap.clear()
         self.uuidTemplatePathMap.clear()
         amountInList = len(data.dungeonNames)
+        # fill in caches
         for i in range(amountInList):
             self.dungeonToUUIDMap[data.dungeonNames[i]] = data.dungeonUUIDS[i]
             self.uuidTemplatePathMap[data.dungeonUUIDS[i]] = data.dungeonDirectories[i]
@@ -141,9 +146,12 @@ class DungeonManager(PogManager):
     def handleFailedDungeonList(self, dataRequestResponse):
         pass
 
-    def getSessionList(self, uuid):
+    def getSessionList(self, dungeonUUID):
+        """
+        get list of session for this dungeon UUID
+        """
         request = RequestData(Constants.SessionListRequest)
-        request.dungeonUUID = uuid
+        request.dungeonUUID = dungeonUUID
         dataResponse = DataRequesterResponse()
         dataResponse.onSuccess = self.handleSuccessfulSessionList
         dataResponse.onFailure = self.handleFailedSessionList
@@ -158,6 +166,9 @@ class DungeonManager(PogManager):
         pass
 
     def editSelectedDungeonUUID(self, selectedDungeonUUID):
+        """
+        client wants to edit this dungeon
+        """
         self.selectedDungeonUUID = selectedDungeonUUID
         self.selectedSessionUUID = None
         self.editMode = True
@@ -169,6 +180,9 @@ class DungeonManager(PogManager):
         ServicesManager.getEventManager().fireEvent(ReasonForAction.DMStateChange, None)
 
     def loadSelectedDungeon(self):
+        """
+        load in the dungeon data for the selected dungeon UUID
+        """
         self.initializeDungeonData()
         self.loadInResourceData()
 
@@ -183,7 +197,7 @@ class DungeonManager(PogManager):
         dd = DungeonData()
         dd.__dict__ = json.loads(dataRequestResponse.data.text)
         self.selectedDungeon = dd.construct()
-        self.loadDungeonData()
+        self.updateWithNewDungeonData()
         self.computedGridWidth = self.getCurrentDungeonLevelData().gridSize
         ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonSelected, None)
         ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataLoaded, None)
@@ -207,7 +221,7 @@ class DungeonManager(PogManager):
         self.loadMonsterPogs()
         self.loadRoomObjectPogs()
 
-    def loadDungeonData(self):
+    def updateWithNewDungeonData(self):
         dungeonLevel = self.getCurrentDungeonLevelData()
         if dungeonLevel is not None:
             self.dungeonLevelMonsters.setPogList(dungeonLevel.monsters)
@@ -215,6 +229,9 @@ class DungeonManager(PogManager):
             self.updateDataVersion()
 
     def updateDataVersion(self):
+        """
+        Keep track of versioned data
+        """
         self.dataVersion.initialize()
         self.dataVersion.setItemVersion(VersionedItem.COMMON_RESOURCE_MONSTERS,
                                         self.getMonsterCollection().getPogListVersion())
@@ -247,6 +264,9 @@ class DungeonManager(PogManager):
         return None
 
     def requestLoadSessionData(self, version):
+        """
+        get session data from server
+        """
         request = RequestData(Constants.LoadSessionRequest)
         request.dungeonUUID = self.selectedDungeonUUID
         request.sessionUUID = self.selectedSessionUUID
@@ -258,14 +278,17 @@ class DungeonManager(PogManager):
         AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
 
     def handleSuccessfulSessionLoad(self, dataRequestResponse):
+        """
+        if no data returned it means the version has not changed so nothing to do
+        """
         if dataRequestResponse.data.text == '':
             return
         dd = DungeonSessionData()
         dd.__dict__ = json.loads(dataRequestResponse.data.text)
         self.selectedSession = dd.construct()
         self.migrateSession()
-        self.loadSessionData()
-        if dataRequestResponse.version == -1:
+        self.updateWithSessionData()
+        if dataRequestResponse.version == -1:  # if version is -1 means this is first time loaded
             ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataReadyToJoin, None)
         else:
             ServicesManager.getEventManager().fireEvent(ReasonForAction.SessionDataChanged, None)
@@ -273,7 +296,10 @@ class DungeonManager(PogManager):
     def handleFailedSessionLoad(self, dataRequestResponse):
         pass
 
-    def loadSessionData(self):
+    def updateWithSessionData(self):
+        """
+        update caches with session data
+        """
         if self.getCurrentSessionLevelData() is not None:
             self.sessionLevelMonsters.updateCollection(self.getCurrentSessionLevelData().monsters)
             self.sessionLevelRoomObjects.updateCollection(self.getCurrentSessionLevelData().roomObjects)
@@ -281,11 +307,14 @@ class DungeonManager(PogManager):
             self.updateDataVersion()
 
     def migrateSession(self):
+        """
+        Migrate and old session data
+        """
         saveIndex = self._currentLevelIndex
         for i in range(len(self.selectedSession.sessionLevels)):
             sessionLevel = self.selectedSession.sessionLevels[i]
             dungeonLevel = self.selectedDungeon.dungeonLevels[i]
-            if sessionLevel.migrateSession(dungeonLevel):
+            if sessionLevel.migrateSession(dungeonLevel):  # need to save if data actually migrated
                 self._currentLevelIndex = i
                 self.fowDirty = True
                 self.saveFow()
@@ -297,6 +326,9 @@ class DungeonManager(PogManager):
         self.fowDirty = False
 
     def updateFogOfWar(self):
+        """
+        update server with Fog of war data
+        """
         if self.selectedDungeon is not None:
             request = RequestData(Constants.UpdateFOWRequest)
             request.sessionUUID = self.selectedSessionUUID
@@ -343,6 +375,10 @@ class DungeonManager(PogManager):
         pass
 
     def deleteTemplate(self, dungeonUUID):
+        """
+        delete the dungeon with this UUID from server
+        Not allowed to delete template dungeon
+        """
         if not self.okToDeleteThisTemplate(dungeonUUID):
             return
         request = RequestData(Constants.DeleteDungeonRequest)
@@ -365,6 +401,9 @@ class DungeonManager(PogManager):
         ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonDataDeleted, None)
 
     def dmSession(self, selectedDungeonUUID, sessionUUID):
+        """
+        start DMing the session with this UUID
+        """
         self.selectedDungeonUUID = selectedDungeonUUID
         self.selectedSessionUUID = sessionUUID
         self.editMode = False
@@ -386,6 +425,9 @@ class DungeonManager(PogManager):
         return False
 
     def createNewSession(self, dungeonUUID, newSessionName):
+        """
+        tell sever to create a new session with this name
+        """
         request = RequestData(Constants.CreateNewSessionRequest)
         request.dungeonUUID = dungeonUUID
         request.newSessionName = newSessionName
@@ -402,6 +444,9 @@ class DungeonManager(PogManager):
         pass
 
     def deleteSession(self, dungeonUUID, sessionUUID):
+        """
+        tell server to delete the session with this UUID
+        """
         request = RequestData(Constants.DeleteSessionRequest)
         request.dungeonUUID = dungeonUUID
         request.sessionUUID = sessionUUID
@@ -412,6 +457,9 @@ class DungeonManager(PogManager):
         AsyncJsonData(self.makeURL(Constants.ServicePath), request, dataResponse, None).submit()
 
     def joinSession(self, selectedDungeonUUID, sessionUUID):
+        """
+        Join the session with this UUID
+        """
         self.selectedDungeonUUID = selectedDungeonUUID
         self.selectedSessionUUID = sessionUUID
         self.editMode = False
@@ -710,7 +758,7 @@ class DungeonManager(PogManager):
         else:
             fileExtension = ''
         valid = fileExtension == 'jpeg' or fileExtension == 'jpg' or \
-                fileExtension == 'png' or fileExtension == 'webp'
+            fileExtension == 'png' or fileExtension == 'webp'
         return valid
 
     def getNextAvailableLevelNumber(self):
@@ -721,8 +769,8 @@ class DungeonManager(PogManager):
 
     def setCurrentLevel(self, newIndex):
         self.currentLevelIndex = newIndex
-        self.loadDungeonData()
-        self.loadSessionData()
+        self.updateWithNewDungeonData()
+        self.updateWithSessionData()
         self.computedGridWidth = self.getCurrentDungeonLevelData().gridSize
         ServicesManager.getEventManager().fireEvent(ReasonForAction.DungeonSelectedLevelChanged, None)
 

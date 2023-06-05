@@ -11,6 +11,16 @@ from services.ServicesManager import ServicesManager
 
 
 class PogData:
+    """
+    Data for a pog.
+
+    Pog is defined as
+    A cardboard or plastic disk printed with a design or picture, collected or swapped by children or used in games
+
+    These were used early on in D&D to represent monsters on a battle mat and later replace by figurines
+    """
+
+    # cache of already loading images for pogs
     images = dict()
 
     def __init__(self):
@@ -88,7 +98,7 @@ class PogData:
     def loadPogImage(self, onSuccess, onFailure):
         imageUrl = ServicesManager.getDungeonManager().getUrlToDungeonResource(self.pogImageUrl)
         if self.pogImageUrl in PogData.images:
-            onSuccess()
+            onSuccess()  # already loaded so just notify
             return
         AsyncImage(imageUrl, partial(self.successfulLoaded, onSuccess), partial(self.failedLoad, onFailure)).submit()
 
@@ -138,6 +148,7 @@ class PogData:
     def load(data):
         pog = PogData()
         pog.__dict__ = data
+        # add all properties not in json dictionary
         if not hasattr(pog, 'pogName'):
             pog.pogName = ''
         if not hasattr(pog, 'pogImageUrl'):

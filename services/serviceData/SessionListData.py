@@ -4,7 +4,9 @@ GPL 3 file header
 
 
 class SessionListData:
-
+    """
+    List of session information for the given dungeon UUID
+    """
     def __init__(self, sessionListData=None, dungeonUUID=None):
         self.dungeonUUID = dungeonUUID
         self.sessionNames = []

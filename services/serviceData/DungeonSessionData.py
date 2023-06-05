@@ -8,7 +8,9 @@ from services.serviceData.PogList import PogList
 
 
 class DungeonSessionData:
-
+    """
+    data for a session with a dungeon
+    """
     def __init__(self, newSessionName='', dungeonUUID='', sessionUUID=''):
         self.version = 1
         self.sessionName = newSessionName
@@ -19,6 +21,10 @@ class DungeonSessionData:
         self.bitsPerColumn = 32
 
     def construct(self):
+        """
+        Take a session that had its data loaded via placing json data into its __dict__
+        and construct a new tree with actual constructors
+        """
         ds = DungeonSessionData()
         self.cloneData(ds)
         return ds

@@ -11,7 +11,7 @@ _eventBus = EventBus()
 
 class EventManager:
     """
-    Event manager is a central place to handle all global events within and application
+    Event manager is a central place to handle all global events within an application
     """
     eventName = 'globalEvents'
 

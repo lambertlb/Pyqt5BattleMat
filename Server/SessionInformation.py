@@ -10,6 +10,9 @@ from services.serviceData.DungeonSessionLevel import DungeonSessionLevel
 
 
 class SessionInformation:
+    """
+    This class manages a single session with a client.
+    """
     def __init__(self, sessionData=None, sessionPath=None, sessionDirectory=None):
         self.dirty = False
         self.sessionDirectory = sessionDirectory
@@ -17,11 +20,17 @@ class SessionInformation:
         self.sessionData: DungeonSessionData = sessionData
 
     def load(self, sessionPath, sessionDirectory, jsonData):
+        """
+        Load in session data
+        """
         self.sessionPath = sessionPath
         self.sessionDirectory = sessionDirectory
         self.fromJson(jsonData)
 
     def fromJson(self, jsonData):
+        """
+        return session data from a json file
+        """
         self.sessionData = None
         if jsonData is not None and jsonData:
             sessionData = DungeonSessionData()
@@ -37,17 +46,26 @@ class SessionInformation:
         return None
 
     def save(self):
+        """
+        Save session data to json file
+        """
         sessionJson = json.dumps(self.sessionData, default=vars)
         with open(self.sessionPath, "wb") as text_file:
             text_file.write(sessionJson.encode())
         self.dirty = False
 
     def getSessionLevel(self, currentLevel):
+        """
+        get data for this level in a session
+        """
         if currentLevel < 0 or currentLevel >= len(self.sessionData.sessionLevels):
             return None
         return self.sessionData.sessionLevels[currentLevel]
 
     def updateFOW(self, fowData, currentLevel):
+        """
+        Up data fog of war in this session level
+        """
         sessionLevel = self.getSessionLevel(currentLevel)
         if not sessionLevel:
             return None
@@ -56,6 +74,9 @@ class SessionInformation:
         self.dirty = True
 
     def addOrUpdatePog(self, pogData, currentLevel):
+        """
+        Add or update this pog in a session level
+        """
         sessionLevel: DungeonSessionLevel = self.getSessionLevel(currentLevel)
         if pogData.pogType == Constants.POG_TYPE_MONSTER:
             sessionLevel.monsters.addOrUpdate(pogData)
@@ -75,6 +96,9 @@ class SessionInformation:
         self.dirty = False
 
     def removePog(self, pogData, level):
+        """
+        remove this pog from a session level
+        """
         sessionLevel: DungeonSessionLevel = self.getSessionLevel(level)
         if pogData.pogType == Constants.POG_TYPE_MONSTER:
             sessionLevel.monsters.remove(pogData)

@@ -5,7 +5,11 @@ from services.serviceData.VersionedItem import VersionedItem
 
 
 class DataVersions:
-
+    """
+    class for managing data versions.
+    This is used to help the UI know which data has actually changed,
+    so it can filter out and just update changed data.
+    """
     def __init__(self):
         self.dataVersion = [0 for _ in range(VersionedItem.LAST_VERSIONED_ITEM.value)]
 

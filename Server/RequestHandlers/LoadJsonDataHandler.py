@@ -6,6 +6,10 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class LoadJsonDataHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the LOADJSONFILE request.
+    """
 
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic

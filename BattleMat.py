@@ -10,7 +10,7 @@ from services.DungeonManager import DungeonManager
 from services.EventManager import EventManager
 from services.ReasonForAction import ReasonForAction
 from services.ServicesManager import ServicesManager
-from services.Utilities import MyConfigManager
+from services.ConfigurationManager import ConfigManager
 from views.ArtAssetsTab import ArtAssetsTab
 from views.BattleMatScene import BattleMatScene
 from views.DungeonEditorTab import DungeonEditorTab
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     # I find doing this easier that doing dependency injection
     # everywhere in the application
     ServicesManager.setEventManager(EventManager())
-    ServicesManager.setConfigManager(MyConfigManager())
+    ServicesManager.setConfigManager(ConfigManager())
     ServicesManager.setDungeonManager(DungeonManager())
     app.mainWindow = MainWindow()
     app.mainWindow.show()

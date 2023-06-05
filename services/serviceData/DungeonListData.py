@@ -4,7 +4,9 @@ GPL 3 file header
 
 
 class DungeonListData:
-
+    """
+    List of dungeon data from server
+    """
     def __init__(self, dungeonListData=None, dungeonDirectoryData=None):
         self.dungeonNames = []
         self.dungeonUUIDS = []

@@ -5,6 +5,11 @@ GPL 3 file header
 
 # noinspection SpellCheckingInspection
 class Constants:
+    """
+    Class to manage constants with application
+    """
+
+    # keys in config data
     Login_Url = 'Login_Url'
     Login_USERNAME = 'Login_USERNAME'
     Login_PASSWORD = 'Login_PASSWORD'

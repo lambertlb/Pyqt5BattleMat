@@ -8,12 +8,18 @@ from services.serviceData.PogData import PogData
 
 
 class PogList:
-
+    """
+    Class to manage a list of pogs
+    """
     def __init__(self):
         self.pogList = []
         self.listVersion = 0
 
     def construct(self):
+        """
+        Take a pog list that had its data loaded via placing json data into its __dict__
+        and construct a new tree with actual constructors
+        """
         dl = PogList()
         self.cloneData(dl)
         return dl

@@ -15,7 +15,9 @@ from services.serviceData.RequestData import RequestData
 
 
 class PogCollection:
-
+    """
+    Manage a collection of pogs in a particular place
+    """
     def __init__(self, loadEvent, pogPlace):
         self.loadEvent = loadEvent
         self.pogPlace = pogPlace

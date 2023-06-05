@@ -8,6 +8,10 @@ from services.serviceData.SessionListData import SessionListData
 
 
 class SessionListHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the GETSESSIONLIST request.
+    """
 
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic

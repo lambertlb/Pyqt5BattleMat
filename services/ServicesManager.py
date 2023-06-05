@@ -6,7 +6,7 @@ GPL 3 file header
 class ServicesManager:
     """
     Central hub for managing all available services.
-    THis make a place where dependency injection can happen
+    This makes a place where dependency injection can happen
     to facilitate unit testing
     """
 

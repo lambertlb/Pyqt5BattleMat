@@ -5,6 +5,11 @@ from Server.ServerDataManager import ServerDataManager
 
 
 class SaveJsonDataHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the SAVEJSONFILE request.
+    """
+
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
     def handleRequest(self, server, parameters: dict, data):

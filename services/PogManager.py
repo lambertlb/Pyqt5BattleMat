@@ -12,7 +12,9 @@ from services.serviceData.PogPlace import PogPlace
 
 
 class PogManager:
-
+    """
+    Mange data related to Pogs
+    """
     def __init__(self):
         self.baseURL = None
         self.monsterCollection = PogCollection(ReasonForAction.MonsterPogsLoaded, PogPlace.COMMON_RESOURCE)
@@ -42,6 +44,10 @@ class PogManager:
         self.roomCollection.loadFromServer(self.makeURL(Constants.ServicePath), Constants.RoomObjects)
 
     def makeURL(self, additions):
+        """
+        Mage a full url to the additions
+        It assumes the base url is contained in the configuration manager
+        """
         if self.baseURL is None:
             self.baseURL = ServicesManager.getConfigManager().getValue(Constants.Login_Url, 'URL')
         if not additions.startswith('/'):

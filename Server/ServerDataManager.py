@@ -20,13 +20,20 @@ from services.serviceData.PogPlace import PogPlace
 
 
 class ServerDataManager:
-    lock = threading.RLock()
-    uuidTemplatePathMap = {}
-    dungeonNameToUUIDMap = {}
-    sessionCache = {}
+    """
+    This class manages all requests from clients.
+    It maintains a couple of caches to help speed up some data access
+    """
+    lock = threading.RLock()    # lack used to limit access to one client at a time
+    uuidTemplatePathMap = {}    # cache of UUIDs to dungeon paths
+    dungeonNameToUUIDMap = {}   # cache of Dungeon Names to UUIDs
+    sessionCache = {}           # cache of current sessions that are running
 
     @staticmethod
     def getDungeonListData(server):
+        """
+        Make sure caches of dungeon information are up to-date
+        """
         ServerDataManager.lock.acquire()
         if len(ServerDataManager.uuidTemplatePathMap) != 0:
             ServerDataManager.lock.release()
@@ -43,11 +50,17 @@ class ServerDataManager:
 
     @staticmethod
     def getPathToDirectory(server, partial):
+        """
+        return full path to this partial path
+        """
         path = server.topDirectory + partial
         return path
 
     @staticmethod
     def getDungeonName(server, folder):
+        """
+        get the name of the dungeon in this folder
+        """
         dungeonData = ServerDataManager.getDungeonData(server, folder)
         dungeonName = dungeonData.dungeonName
         dungeonUUID = dungeonData.uuid
@@ -56,11 +69,17 @@ class ServerDataManager:
 
     @staticmethod
     def getDungeonData(server, folder):
+        """
+        Load in the data for the dungeon in this folder
+        """
         path = ServerDataManager.getPathToDirectory(server, Constants.Dungeons) + folder
         return ServerDataManager.getDungeonDataFromPath(path)
 
     @staticmethod
     def getDungeonDataFromPath(folder):
+        """
+        Load in json data for this dungeon
+        """
         filePath = folder + '/dungeonData.json'
         jsonData = ServerDataManager.readJsonFile(filePath)
         dungeonData = DungeonData()
@@ -74,6 +93,9 @@ class ServerDataManager:
 
     @staticmethod
     def addToDungeonCache(folder, dungeonName, dungeonUUID):
+        """
+        add this dungeon to cache
+        """
         ServerDataManager.lock.acquire()
         try:
             path = Constants.Dungeons + folder
@@ -84,6 +106,9 @@ class ServerDataManager:
 
     @staticmethod
     def getSessionListData(server, dungeonUUID):
+        """
+        get the list of session names for this dungeon
+        """
         sessionListData = {}
         ServerDataManager.lock.acquire()
         try:
@@ -107,12 +132,18 @@ class ServerDataManager:
 
     @staticmethod
     def putSessionNameInCache(sessionsPath, possibleSession, sessionListData):
+        """
+        Load in session data and add its name to cache
+        """
         sessionInformation = ServerDataManager.loadSessionInformation(sessionsPath + possibleSession)
         sessionData: DungeonSessionData = sessionInformation.sessionData
         sessionListData[sessionData.sessionName] = sessionData.sessionUUID
 
     @staticmethod
     def loadSessionInformation(possibleSession):
+        """
+        Load in session data
+        """
         possibleSessionInformation = SessionInformation()
         path = possibleSession + "/sessionData.json"
         jsonData = ServerDataManager.readJsonFile(path)
@@ -121,6 +152,9 @@ class ServerDataManager:
 
     @staticmethod
     def getFileAsString(server, fileName):
+        """
+        load in the data for this file
+        """
         ServerDataManager.lock.acquire()
         try:
             filePath = ServerDataManager.getPathToDirectory(server, Constants.DungeonData) + fileName
@@ -130,6 +164,9 @@ class ServerDataManager:
 
     @staticmethod
     def getDungeonDataAsString(server, dungeonUUID):
+        """
+        Load in the data for this dungeon
+        """
         ServerDataManager.lock.acquire()
         try:
             if dungeonUUID not in ServerDataManager.uuidTemplatePathMap:
@@ -142,6 +179,9 @@ class ServerDataManager:
 
     @staticmethod
     def getFilenamesInPath(server, folder):
+        """
+        get all the filenames in this folder
+        """
         foundFiles = []
         directoryPath = ServerDataManager.getPathToDirectory(server, folder)
         files = os.listdir(directoryPath)
@@ -153,13 +193,16 @@ class ServerDataManager:
 
     @staticmethod
     def copyDungeon(server, dungeonUUID, newDungeonName):
+        """
+        make a copy of the template dungeon
+        """
         ServerDataManager.lock.acquire()
         try:
             dstDirectory = re.sub("[^a-zA-Z0-9]", "_", newDungeonName)
             dungeonPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
             dungeonFullPath = ServerDataManager.getPathToDirectory(server, dungeonPath)
             copyPath = ServerDataManager.getPathToDirectory(server, Constants.Dungeons + dstDirectory)
-            shutil.copytree(dungeonFullPath, copyPath)
+            shutil.copytree(dungeonFullPath, copyPath)  # copy everything ins the source folder
             ServerDataManager.deleteAnyOldSessions(copyPath)
             dungeonData = ServerDataManager.getDungeonData(server, dstDirectory)
             dungeonData.dungeonName = newDungeonName
@@ -167,12 +210,14 @@ class ServerDataManager:
             ServerDataManager.addToDungeonCache(dstDirectory, newDungeonName, dungeonData.uuid)
             jsonData = json.dumps(dungeonData, default=vars)
             ServerDataManager.saveDungeonData(server, jsonData, dungeonData.uuid)
-            pass
         finally:
             ServerDataManager.lock.release()
 
     @staticmethod
     def deleteAnyOldSessions(destinationDirectory):
+        """
+        remove all sessions in this directory
+        """
         sessionsPath = destinationDirectory + "/" + Constants.SessionFolder
         ServerDataManager.lock.acquire()
         try:
@@ -183,6 +228,11 @@ class ServerDataManager:
 
     @staticmethod
     def saveDungeonData(server, jsonData, dungeonUUID):
+        """
+        Save the dungeon data as starting session data
+        This is so one session does not change another sessions data
+        Each session gets it own copy of the original dungeon's data.
+        """
         filePath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID) + "/dungeonData.json"
         fullPath = ServerDataManager.getPathToDirectory(server, filePath)
         ServerDataManager.saveJsonFile(jsonData, fullPath)
@@ -197,6 +247,9 @@ class ServerDataManager:
 
     @staticmethod
     def deleteDungeon(server, dungeonUUID):
+        """
+        Delete a dungeon
+        """
         ServerDataManager.lock.acquire()
         try:
             dungeonPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
@@ -209,12 +262,18 @@ class ServerDataManager:
 
     @staticmethod
     def rebuildDungeonList(server):
+        """
+        Clear caches and reload all dungeon data
+        """
         ServerDataManager.uuidTemplatePathMap.clear()
         ServerDataManager.dungeonNameToUUIDMap.clear()
         ServerDataManager.getDungeonListData(server)
 
     @staticmethod
     def saveSessionData(server, jsonData, dungeonUUID, sessionUUID):
+        """
+        save this sessions data
+        """
         if not dungeonUUID:
             return
         ServerDataManager.lock.acquire()
@@ -229,6 +288,9 @@ class ServerDataManager:
 
     @staticmethod
     def getSessionInformation(server, dungeonUUID, sessionUUID):
+        """
+        find and return the session with this UUID
+        """
         ServerDataManager.lock.acquire()
         try:
             sessionInformation = ServerDataManager.getSessionFromCache(sessionUUID)
@@ -277,6 +339,9 @@ class ServerDataManager:
 
     @staticmethod
     def createSession(server, dungeonUUID, newSessionName):
+        """
+        Create a new session in the dungeon with this UUID
+        """
         ServerDataManager.lock.acquire()
         try:
             dungeonPath = ServerDataManager.uuidTemplatePathMap.get(dungeonUUID)
@@ -300,11 +365,14 @@ class ServerDataManager:
     # noinspection PyUnusedLocal
     @staticmethod
     def createSessionData(server, dungeonUUID, newSessionName, dungeonData):
+        """
+        create new session data by copying this dungeon data
+        """
         uuidString = str(uuid.uuid4())
         newSessionData = DungeonSessionData(newSessionName, dungeonUUID, uuidString)
         sessionLevels = []
         newSessionData.setSessionLevels(sessionLevels)
-        for i in range(len(dungeonData.dungeonLevels)):
+        for i in range(len(dungeonData.dungeonLevels)):  # create session level by copying dungeon level
             sessionLevel = DungeonSessionLevel(dungeonData.dungeonLevels[i])
             sessionLevels.append(sessionLevel)
         return newSessionData
@@ -326,10 +394,13 @@ class ServerDataManager:
     def getSessionDataAsString(server, dungeonUUID, sessionUUID, version):
         ServerDataManager.lock.acquire()
         try:
-            if version != -1:
+            if version != -1:   # if version is -1 the do a full reload else use cached one if it exists
                 sessionInformation = ServerDataManager.getSessionFromCache(sessionUUID)
             else:
                 sessionInformation = ServerDataManager.getSessionInformation(server, dungeonUUID, sessionUUID)
+            # only return full json data if version has changed.
+            # this is so client can periodically do a check and only incur overhead
+            # if the data actually changed
             if sessionInformation and sessionInformation.sessionData.version != version:
                 return sessionInformation.toJson()
             return ''
@@ -339,6 +410,9 @@ class ServerDataManager:
     # noinspection PyUnusedLocal
     @staticmethod
     def updateFOW(server, sessionUUID, currentLevel, fogOfWar):
+        """
+        Update fog of war for this level in a session
+        """
         ServerDataManager.lock.acquire()
         try:
             sessionInformation = ServerDataManager.getSessionFromCache(sessionUUID)
@@ -349,6 +423,9 @@ class ServerDataManager:
 
     @staticmethod
     def savePog(server, dungeonUUID, sessionUUID, level, place, pogJsonData):
+        """
+        save this pog data to the proper place
+        """
         ServerDataManager.lock.acquire()
         try:
             pogData = PogData.load(json.loads(pogJsonData.decode()))
@@ -408,6 +485,10 @@ class ServerDataManager:
 
     @staticmethod
     def periodicTimer():
+        """
+        This run periodically
+        It should handle all checks that need to be done occasionally
+        """
         ServerDataManager.lock.acquire()
         try:
             ServerDataManager.checkIfTimeToSaveSessionData()
@@ -417,6 +498,9 @@ class ServerDataManager:
 
     @staticmethod
     def checkIfTimeToSaveSessionData():
+        """
+        see if session data is dirty and needs to be saved to disk
+        """
         for sessionInformation in ServerDataManager.sessionCache.values():
             sessionInformation.saveIfDirty()
 
@@ -426,6 +510,9 @@ class ServerDataManager:
 
     @staticmethod
     def deletePog(server, dungeonUUID, sessionUUID, level, place, pogJsonData):
+        """
+        delete Pog from proper place
+        """
         ServerDataManager.lock.acquire()
         try:
             pogData = PogData.load(json.loads(pogJsonData.decode()))

@@ -5,7 +5,6 @@ import json
 import os
 import re
 import threading
-import time
 import traceback
 
 import requests
@@ -30,17 +29,19 @@ asyncPool = None
 class AsynchBase(QRunnable):
     """
     Class to allow long tasks to run in thread pool
+    This is a base class and only serves as a parent for
+    the actual tasks.
     """
 
     def __init__(self, onSuccess, onFailure, dataResponse):
         super().__init__()
         self._signaler = None  # so we can call signals
-        self._onSuccess = onSuccess
-        self._onFailure = onFailure
-        self._returnData = dataResponse
-        self._returnData.task = self
-        self._connectToken = None
-        self._executeTask = True
+        self._onSuccess = onSuccess  # method to call upon success
+        self._onFailure = onFailure  # method to call upon failure
+        self._returnData = dataResponse  # data to hand back as response to task
+        self._returnData.task = self  # reference to self
+        self._connectToken = None  # connect token used for disconnecting
+        self._executeTask = True  # True if the task is to be actually executed
 
     @property
     def signaler(self):
@@ -70,7 +71,11 @@ class AsynchBase(QRunnable):
     def onFailure(self, value):
         self._onFailure = value
 
+    # noinspection PyUnresolvedReferences
     def submit(self):
+
+        # only execute if true. Some tasks may look up data in a cache
+        # and might not actually have to go into execution queue.
         if not self._executeTask:
             return
         self._signaler = AsyncSignal()  # so we can call signals
@@ -78,7 +83,7 @@ class AsynchBase(QRunnable):
         global asyncPool
         if asyncPool is None:
             asyncPool = QThreadPool.globalInstance()
-            asyncPool.setMaxThreadCount(100)
+            asyncPool.setMaxThreadCount(100)  # make sure queue is large enough
         asyncPool.start(self)
 
     @QtCore.Slot()
@@ -119,18 +124,21 @@ def taskDone(dataRequesterResponse):
         task.onFailure(task.returnData)
     else:
         task.onSuccess(task.returnData)
-    task.signaler.finished.disconnect(taskDone)
+    task.signaler.finished.disconnect(taskDone)  # disconnect so object can be garbage collected
 
 
 class AsyncImage(AsynchBase):
     """
     Task to asynchronously load an image.
     if the URL starts with http it assumes a web request
-    else if tries to load from file
+    else if tries to load from file.
+
+    This will keep a cache of previously loaded images and save
+    time by reuse if it can.
     """
-    lock = threading.RLock()
-    imageCache = {}
-    imagesBeingLoaded = {}
+    lock = threading.RLock()  # lock to serialize access to queue
+    imageCache = {}  # cache of images
+    imagesBeingLoaded = {}  # cache of images being loaded
 
     def __init__(self, url, onSuccess, onFailure):
         self.url = re.sub("\\\\", "/", url)
@@ -140,20 +148,21 @@ class AsyncImage(AsynchBase):
         self.saveOnFailure = onFailure
         super(AsyncImage, self).__init__(onSuccess, onFailure, DataRequesterResponse())
         AsyncImage.lock.acquire()
-        cachedImage = AsyncImage.imageCache.get(self.url)
+        cachedImage = AsyncImage.imageCache.get(self.url)  # is image already loaded?
         try:
             if cachedImage:
                 self._executeTask = False
                 self._returnData.data = cachedImage
-                onSuccess(self._returnData)
+                onSuccess(self._returnData)  # tell client about image
                 return
+            # see if there is a pending task to load same image
             pendingLoad = AsyncImage.imagesBeingLoaded.get(self.url)
             if pendingLoad:
                 self._executeTask = False
-                pendingLoad.pending.append(self)
+                pendingLoad.pending.append(self)  # add myself to the pending task for notification
                 return
             AsyncImage.imagesBeingLoaded[self.url] = self
-            # override normal callbacks
+            # override normal callbacks so I can notify other pending tasks
             self.onSuccess = self.hadSuccess
             self.onFailure = self.hadFailure
         finally:
@@ -186,20 +195,30 @@ class AsyncImage(AsynchBase):
         """
         return self._returnData.data
 
+    # noinspection PyUnusedLocal
     def hadSuccess(self, data):
+        """
+        Image was successfully load.
+        If other tasks where also waiting for load we need to notify them
+        """
         AsyncImage.lock.acquire()
         try:
             AsyncImage.imagesBeingLoaded.pop(self.url)
-            AsyncImage.imageCache[self.url] = self.getImage()
+            AsyncImage.imageCache[self.url] = self.getImage()  # add to image cache
         finally:
             AsyncImage.lock.release()
         self.saveOnSuccess(self._returnData)
         for pendingTasks in self.pending:
             pendingTasks.returnData.data = self._returnData.data
-            pendingTasks.saveOnSuccess(pendingTasks.returnData)
-        pass
+            pendingTasks.saveOnSuccess(pendingTasks.returnData)  # notify of load
 
+    # noinspection PyUnusedLocal
     def hadFailure(self, data):
+        """
+        Image was failed to load.
+        If other tasks where also waiting for load we need to notify them
+        """
+
         AsyncImage.lock.acquire()
         try:
             AsyncImage.imagesBeingLoaded.pop(self.url)
@@ -208,12 +227,11 @@ class AsyncImage(AsynchBase):
         self.saveOnFailure(self._returnData)
         for pendingTasks in self.pending:
             pendingTasks.saveOnFailure(pendingTasks.returnData)
-        pass
 
 
 class AsyncJsonData(AsynchBase):
     """
-    Task to asynchronously load json.
+    Task to asynchronously load json data.
     """
 
     def __init__(self, url, requestData, dataResponse, data):
@@ -231,7 +249,7 @@ class AsyncJsonData(AsynchBase):
         """
         headers = {'Content-type': 'text/plain', 'Accept': 'application/json'}
         sendData = ''
-        if self.data is not None:
+        if self.data is not None:  # anything to send?
             sendData = json.dumps(self.data, default=vars)
         self.reply = requests.post(self.url, sendData, headers=headers, params=self.requestData.__dict__)
         if self.reply.status_code == 200:

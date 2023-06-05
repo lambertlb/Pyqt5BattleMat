@@ -12,6 +12,10 @@ class LoginResponse:
 
 
 class LoginRequestHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the LOGIN request.
+    """
 
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
@@ -19,6 +23,7 @@ class LoginRequestHandler:
         response = LoginResponse()
         username = parameters.get('username')[0]
         password = parameters.get('password')[0]
+        # login authorization not implemented just do parameter check
         if username is None or not username or password is None or not password:
             response.error = 1
         else:

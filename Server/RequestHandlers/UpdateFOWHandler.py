@@ -8,6 +8,11 @@ from services.serviceData.FogOfWarData import FogOfWarData
 
 
 class UpdateFOWHandler:
+    # noinspection SpellCheckingInspection
+    """
+    Handle the UPDATEFOW request.
+    """
+
     # noinspection PyUnusedLocal
     # noinspection PyMethodMayBeStatic
     def handleRequest(self, server, parameters: dict, data):

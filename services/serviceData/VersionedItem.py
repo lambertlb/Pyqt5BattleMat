@@ -5,6 +5,9 @@ from enum import Enum, auto
 
 
 class VersionedItem(Enum):
+    """
+    Enum of the various items that can be versioned
+    """
     COMMON_RESOURCE_MONSTERS = auto()
     COMMON_RESOURCE_ROOMOBECTS = auto()
     DUNGEON_LEVEL_MONSTERS = auto()

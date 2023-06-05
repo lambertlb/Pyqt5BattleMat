@@ -5,7 +5,9 @@ from services.serviceData.DungeonLevel import DungeonLevel
 
 
 class DungeonData:
-
+    """
+    This contains all the data for the dungeon with a specific UUID
+    """
     def __init__(self):
         self.uuid = ''
         self.dungeonName = ''
@@ -13,6 +15,10 @@ class DungeonData:
         self.showGrid = False
 
     def construct(self):
+        """
+        Take a dungeon that had its data loaded via placing json data into its __dict__
+        and construct a new tree with actual constructors
+        """
         dl = DungeonData()
         self.cloneData(dl)
         return dl

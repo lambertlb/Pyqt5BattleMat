@@ -5,7 +5,16 @@ from services.serviceData.PogList import PogList
 
 
 class DungeonSessionLevel:
+    """
+    class to manage a level with a session
 
+    Fog of war management is a little strange.
+    Normally this would be a straight bitmap with one bit
+    per column in the grid. But python does not have true
+    integers, it uses bits in the mantissa of a floating number.
+    Because of that I constrained my usage to just the first
+    32 bits of what would have been a 64-bit integer.
+    """
     def __init__(self, dungeonLevel=None):
         self.fogOfWarVersion = 0
         self.fogOfWarData = []
@@ -19,6 +28,10 @@ class DungeonSessionLevel:
             self.fogOfWarData = self.createNewFOWData(dungeonLevel.rows, -1)
 
     def construct(self):
+        """
+        Take a session level that had its data loaded via placing json data into its __dict__
+        and construct a new tree with actual constructors
+        """
         dl = DungeonSessionLevel()
         self.cloneData(dl)
         return dl
@@ -77,7 +90,6 @@ class DungeonSessionLevel:
         self.bitsPerColumn = dungeonLevel.columns
         return False
 
-    # noinspection PyMethodMayBeStatic
     def createNewFOWData(self, rows, fillData=0):
         size = int(((self.bitsPerColumn * rows) / 32) + 1)
         data = []

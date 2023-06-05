@@ -6,7 +6,9 @@ from services.serviceData.DungeonSessionLevel import DungeonSessionLevel
 
 
 class DungeonLevel(DungeonSessionLevel):
-
+    """
+    Manage the data in a level within a dungeon
+    """
     def __init__(self):
         super(DungeonLevel, self).__init__()
         self.levelDrawing = ''
@@ -18,6 +20,10 @@ class DungeonLevel(DungeonSessionLevel):
         self.rows = 0
 
     def construct(self):
+        """
+         Take a level that had its data loaded via placing json data into its __dict__
+         and construct a new tree with actual constructors
+         """
         dl = DungeonLevel()
         self.cloneData(dl)
         return dl

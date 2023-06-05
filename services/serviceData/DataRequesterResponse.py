@@ -4,7 +4,9 @@ GPL 3 file header
 
 
 class DataRequesterResponse:
-
+    """
+    Base class for handling responses from a web request
+    """
     def __init__(self):
         self._hadException = False
         self._data = None

@@ -6,6 +6,9 @@ from enum import auto
 
 
 class ReasonForAction(Enum):
+    """
+    Enumeration of reasons for all global events
+    """
     LOGGED_IN = auto()
     LOAD_IMAGE = auto()
 
