@@ -48,12 +48,10 @@ class FileUploadHandler:
                 nextLine = nextLine[0:-1]
                 if nextLine.endswith(b'\r'):
                     nextLine = nextLine[0:-1]
-                print(nextLine)
                 out.write(nextLine)
                 out.close()
                 return
             else:
-                print(nextLine)
                 out.write(nextLine)
                 nextLine = line
         raise Exception("Unexpected Ends of data")

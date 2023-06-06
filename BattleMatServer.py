@@ -65,7 +65,7 @@ class BattleMatServer(SimpleHTTPRequestHandler):
     def do_POST(self):
         """
         Handle POST requests.
-        Ths expects a request and it parameters to be included in the parts.
+        This expects a request and it parameters to be included in the parts.
         It will use the request data to look up the proper handler
         """
         self.topDirectory = BattleMatServer.topDirectory
