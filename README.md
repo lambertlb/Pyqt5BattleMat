@@ -20,7 +20,7 @@ This is basically a conversion of the ElectronicBattleMat project done in GWT
 - pip install event-bus
 ## Packaging
 This contains two batch files for packaging the client and server for windows.
-Other scripts can be generated for linus or Mac
+Other scripts can be generated for linux or Mac
 - clientPackage.bat packages the BattleMat client under dist folder
 - serverPackage.bat packages the BattleMatServer web service under dist folder
 
