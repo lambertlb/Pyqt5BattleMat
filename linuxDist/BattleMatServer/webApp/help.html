@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Insert title here</title>
+</head>
+<body>
+<div>
+    <p>
+        Following are some hints on how to use <b>Electronic Battle Mat</b>
+    </p>
+    <p>
+    <ul>
+        <li><a href="#Overview">Electronic Battle Mat Overview</a></li>
+        <li><a href="#DungeonEditorLayout>">Dungeon Editor Layout</a></li>
+        <li><a href="#CreateNewDungeon">Creating a New Dungeon</a></li>
+        <li><a href="#EditDungeon">Editing a Dungeon</a></li>
+        <ul>
+            <li><a href="#ManageArtAssets">Managing Art Assets</a></li>
+            <ul>
+                <li><a href="#AddingArtAssets">Adding Art Assets</a></li>
+                <li><a href="#DeletingArtAssets">Deleting Art Assets</a></li>
+                <li><a href="#SelectingArtAssets">Selecting Art Assets</a></li>
+            </ul>
+            <li><a href="#ManageDungeonLevels">Managing Dungeon Levels</a></li>
+            <li><a href="#ManagePogs">Managing Pogs</a></li>
+        </ul>
+        <li><a href="#CreatingaSession">Creating a Session</a></li>
+        <li><a href="#DMingaSession">DMing a Session</a></li>
+    </ul>
+    </p>
+</div>
+
+
+<h2 id="Overview">Electronic Battle Mat Overview</h2>
+<p>Electronic Battle mat is a Web Application to help DMs and
+    players have a better experience for running a role playing game. It
+    encompasses four modes of operation.
+<ol>
+    <li>Creating and editing Template dungeons</li>
+    <p>Template dungeons contain all the maps and resources needed for
+        managing a single adventure. It is called a template because it is
+        not actually used directly by end users. This is because multiple
+        groups could be playing the same dungeon at the same time and you
+        would not want them to interfere with each other.</p>
+    <li>Creating Dungeon Session</li>
+    <p>A dungeon session is a copy of a dungeon template that is owned
+        by a certain group. This session is private so it can be changed
+        without interfering with other groups playing the same one.</p>
+    <li>DMing a Session</li>
+    <p>
+        In this mode of operation a DM takes control of a session. They can
+        do may things like clear areas of FOG of WAR so players can see
+        stuff. They can make monsters and room objects visible or invisible
+        to players. They can move pogs around the map to show correct
+        positions. They can add new stuff like monsters that were not in the
+        dungeon template <b>SURPRISE this dragon happened by and wants to
+        eat your face</b>.
+    </p>
+    <li>Player joining a Session</li>
+    <p>In this mode of operation a player can view the Battle Mat.
+        They have very little functionality other than panning and zooming
+        the map. They can also create a PC pog and move it around the visible
+        areas of the map.</p>
+</ol>
+
+
+<h2 id="DungeonEditorLayout>">Dungeon Editor Layout</h2>
+<p>This is how the editor should look when it is first opened up on
+    a new dungeon created from the "Template" dungeon.</p>
+<img src="help/DungeonEditor.png">
+<ol>
+    <li>This is the <a href="#RibbonBar">Ribbon Bar area</a>.
+    </li>
+    <li>This is the <a href="#BattleMat">Battle Mat area</a>.
+    </li>
+    <li>This is the <a href="#InformationManagement">Information
+        Management area</a>.
+    </li>
+</ol>
+<h3 id="RibbonBar">Ribbon Bar Area</h3>
+<ol>
+    <li>Selected Pog Area</li>
+    <img src="help/RibbonBar1.png">
+    <p>This will show the picture of the currently selected Pog. You
+        can click and drag in this area to place a copy of the pog onto the
+        map.</p>
+    <li>Level Selection Area</li>
+    <img src="help/RibbonBar2.png">
+    <p>This is where you select which dungeon level you wish to view
+        or edit.</p>
+    <li>Show Pog Notes Checkbox</li>
+    <img src="help/RibbonBar3.png">
+    <p>By checking this box you will cause a floating dialog window to
+        appear. This window will allow you to view and edit the notes placed
+        on a pog. You can edit both regular notes which are viewable by the
+        players or DM notes only viewable by the DM.</p>
+    <li>Show Selected Pog Checkbox</li>
+    <img src="help/RibbonBar4.png">
+    <p>By checking this box you will cause a floating dialog window to
+        appear. This window will allow you to view the picture of the
+        selected pog. You can resize the window by dragging in the lower
+        right corner allowing you to get a better view.</p>
+    <li>Show Help</li>
+    <img src="help/RibbonBar5.png">
+    <p>By clicking here you will get this help page.</p>
+</ol>
+<h3 id="BattleMat">Battle Mat Area</h3>
+<p>
+    This area is where the map and all the objects placed on it appear.
+    When you are DMing a session this will also display the areas that
+    have <b>Fog of War (FOW)</b> on them. It will be transparent to the DM
+    but will be solid black to the players preventing them from seeing
+    stuff. Following are a few things you can do with and to this area.
+</p>
+<ol>
+    <li>Pan the Map</li>
+    <p>By clicking on the map and holding the mouse button down you
+        can change the position of the map.</p>
+    <li>Zoom the Map</li>
+    <p>By spinning the center mouse button you can zoom in and out of
+        the map.</p>
+    <li>Move Pogs around</li>
+    <p>You can click on a pog and drag it to a new spot.</p>
+    <li>Add new pogs to map</li>
+    <p>By dragging and dropping a picture of a pog from the ribbon bar
+        you will create a new pog on the map. This is a copy of the pog and
+        not the original. So if you want two more of a monster already on the
+        map. You just need to select it so it shows in the ribbon bar then
+        drag and drop twice from the ribbon bar.</p>
+    <li>Change properties of a pog</li>
+    <p>By right clicking on a pog you can change some properties. Like
+        make it visible or invisible to players or give it a number to help
+        players more easily identify it. You can even delete it from the map.</p>
+    <li>Adjust Fog of War</li>
+    <p id="ClearingFOW">Dms have the ability to adjust what the
+        players see I.E. change the fog of war. This can be done several ways
+        only when DMing a session</p>
+    <ol>
+        <li>Toggle FOW check box on ribbon bar</li>
+        <p>The DM can enable this mode by clicking in the checkbox. Once
+            in this mode you can click on the map in a grid square. The FOW in
+            that square will toggle. If you hold down the mouse button and move
+            around the map other squares will also change to what the starting
+            one was.</p>
+        <li>Shift click in a grid square</li>
+        <p>The DM can change FOW by just holding SHIFT key down and
+            clicking in a square. The FOW in that square will toggle. If you
+            hold down the mouse button and move around the map other squares
+            will also change to what the starting one was.</p>
+        <li>Control click in a grid square</li>
+        <p>The DM can change FOW by just holding Control key down and
+            clicking in a square. Now you drag to form a red rectangle. All the
+            squares in to rectangle will change to the opposite of the first one
+            you clicked in.</p>
+    </ol>
+</ol>
+<h3 id="InformationManagement">Information Management area</h3>
+<p>This area allows the DM to edit and create all kinds of
+    information related to the dungeon. It is broken into different tabs
+    to help separate functionality.</p>
+<ol>
+    <li>Art Assets</li>
+    <p>This area allows you to manage the artwork needed for you
+        dungeon</p>
+    <li>Dungeon Editor</li>
+    <p>This area allows you to edit and add dungeon levels</p>
+    <li>Pog Editor</li>
+    <p>This area allows you to do things like edit, create and delete
+        pogs.</p>
+</ol>
+
+
+<h2 id="CreateNewDungeon">Creating a New Dungeon</h2>
+<p>These are the steps to create a new dungeon. You have access to
+    this dialog just after you log in.</p>
+<ol>
+    <li>Check the <b>I am DM</b> check box
+    </li>
+    <p>This opens up all the operations and privileges of a Dungeon
+        Master.</p>
+    <li>Name the new dungeon</li>
+    <p>
+        In the text box labeled "<b>Enter Dungeon Name</b>&quot; enter the
+        name of your new dungeon. You can use letters, numbers and spaces in
+        the name. The name must be greater than 4 letters long and cannot
+        match an existing name. Once a legal name is entered the &quot;<b>Create
+        New Dungeon</b>&quot; button will be enabled.
+    </p>
+    <img src="help/ManageDungeons2.png">
+    <li>Click the &quot;<b>Create New Dungeon</b>&quot; button
+        <p>
+            This will create a new dungeon with the entered name by copying the
+            "Template" dungeon. It should now be visible in the &quot;<b>Select
+            a Dungeon for Operations</b>&quot; list.
+        </p> <img src="help/ManageDungeons7.png">
+    </li>
+</ol>
+
+
+<h2 id="EditDungeon">Editing a Dungeon</h2>
+<p>These are the steps to edit a dungeon.</p>
+<ol>
+    <li>Check the <b>I am DM</b> check box
+    </li>
+    <p>This opens up all the operations and privileges of a Dungeon
+        Master.</p>
+    <li>Select a Dungeon to edit</li>
+    <p>
+        In the drop down called &quot;<b>Select a Dungeon for Operations</b>&quot;
+        select a dungeon to edit. This will enable the &quot;<b>Edit
+        Dungeon</b>&quot; button.
+    </p>
+    <li>Press the &quot;<b>Edit Dungeon</b>&quot; button
+    </li>
+    <p>This will load in the dungeon and display the first level map.
+        The ribbon bar will also map to the available operations that the DM
+        can do on the dungeon.</p>
+</ol>
+
+
+<h2 id="ManageArtAssets">Managing Art Assets</h2>
+<p>One of the first operations you will probably need to do is
+    manage some of the art assets. Specifically you will probably want to
+    have access to a picture that will be used for this level of the
+    dungeon</p>
+<img src="help/ArtAssets1.png">
+<p>Above you can see that there are already some assets available
+    and they belong in three categories.</p>
+<ol>
+    <li>Dungeon Assets</li>
+    <p>All items in this list belong specifically to the Dungeon you
+        are currently editing. For example level1.png is the picture for
+        level 1. So if you need to add or subtract any artwork for your
+        dungeon it would be in this list. dungeonData.json is a JSON
+        formatted text file containing all the information about the dungeon.
+        You should not need to manipulate this file manually. You can edit it
+        using the Dungeon Editor Tab</p>
+    <li>Global Monster Assets</li>
+    <p>This list contains any pictures for monsters that you wish to
+        have available across all dungeons. pogs.json is a JSON formatted
+        text file containing the pog information that uses the pictures. You
+        should not need to manipulate this file manually. You can edit it
+        using the Pog Editor Tab.</p>
+    <li>Global Room Assets</li>
+    <p>This list contains any pictures for room objects that you wish
+        to have available across all dungeons. pogs.json is a JSON formatted
+        text file containing the pog information that uses the pictures. You
+        should not need to manipulate this file manually. You can edit it
+        using the Pog Editor Tab.</p>
+</ol>
+
+<h2 id="AddingArtAssets">Adding Art Assets</h2>
+<p>Following is how you would add an art asset.</p>
+<ol>
+    <li>Select where you want the asset to be uploaded to.</li>
+    <p>
+        For example you may wish this to be a dungeon asset so select the <b>Dungeon
+        Assets</b> area. You can select either the top level or any items in the
+        list. This will enable the <b>Choose File</b> button.
+    </p>
+    <img src="help/ArtAssets2.png">
+    <li>Choose file you wish to upload.</li>
+    <p>
+        Click the <b>Choose File</b> button then navigate to and select the
+        picture file you wish to upload then press the open button. The
+        filename should show up next to the Choose File button. The <b>Upload
+        Asset</b> button should become enabled.
+    </p>
+    <li>Upload the file.</li>
+    <p>
+        Click the <b>Upload Asset</b> button to actually upload it to the
+        server. The list should update and show you the new file.
+    </p>
+</ol>
+
+<h2 id="DeletingArtAssets">Deleting Art Assets</h2>
+<p>
+    Select the item you wish to delete and the <b>Delete Asset</b> button
+    will enable. Just click it to delete the asset. Some assets like
+    dungeonData or pogs .json files cannot be deleted.
+</p>
+
+<h2 id="SelectingArtAssets">Selecting Art Assets</h2>
+<p>When you need to use an art asset in either the Dungeon Editor
+    or the Pog Editor just select a picture file in one of the lists. The
+    file path for the file you selected will show up under the buttons at
+    the top of the panel. This path is also save internally and is
+    available to be used by the mentioned editor. See those editors on the
+    specifics on how to get at it.</p>
+
+<h2 id="ManageDungeonLevels">Managing Dungeon Levels</h2>
+<p>
+    The tab labeled <b>Dungeon Editor</b> allows you to edit levels of the
+    dungeon. What information is shown here is dependent on what level is
+    selected in the drop down list on the ribbon bar.
+</p>
+<img src="help/DungeonEditor1.png">
+<p>Following is a brief description of what the items in this view
+    do.</p>
+<ul>
+    <li>Manage Dungeons button</li>
+    <p>
+        This will call up the Manage Dungeons Dialog box allowing you to
+        switch dungeons or create new ones as described in <a
+            href="#CreateNewDungeon">Creating a New Dungeon.</a>
+    </p>
+    <li>New Level button</li>
+    <p>This will clear out the information for the current level and
+        make the entries ready for a new one. You just need to fill in the
+        appropriate information and click the save button to create the new
+        level.</p>
+    <li>DELETE Level button</li>
+    <p>
+        This deletes the currently selected level. <b>There is no undo so
+        be very careful with this.</b>
+    </p>
+    <li>Level Name</li>
+    <p>This is where you enter or change the name of the selected
+        level</p>
+    <li>Show Grid checkbox</li>
+    <p>This is where you enable or disable the grid from showing on
+        the map. This is mainly used for sizing the grid. Most maps have the
+        grid already drawn on them but this tool needs to match that grid in
+        size and position so you would enable the grid to help with that</p>
+    <li>Grid Size button</li>
+    <p>To assist in figuring out the size of a grid square you can do
+        the following. Go to the map and zoom in until one square is pretty
+        large. Then control click in the upper left corner of the square and
+        draw a rectangle to the lower right corner. Then release the mouse
+        button. The size of this box will get captured internally and get put
+        into the Dungeon editor dialog when you press the Grid Size button.
+        This will get the number close but might need some manual tweaking.
+        The number can have a decimal point in it so you can fine tune it.</p>
+    <img src="help/DungeonEditor2.png">
+    <li>OffsetX and OffsetY</li>
+    <p>Once you have the grid size correct you probable will need to
+        have the grid move up, down, left or right. You enter decimal numbers
+        in Offset X and Y to do that.</p>
+    <li>Use Selected picture resource button</li>
+    <p>
+        The text area next to this button is where you enter the URL for the
+        picture you wish to use for this level. The picture can be gotten
+        from the internet by using its web path. It can also be gotten from
+        one of your assets you uploaded in the asset management tab. Just go
+        there and select the picture then come back here and press the <b>Selected
+        picture resource</b> button.
+    </p>
+    <li>Save button</li>
+    <p>If all information in the dialog area is correct then the save
+        button will enable. Just press it to save the data. If you had pushed
+        the New Level button then a new level will be created with the
+        information else the existing level will be edited.</p>
+    <li>Cancel button</li>
+    <p>Pressing cancel will throw away changes and revert back to
+        original information.</p>
+</ul>
+
+<h2 id="ManagePogs">Managing Pogs</h2>
+<p>
+    The tab labeled <b>Pog Editor</b> allows you to edit, create and
+    delete pogs. Pogs are the little pictures you can create and drop onto
+    the map. They represent the monsters, Player characters, and room
+    object that might exist in the dungeon.
+</p>
+<img src="help/PogEditor1.png">
+<ul>
+    <li>Create Pog Button</li>
+    <p>This will clear out the dialog information in preparation for
+        creating a new Pog.</p>
+    <li>DELETE Pog Button</li>
+    <p>
+        This delete the currently selected pog. <b>There is no undo so be
+        very careful with this.</b>
+    </p>
+    <li>Pog Name</li>
+    <p>
+        This is where you give your pog a name. I suggest you use the
+        following guideline in doing that. Make the name by using RACE CLASS
+        SEX separated by spaces. By doing this in the future filtering can
+        easily be added to narrow down choices to help find things.</b>
+    </p>
+    <li>Pog type</li>
+    <p>
+        There are three choices. MONSTER, ROOM OBJECT, and PLAYER. The type
+        are mostly to help separate them in lists. Players are the only
+        unique ones because there can only ever be one instance. So if you
+        drag and drop them on a different map they disappear from the
+        original map. Also PLAYER can only be created and used when DMing a
+        session because they exist in the Session data and not in the dungeon
+        data as explained later.</b>
+    </p>
+    <li>Pog Location</li>
+    <p>This is where the data for this pog resides. Following are the
+        possibilities.</p>
+    <ul>
+        <li>Dungeon Level</li>
+        <p>This means the data exists in the dungeonData.json file in the
+            section for a specific level. Most of the time data is gotten here
+            by dragging and dropping a pog from the ribbon bar onto the map. A
+            copy of the select pogs information in placed in the Dungeon Level.
+            This is where you would also create any dungeon specific pogs.</p>
+        <li>Session Level</li>
+        <p>This means the data for the pog is stored in the
+            sessionData.json file in a specific session. This file starts out as
+            a copy of dungeonData.json file. This way any pogs moved around,
+            created or deleted only affect the one session. Data is only changed
+            here when the DM is managing a session.</p>
+        <li>Player Location</li>
+        <p>This means the data for the pog is stored in the
+            sessionData.json file in a specific session. The data for these
+            player characters are in a special portion of the sessionData.json
+            file. Data is only changed here when the DM is managing a session.</p>
+        <li>Common Resource</li>
+        <p>This means the data for the pog is stored in the pogs.json
+            file in common resource area. This area is outside of any specific
+            dungeon and therefore applies to all of them. This is where you
+            would add pogs that all dungeons might shares like Kobolds.</p>
+    </ul>
+    <li>Use Selected picture resource button</li>
+    <p>
+        The text area next to this button is where you enter the URL for the
+        picture you wish to use for this pog. The picture can be gotten from
+        the internet by using its web path. It can also be gotten from one of
+        your assets you uploaded in the asset management tab. Just go there
+        and select the picture then come back here and press the <b>Selected
+        picture resource</b> button.
+    </p>
+    <li>Edit Notes button</li>
+    <p>Pressing this button will bring up a dialog box the will allow
+        you edit either the player visible notes or the DM notes that the
+        players don't see. Any pog can have notes on them. These are useful
+        for adding box text to the map.</p>
+    <li>Pog size drop down</li>
+    <p>Next to the notes button is a size drop down. Normal means the
+        pog takes up one grid square. Large is 2x2. Huge is 3x3. Gargantuan
+        is 4x4</p>
+    <li>Player Flags button</li>
+    <p>This button will bring up a dialog to select player flags.
+        These are flags players can adjust during a session.</p>
+    <ul>
+        <li>Dead</li>
+        <p>This means the monster or player is dead. An indicator will be
+            placed on the Pog to denote that.</p>
+        <li>Invisible</li>
+        <p>This means the monster or player is invisible. The pog will be
+            transparent to denote that. This transparent pog can be seen by
+            players.</p>
+    </ul>
+    <li>DM Flags button</li>
+    <p>This button will bring up a dialog to select DM flags. These
+        are flags only a DM can manipulate.</p>
+    <ul>
+        <li>Invisible to Player</li>
+        <p>This means the monster or PC is invisible to players. The pog
+            will be transparent to the DM denote that. This transparent pog
+            cannot be seen by players.</p>
+        <li>Transparent Background</li>
+        <p>If the picture for a pog has a transparent background then it
+            is allowed to be used. Otherwise a white background is used.</p>
+        <li>Shift to Right</li>
+        <p>Normally pogs are draw with the upper left corner matching the
+            upper left corner of a grid square. Something you might wish it to
+            be over a bit for example a secret door would be on the wall and not
+            in a square. By selecting this option the pog will move to the right
+            half a square.</p>
+        <li>Shift to Top</li>
+        <p>Normally pogs are draw with the upper left corner matching the
+            upper left corner of a grid square. Something you might wish it to
+            be over a bit for example a secret door would be on the wall and not
+            in a square. By selecting this option the pog will move up half a
+            square.</p>
+        <li>Dark background in edit mode</li>
+        <p>Sometimes a light pog picture is hard to see against a light
+            background. By making the background dark in edit mode it helps.</p>
+    </ul>
+    <li>Save button</li>
+    <p>If all information in the dialog area is correct then the save
+        button will enable. Just press it to save the data. If you had pushed
+        the New Pog button then a new pog will be created with the
+        information else the existing pog will be edited.</p>
+    <li>Cancel button</li>
+    <p>Pressing cancel will throw away changes and revert back to
+        original information.</p>
+    <li>Pog trees</li>
+    <p>Below the editable area is where to trees of existing pogs
+        lives. you can use this to find and select a particular pog. The
+        information for it will show up in the edit area and its picture will
+        show up in both the ribbon bar and at the lower part of this panel.
+        You can drag and drop either picture to create a copy on the map.</p>
+</ul>
+
+<h2 id="CreatingaSession">Creating a Session</h2>
+<p>To create a new session do the following steps.</p>
+<ol>
+    <li>Get into the Manage Dungeons dialog.</li>
+    <p>You can do this by revisiting the Electronic Battle Mat screen
+        and log back in.</p>
+    <li>Check the <b>I am DM</b> check box
+    <li>Select the template dungeon you wish to make a session for</li>
+    <img src="help/ManageDungeons.png">
+    <li>Enter a new Session name</li>
+    <p>This name must be unique from other sessions in this dungeon
+        and it must be at least 4 characters long and can't start with "Enter
+        "</p>
+    <img src="help/ManageDungeons3.png">
+    <li>Click the &quot;<b>Create New Session</b>&quot; to create the
+        session.
+    </li>
+    <p>Now the Session name should be in the Select session list. This
+        makes it available for functions like "DM the Session" or "Delete the
+        Session"</p>
+    <p>
+        <b>NOTICE: Once you create a session any edits you make on the
+            template dungeon will not show up in the session. This is because a
+            session is actually a copy of the dungeons database so any new
+            changes will not show up in the copy.</b>
+    </p>
+</ol>
+<h2 id="DMingaSession">DMing a Session</h2>
+<p>Following are things you need to know and do while DMing a
+    session.</p>
+<ol>
+    <li>Add PCs (Player Characters) artwork</li>
+    <p>
+        One of the first thing you will want to do is create some Player
+        Characters. To do this you first upload all the pictures you need to
+        use if you don't have a URL for them. You do this in the Assets Tab
+        under the Dungeon Assests tree. <a href="#AddingArtAssets">Adding
+        Art Assets</a>
+    </p>
+    <li>Create a pog for PC</li>
+    <p>
+        You will then need to create a pog for each PC in the Pog Editor. <a
+            href="#ManagePogs">Managing Pogs</a> Make sure to select pog type
+        "PLAYER" and pog location as "Player Location".
+    </p>
+    <li>Clear FOG of WAR in an area</li>
+    <p>
+        Clear FOG of WAR in an area on the starting map where you wish the
+        PCs to start. <a href="ClearingFOW">Clearing FOW</a> I usually do
+        this by Control clicking and drawing a selection rectangle. All grid
+        squares in the rectangle will toggle.
+    </p>
+    <li>Place PCs on map</li>
+    <p>To place PCs on the map go to the Pog Editor tab and expand the
+        Players tree. Then one at a time select a name in the list. This will
+        selected the pog and the picture should show up in the ribbon bar and
+        also at the bottom of the pog editor. You can now click on either
+        picture and drag it onto the map. You will need to do this step every
+        time the players go to a new level.</p>
+    <li>DM the session</li>
+    <p>DMing is fairly straight forward. You just clear FOW from areas
+        you want players to see. You can move around pogs during combat. You
+        can change properties of a pog by right clicking on it for doing
+        things like marking it as dead. You can add more monsters on the fly
+        be selecting one either on the map or in the Pog editor and dragging
+        and dropping it to the map from the ribbon bar.</p>
+</ol>
+
+</body>
+</html>

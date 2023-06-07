@@ -18,11 +18,15 @@ This is basically a conversion of the ElectronicBattleMat project done in GWT
     I used these instead of newer ones because PyCharm gave fewer erroneous warnings
 - pip install PySide2 
 - pip install event-bus
+- pip install pyinstaller
+
 ## Packaging
-This contains two batch files for packaging the client and server for windows.
-Other scripts can be generated for linux or Mac
+This contains two batch files for packaging the client and server for windows and linux.
+Other scripts can be generated for Mac
 - clientPackage.bat packages the BattleMat client under dist folder
 - serverPackage.bat packages the BattleMatServer web service under dist folder
+- clientPackage.sh packages the BattleMat client under linuxDist folder
+- serverPackage.sh packages the BattleMatServer web service under linuxDist folder
 
 ## Things of interest
 I learned many things about Python and Qt while doing this project. Some of them were very painful.

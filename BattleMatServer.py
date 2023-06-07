@@ -77,7 +77,7 @@ class BattleMatServer(SimpleHTTPRequestHandler):
         rawData = ''
         try:
             content_type = self.headers['content-type']
-            if 'multi' not in content_type: # if not multipart then just read the data for the handlers
+            if 'multi' not in content_type:  # if not multipart then just read the data for the handlers
                 content_length = int(self.headers["Content-Length"])
                 rawData = self.rfile.read(content_length)
             requestType = parameters['request'][0]
