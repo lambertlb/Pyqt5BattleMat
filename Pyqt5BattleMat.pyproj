@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{90d6abf9-39d6-4cad-a384-ee975362aa4f}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>BattleMat.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>Global|PythonCore|3.10</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="BattleMat.ini" />
+    <Content Include="build\BattleMatServer\warn-BattleMatServer.txt" />
+    <Content Include="build\BattleMatServer\xref-BattleMatServer.html" />
+    <Content Include="build\BattleMat\warn-BattleMat.txt" />
+    <Content Include="build\BattleMat\xref-BattleMat.html" />
+    <Content Include="dist\BattleMatServer\webApp\DragDropTouch.js" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Avalexi.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Ezren.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Harsk.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Kasadia.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Kyra.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\level1.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\level2.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Merisiel.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Seelah.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Valeros.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Zadendi.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Steel_Talon_2\level1.jpg" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Steel_Talon_2\Space_goblin.jpg" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Steel_Talon_2\SteelDragon.jpg" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\dungeons\TemplateDungeon\level1.jpg" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\resources\monsters\FemaleKobold.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\resources\monsters\KoboldWarrior.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\resources\roomObjects\Notes.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\resources\roomObjects\SecretDoor.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\resources\roomObjects\SecretDoorDark.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\resources\roomObjects\SecretDoorTop.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\resources\roomObjects\SecretDoorTopDark.png" />
+    <Content Include="dist\BattleMatServer\webApp\dungeonData\resources\roomObjects\Trap.png" />
+    <Content Include="dist\BattleMatServer\webApp\ElectronicBattleMat.css" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\31230EF791DD36AE6120038CFC63871C.cache.js" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\575FEEC460C06E5EA8098373AA4534BB.cache.js" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\clear.cache.gif" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\compilation-mappings.txt" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\electronicbattlemat.devmode.js" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\electronicbattlemat.nocache.js" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\standard\images\corner.png" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\standard\images\hborder.png" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\standard\images\splitPanelThumb.png" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\standard\images\vborder.png" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\standard\standard.css" />
+    <Content Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\standard\standard_rtl.css" />
+    <Content Include="dist\BattleMatServer\webApp\favicon.ico" />
+    <Content Include="dist\BattleMatServer\webApp\help.html" />
+    <Content Include="dist\BattleMatServer\webApp\help\ArtAssets1.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\ArtAssets2.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\DungeonEditor.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\DungeonEditor1.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\DungeonEditor2.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\ManageDungeons.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\ManageDungeons2.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\ManageDungeons3.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\ManageDungeons7.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\PogEditor1.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\RibbonBar1.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\RibbonBar2.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\RibbonBar3.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\RibbonBar4.png" />
+    <Content Include="dist\BattleMatServer\webApp\help\RibbonBar5.png" />
+    <Content Include="dist\BattleMatServer\webApp\index.html" />
+    <Content Include="dist\BattleMat\BattleMat.ini" />
+    <Content Include="webApp\DragDropTouch.js" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Avalexi.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Ezren.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Harsk.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Kasadia.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Kyra.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\level1.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\level2.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Merisiel.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Seelah.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Valeros.png" />
+    <Content Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun\Zadendi.png" />
+    <Content Include="webApp\dungeonData\dungeons\Steel_Talon_2\level1.jpg" />
+    <Content Include="webApp\dungeonData\dungeons\Steel_Talon_2\Space_goblin.jpg" />
+    <Content Include="webApp\dungeonData\dungeons\Steel_Talon_2\SteelDragon.jpg" />
+    <Content Include="webApp\dungeonData\dungeons\TemplateDungeon\level1.jpg" />
+    <Content Include="webApp\dungeonData\resources\monsters\FemaleKobold.png" />
+    <Content Include="webApp\dungeonData\resources\monsters\KoboldWarrior.png" />
+    <Content Include="webApp\dungeonData\resources\roomObjects\Notes.png" />
+    <Content Include="webApp\dungeonData\resources\roomObjects\SecretDoor.png" />
+    <Content Include="webApp\dungeonData\resources\roomObjects\SecretDoorDark.png" />
+    <Content Include="webApp\dungeonData\resources\roomObjects\SecretDoorTop.png" />
+    <Content Include="webApp\dungeonData\resources\roomObjects\SecretDoorTopDark.png" />
+    <Content Include="webApp\dungeonData\resources\roomObjects\Trap.png" />
+    <Content Include="webApp\ElectronicBattleMat.css" />
+    <Content Include="webApp\electronicbattlemat\31230EF791DD36AE6120038CFC63871C.cache.js" />
+    <Content Include="webApp\electronicbattlemat\575FEEC460C06E5EA8098373AA4534BB.cache.js" />
+    <Content Include="webApp\electronicbattlemat\clear.cache.gif" />
+    <Content Include="webApp\electronicbattlemat\compilation-mappings.txt" />
+    <Content Include="webApp\electronicbattlemat\electronicbattlemat.devmode.js" />
+    <Content Include="webApp\electronicbattlemat\electronicbattlemat.nocache.js" />
+    <Content Include="webApp\electronicbattlemat\gwt\standard\images\corner.png" />
+    <Content Include="webApp\electronicbattlemat\gwt\standard\images\hborder.png" />
+    <Content Include="webApp\electronicbattlemat\gwt\standard\images\splitPanelThumb.png" />
+    <Content Include="webApp\electronicbattlemat\gwt\standard\images\vborder.png" />
+    <Content Include="webApp\electronicbattlemat\gwt\standard\standard.css" />
+    <Content Include="webApp\electronicbattlemat\gwt\standard\standard_rtl.css" />
+    <Content Include="webApp\favicon.ico" />
+    <Content Include="webApp\help.html" />
+    <Content Include="webApp\help\ArtAssets1.png" />
+    <Content Include="webApp\help\ArtAssets2.png" />
+    <Content Include="webApp\help\DungeonEditor.png" />
+    <Content Include="webApp\help\DungeonEditor1.png" />
+    <Content Include="webApp\help\DungeonEditor2.png" />
+    <Content Include="webApp\help\ManageDungeons.png" />
+    <Content Include="webApp\help\ManageDungeons2.png" />
+    <Content Include="webApp\help\ManageDungeons3.png" />
+    <Content Include="webApp\help\ManageDungeons7.png" />
+    <Content Include="webApp\help\PogEditor1.png" />
+    <Content Include="webApp\help\RibbonBar1.png" />
+    <Content Include="webApp\help\RibbonBar2.png" />
+    <Content Include="webApp\help\RibbonBar3.png" />
+    <Content Include="webApp\help\RibbonBar4.png" />
+    <Content Include="webApp\help\RibbonBar5.png" />
+    <Content Include="webApp\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BattleMat.py" />
+    <Compile Include="BattleMatServer.py" />
+    <Compile Include="generated\dungeonManagerDialog.py" />
+    <Compile Include="generated\FlagSelector.py" />
+    <Compile Include="generated\loginDialog.py" />
+    <Compile Include="generated\MainWindow.py" />
+    <Compile Include="generated\ViewNotes.py" />
+    <Compile Include="generated\ViewPog.py" />
+    <Compile Include="Server\RequestHandlers\AddOrUpdatePogHandler.py" />
+    <Compile Include="Server\RequestHandlers\CreateNewDungeonHandler.py" />
+    <Compile Include="Server\RequestHandlers\CreateNewSessionHandler.py" />
+    <Compile Include="Server\RequestHandlers\DeleteDungeonHandler.py" />
+    <Compile Include="Server\RequestHandlers\DeleteFileHandler.py" />
+    <Compile Include="Server\RequestHandlers\DeletePogHandler.py" />
+    <Compile Include="Server\RequestHandlers\DeleteSessionHandler.py" />
+    <Compile Include="Server\RequestHandlers\DungeonListHandler.py" />
+    <Compile Include="Server\RequestHandlers\FileListerHandler.py" />
+    <Compile Include="Server\RequestHandlers\FileUploadHandler.py" />
+    <Compile Include="Server\RequestHandlers\LoadJsonDataHandler.py" />
+    <Compile Include="Server\RequestHandlers\LoadSessionHandler.py" />
+    <Compile Include="Server\RequestHandlers\LoginRequestHandler.py" />
+    <Compile Include="Server\RequestHandlers\SaveJsonDataHandler.py" />
+    <Compile Include="Server\RequestHandlers\SessionListHandler.py" />
+    <Compile Include="Server\RequestHandlers\UpdateFOWHandler.py" />
+    <Compile Include="Server\ServerDataManager.py" />
+    <Compile Include="Server\SessionInformation.py" />
+    <Compile Include="services\AsyncTasks.py" />
+    <Compile Include="services\ConfigurationManager.py" />
+    <Compile Include="services\Constants.py" />
+    <Compile Include="services\DungeonManager.py" />
+    <Compile Include="services\DungeonMasterFlag.py" />
+    <Compile Include="services\EventData.py" />
+    <Compile Include="services\EventManager.py" />
+    <Compile Include="services\PlayerFlags.py" />
+    <Compile Include="services\PogManager.py" />
+    <Compile Include="services\ReasonForAction.py" />
+    <Compile Include="services\serviceData\DataRequesterResponse.py" />
+    <Compile Include="services\serviceData\DataVersions.py" />
+    <Compile Include="services\serviceData\DungeonData.py" />
+    <Compile Include="services\serviceData\DungeonLevel.py" />
+    <Compile Include="services\serviceData\DungeonListData.py" />
+    <Compile Include="services\serviceData\DungeonSessionData.py" />
+    <Compile Include="services\serviceData\DungeonSessionLevel.py" />
+    <Compile Include="services\serviceData\FogOfWarData.py" />
+    <Compile Include="services\serviceData\PogCollection.py" />
+    <Compile Include="services\serviceData\PogData.py" />
+    <Compile Include="services\serviceData\PogList.py" />
+    <Compile Include="services\serviceData\PogPlace.py" />
+    <Compile Include="services\serviceData\RequestData.py" />
+    <Compile Include="services\serviceData\SessionListData.py" />
+    <Compile Include="services\serviceData\VersionedItem.py" />
+    <Compile Include="services\ServicesManager.py" />
+    <Compile Include="views\ArtAssetsTab.py" />
+    <Compile Include="views\AssetManagement.py" />
+    <Compile Include="views\BattleMatCanvas.py" />
+    <Compile Include="views\BattleMatScene.py" />
+    <Compile Include="views\DungeonEditorTab.py" />
+    <Compile Include="views\DungeonManagerDialog.py" />
+    <Compile Include="views\FlagEditor.py" />
+    <Compile Include="views\LoginDialog.py" />
+    <Compile Include="views\PogCanvas.py" />
+    <Compile Include="views\PogEditorTab.py" />
+    <Compile Include="views\PogNotesView.py" />
+    <Compile Include="views\PogViewer.py" />
+    <Compile Include="views\PopupMenu.py" />
+    <Compile Include="views\RibbonBar.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="build\" />
+    <Folder Include="build\BattleMat" />
+    <Folder Include="build\BattleMatServer" />
+    <Folder Include="dist\" />
+    <Folder Include="dist\BattleMat" />
+    <Folder Include="dist\BattleMatServer\" />
+    <Folder Include="dist\BattleMatServer\webApp" />
+    <Folder Include="dist\BattleMatServer\webApp\dungeonData\" />
+    <Folder Include="dist\BattleMatServer\webApp\dungeonData\dungeons\" />
+    <Folder Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun" />
+    <Folder Include="dist\BattleMatServer\webApp\dungeonData\dungeons\Steel_Talon_2" />
+    <Folder Include="dist\BattleMatServer\webApp\dungeonData\dungeons\TemplateDungeon" />
+    <Folder Include="dist\BattleMatServer\webApp\dungeonData\resources\" />
+    <Folder Include="dist\BattleMatServer\webApp\dungeonData\resources\monsters" />
+    <Folder Include="dist\BattleMatServer\webApp\dungeonData\resources\roomObjects" />
+    <Folder Include="dist\BattleMatServer\webApp\electronicbattlemat" />
+    <Folder Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\" />
+    <Folder Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\standard" />
+    <Folder Include="dist\BattleMatServer\webApp\electronicbattlemat\gwt\standard\images" />
+    <Folder Include="dist\BattleMatServer\webApp\help" />
+    <Folder Include="generated" />
+    <Folder Include="Server" />
+    <Folder Include="Server\RequestHandlers" />
+    <Folder Include="services" />
+    <Folder Include="services\serviceData" />
+    <Folder Include="views" />
+    <Folder Include="webApp" />
+    <Folder Include="webApp\dungeonData\" />
+    <Folder Include="webApp\dungeonData\dungeons\" />
+    <Folder Include="webApp\dungeonData\dungeons\Dawn_of_the_Scarlet_Sun" />
+    <Folder Include="webApp\dungeonData\dungeons\Steel_Talon_2" />
+    <Folder Include="webApp\dungeonData\dungeons\TemplateDungeon" />
+    <Folder Include="webApp\dungeonData\resources\" />
+    <Folder Include="webApp\dungeonData\resources\monsters" />
+    <Folder Include="webApp\dungeonData\resources\roomObjects" />
+    <Folder Include="webApp\electronicbattlemat" />
+    <Folder Include="webApp\electronicbattlemat\gwt\" />
+    <Folder Include="webApp\electronicbattlemat\gwt\standard" />
+    <Folder Include="webApp\electronicbattlemat\gwt\standard\images" />
+    <Folder Include="webApp\help" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.10" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
