@@ -1,0 +1,91 @@
+/** Add css rules here for your application. */
+/** Example rules used by the template application (remove for your app) */
+h1 {
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 70px;
+	text-align: center;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+	width: 400px;
+}
+
+.ribbonBarLabel {
+	align-self: center;
+	font-family: arial;
+	font-size: 8pt !important;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+.badLabel {
+	color: red;
+}
+
+.noEvents {
+	pointer-events: none;
+}
+
+.v-gridlayout-spacing-on {
+	width: 1px;
+	height: 1px;
+}
+
+.popupPanel {
+	background-color: ivory;
+}
+
+.sessionLabel {
+	width: 100%;
+	height: 23px;
+	margin-right: 4px;
+	margin-top: 8px;
+	vertical-align: middle;
+	color: black;
+	background: darkgrey;
+	font-family: arial;
+	font-size: 9pt;
+	text-align: center;
+	padding-top: 5px;
+}
+
+.selectedPog {
+	border-color: transparent;
+	border-style: solid;
+	border-width: 3px;
+}
+
+.gwt-MenuBarPopup {
+	margin: 0px 0px 0px 3px;
+	z-index: 12;
+}
+
+html>body .gwt-MenuBarPopup {
+	margin: 0px 0px 0px 3px;
+	z-index: 12;
+}
+
+.spinnerarrowup {
+    content: "\2191";
+}
+
+/* .spinnerarrowup { */
+/* 	border: solid black; */
+/* 	border-width: 0 3px 3px 0; */
+/* 	display: inline-block; */
+/* 	padding: 3px; */
+/* 	transform: rotate(-135deg); */
+/* 	-webkit-transform: rotate(-135deg); */
+/* } */
+
+.spinnerarrowdown {
+	border: solid black;
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	padding: 3px;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+}
