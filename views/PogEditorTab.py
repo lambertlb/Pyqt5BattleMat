@@ -2,7 +2,7 @@
 GPL 3 file header
 """
 
-from PySide2 import QtWidgets, QtCore, QtGui
+from PySide6 import QtWidgets, QtCore, QtGui
 
 from services.Constants import Constants
 from services.DungeonManager import DungeonManager

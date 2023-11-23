@@ -1,6 +1,6 @@
 # BattleMat
 
-Make an electronic battle mat using python and PySide2
+Make an electronic battle mat using python and PySide6
 
 I did this as a learning experiment to learn Python and QT
 
@@ -16,7 +16,7 @@ This is basically a conversion of the ElectronicBattleMat project done in GWT
 ## Dependencies
 - Beside python 3.10 or later you will need the following items.
     I used these instead of newer ones because PyCharm gave fewer erroneous warnings
-- pip install PySide2 
+- pip install PySide6 
 - pip install event-bus
 - pip install pyinstaller
 

@@ -5,7 +5,7 @@ import json
 import os
 from os.path import expanduser
 
-from PySide2 import QtWidgets, QtCore
+from PySide6 import QtWidgets, QtCore
 
 from services.Constants import Constants
 from services.ReasonForAction import ReasonForAction

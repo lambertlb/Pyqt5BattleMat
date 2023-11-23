@@ -1,7 +1,7 @@
 """
 GPL 3 file header
 """
-from PySide2 import QtWidgets, QtCore
+from PySide6 import QtWidgets, QtCore
 
 from generated.ViewNotes import Ui_PogNotesDialog
 

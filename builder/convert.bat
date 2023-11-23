@@ -5,9 +5,9 @@
 @REM python -m PyQt5.uic.pyuic -x ViewNotes.ui -o ../generated/ViewNotes.py
 @REM python -m PyQt5.uic.pyuic -x FlagSelector.ui -o ../generated/FlagSelector.py
 
-pyside2-uic loginDialog.ui -o ../generated/loginDialog.py
-pyside2-uic dungeonManagerDialog.ui -o ../generated/dungeonManagerDialog.py
-pyside2-uic MainWindow.ui -o ../generated/MainWindow.py
-pyside2-uic ViewPog.ui -o ../generated/ViewPog.py
-pyside2-uic ViewNotes.ui -o ../generated/ViewNotes.py
-pyside2-uic FlagSelector.ui -o ../generated/FlagSelector.py
+PySide6-uic loginDialog.ui -o ../generated/loginDialog.py
+PySide6-uic dungeonManagerDialog.ui -o ../generated/dungeonManagerDialog.py
+PySide6-uic MainWindow.ui -o ../generated/MainWindow.py
+PySide6-uic ViewPog.ui -o ../generated/ViewPog.py
+PySide6-uic ViewNotes.ui -o ../generated/ViewNotes.py
+PySide6-uic FlagSelector.ui -o ../generated/FlagSelector.py

@@ -3,8 +3,8 @@ GPL 3 file header
 """
 import sys
 
-from PySide2 import QtCore, QtWidgets
-from PySide2.QtWidgets import QMainWindow
+from PySide6 import QtCore, QtWidgets
+from PySide6.QtWidgets import QMainWindow
 
 from services.DungeonManager import DungeonManager
 from services.EventManager import EventManager

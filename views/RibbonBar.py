@@ -3,8 +3,8 @@ GPL 3 file header
 """
 import webbrowser
 
-from PySide2 import QtWidgets, QtCore, QtGui
-from PySide2.QtCore import Qt
+from PySide6 import QtWidgets, QtCore, QtGui
+from PySide6.QtCore import Qt
 
 from services.Constants import Constants
 from services.ReasonForAction import ReasonForAction
@@ -66,7 +66,8 @@ class RibbonBar(QtWidgets.QGridLayout):
         self.frame = frame
         self.gridLayout_2 = self
         self.selectPlayer_2 = QtWidgets.QComboBox(self.frame)
-        self.selectPlayer_2.activated[str].connect(self.onPlayerChanged)
+        # self.selectPlayer_2.activated[str].connect(self.onPlayerChanged)
+        self.selectPlayer_2.currentTextChanged.connect(self.onPlayerChanged)
         self.gridLayout_2.addWidget(self.selectPlayer_2, 1, 1, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem, 1, 5, 1, 1)
@@ -88,7 +89,8 @@ class RibbonBar(QtWidgets.QGridLayout):
         self.gridLayout_2.addWidget(self.selectedPogArea_2, 0, 0, 2, 1)
         self.selectDungeonLevel_2 = QtWidgets.QComboBox(self.frame)
         self.selectDungeonLevel_2.setMinimumSize(QtCore.QSize(400, 0))
-        self.selectDungeonLevel_2.activated[str].connect(self.onLevelChanged)
+        # self.selectDungeonLevel_2.activated[str].connect(self.onLevelChanged)
+        self.selectDungeonLevel_2.currentTextChanged.connect(self.onLevelChanged)
         self.gridLayout_2.addWidget(self.selectDungeonLevel_2, 0, 1, 1, 1)
         self.showPogNotes_2 = QtWidgets.QCheckBox(self.frame)
         self.showPogNotes_2.stateChanged.connect(self.handleSelectedPogNotes)

@@ -1,8 +1,8 @@
 """
 GPL 3 file header
 """
-from PySide2 import QtWidgets, QtGui, QtCore
-from PySide2.QtCore import Qt
+from PySide6 import QtWidgets, QtGui, QtCore
+from PySide6.QtCore import Qt
 
 from services.DungeonMasterFlag import DungeonMasterFlag
 from services.PlayerFlags import PlayerFlag

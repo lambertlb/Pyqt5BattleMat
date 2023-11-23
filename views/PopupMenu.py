@@ -3,7 +3,7 @@ GPL 3 file header
 """
 from functools import partial
 
-from PySide2 import QtWidgets
+from PySide6 import QtWidgets
 
 from services.DungeonMasterFlag import DungeonMasterFlag
 from services.PlayerFlags import PlayerFlag

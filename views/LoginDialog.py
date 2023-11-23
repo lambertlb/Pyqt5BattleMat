@@ -1,7 +1,7 @@
 """
 GPL 3 file header
 """
-from PySide2 import QtWidgets
+from PySide6 import QtWidgets
 
 from generated.loginDialog import Ui_Dialog
 from services.Constants import Constants

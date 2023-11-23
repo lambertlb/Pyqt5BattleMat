@@ -1,7 +1,7 @@
 """
 GPL 3 file header
 """
-from PySide2 import QtWidgets
+from PySide6 import QtWidgets
 
 from generated.dungeonManagerDialog import Ui_DungeonSelectDialog
 from services.ReasonForAction import ReasonForAction
