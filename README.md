@@ -33,27 +33,17 @@ I learned many things about Python and Qt while doing this project. Some of them
 So I thought I would enumerate them here to help others over the pain.
 
 ###  Asynchronous tasks
-I wanted to centralize the handling of tasks
-that take a while such as loading json data from a server or getting
-images from the web. To do this I create a series of classes services/AsyncTasks.py.
-They also manage a cache of images, so they ever have to be loaded just once from the web.
+I wanted to centralize the handling of tasks that take a while such as loading json data from a server or getting images from the web. To do this I create a series of classes services/AsyncTasks.py. They also manage a cache of images, so they ever have to be loaded just once from the web.
 ### How to handle Posts in a Python server
-My web service is mostly driven be POST requests from my application.
-For each request type I created a handler. These can be found under Server/RequestHandlers.
-FileUploadHandler.py is the most complicated and deals with multipart uploads.
+My web service is mostly driven be POST requests from my application. For each request type I created a handler. These can be found under Server/RequestHandlers. FileUploadHandler.py is the most complicated and deals with multipart uploads.
 ### Handling zooming sub images in a scene
-QGraphicsScene has a lot of nice things for handling panning and zooming, but I have a lot of
-issues with overlay images getting pixelated when zoomed. I solved this by sub-classing QGraphicsItem
-and doing all the painting by myself. You can find this under views/PogCanvas.py.
+QGraphicsScene has a lot of nice things for handling panning and zooming, but I have a lot of issues with overlay images getting pixelated when zoomed. I solved this by sub-classing QGraphicsItem and doing all the painting by myself. You can find this under views/PogCanvas.py.
 ### Using mouse wheel to zoom image
 view/BattleMatCanvas.py is a subclass of QGraphicsView and shows how I use the mouse wheel to zoom an image.
 
 ## Issues
 ### Hand Cursor
-I have not figured out how to use a different cursor other than the hand when over the QGraphicsView.
-if you do setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag) so that you can use the mouse
-to pan the image you are stuck with the hand cursor. To not use this means you have to manually pan
-the image and that becomes very complicated. Would be nice if I could just tell it what cursor to use.
+I have not figured out how to use a different cursor other than the hand when over the QGraphicsView if you do setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag) so that you can use the mouse to pan the image you are stuck with the hand cursor. To not use this means you have to manually pan the image and that becomes very complicated. Would be nice if I could just tell it what cursor to use.
 
 ## Software License
 GPL 3
