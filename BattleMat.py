@@ -148,4 +148,4 @@ if __name__ == "__main__":
     app.mainWindow = MainWindow()
     app.mainWindow.show()
     app.mainWindow.appStarted()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
