@@ -78,7 +78,7 @@ class MainWindow(QMainWindow):
     def localize(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle("MainWindow")
-        self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.artAssetsTab), "MainWindow")
+        self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.artAssetsTab), "Art Assets")
         self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.monsterEditorTab), "Dungeon Editor")
         self.assetManagementTabs.setTabText(self.assetManagementTabs.indexOf(self.pogEditorTab), "Pog Editor")
 
