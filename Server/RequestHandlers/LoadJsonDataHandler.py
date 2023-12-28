@@ -2,29 +2,37 @@
 GPL 3 file header
 """
 
+from Server.RequestHandler import RequestHandler
 from Server.ServerDataManager import ServerDataManager
 
 
-class LoadJsonDataHandler:
-    # noinspection SpellCheckingInspection
-    """
-    Handle the LOADJSONFILE request.
-    """
+class LoadJsonDataHandler(RequestHandler):
 
-    # noinspection PyUnusedLocal
-    # noinspection PyMethodMayBeStatic
-    def handleRequest(self, server, parameters: dict, data):
-        dungeonUUID = None
-        dd = parameters.get('dungeonUUID')
-        if dd:
-            dungeonUUID = dd[0]
-        fileName = None
-        ff = parameters.get('fileName')
-        if ff:
-            fileName = ff[0]
+	def __init__(self):
+		super().__init__()
 
-        if dungeonUUID:
-            data = ServerDataManager.getDungeonDataAsString(server, dungeonUUID)
-        else:
-            data = ServerDataManager.getFileAsString(server, fileName)
-        return data
+	# noinspection SpellCheckingInspection
+	"""
+	Handle the LOADJSONFILE request.
+	"""
+
+	# noinspection PyUnusedLocal
+	# noinspection PyMethodMayBeStatic
+	def handleRequest(self, server, parameters: dict, data):
+		dungeonUUID = None
+		dd = parameters.get('dungeonUUID')
+		if dd:
+			dungeonUUID = dd[0]
+		fileName = None
+		ff = parameters.get('fileName')
+		if ff:
+			fileName = ff[0]
+
+		if dungeonUUID:
+			data = ServerDataManager.getDungeonDataAsString(server, dungeonUUID)
+		else:
+			data = ServerDataManager.getFileAsString(server, fileName)
+		return data
+
+	def serviceName(self):
+		return 'LOADJSONFILE'

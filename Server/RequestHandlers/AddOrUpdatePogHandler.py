@@ -1,33 +1,41 @@
 """
 GPL 3 file header
 """
+from Server.RequestHandler import RequestHandler
 from Server.ServerDataManager import ServerDataManager
 from services.serviceData.PogPlace import PogPlace
 
 
-class AddOrUpdatePogHandler:
-    # noinspection SpellCheckingInspection
-    """
-    Handle the ADDORUPDATEPOG request.
-    We have been requested to update pog data in the proper spot
-    """
-    # noinspection PyUnusedLocal
-    # noinspection PyMethodMayBeStatic
-    def handleRequest(self, server, parameters: dict, data):
-        # parameters can be used in different combinations
-        # so need to make sure to handle properly if not supplied
-        dungeonUUID = None
-        dd = parameters.get('dungeonUUID')
-        if dd:
-            dungeonUUID = dd[0]
-        sessionUUID = None
-        ss = parameters.get('sessionUUID')
-        if ss:
-            sessionUUID = ss[0]
-        currentLevel = 0
-        cl = parameters.get('currentLevel')
-        if cl:
-            currentLevel = int(cl[0])
-        place = PogPlace.getKey(parameters.get('place')[0])
-        ServerDataManager.savePog(server, dungeonUUID, sessionUUID, currentLevel, place, data)
-        return ''
+class AddOrUpdatePogHandler(RequestHandler):
+
+	def __init__(self):
+		super().__init__()
+
+	# noinspection SpellCheckingInspection
+	"""
+	Handle the ADDORUPDATEPOG request.
+	We have been requested to update pog data in the proper spot
+	"""
+	# noinspection PyUnusedLocal
+	# noinspection PyMethodMayBeStatic
+	def handleRequest(self, server, parameters: dict, data):
+		# parameters can be used in different combinations
+		# so need to make sure to handle properly if not supplied
+		dungeonUUID = None
+		dd = parameters.get('dungeonUUID')
+		if dd:
+			dungeonUUID = dd[0]
+		sessionUUID = None
+		ss = parameters.get('sessionUUID')
+		if ss:
+			sessionUUID = ss[0]
+		currentLevel = 0
+		cl = parameters.get('currentLevel')
+		if cl:
+			currentLevel = int(cl[0])
+		place = PogPlace.getKey(parameters.get('place')[0])
+		ServerDataManager.savePog(server, dungeonUUID, sessionUUID, currentLevel, place, data)
+		return ''
+
+	def serviceName(self):
+		return 'ADDORUPDATEPOG'
