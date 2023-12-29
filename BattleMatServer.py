@@ -13,23 +13,8 @@ from threading import Timer
 from urllib import parse
 from Server.RequestHandler import RequestHandler
 
-from Server.RequestHandlers.AddOrUpdatePogHandler import AddOrUpdatePogHandler
-from Server.RequestHandlers.CreateNewDungeonHandler import CreateNewDungeonHandler
-from Server.RequestHandlers.CreateNewSessionHandler import CreateNewSessionHandler
-from Server.RequestHandlers.DeleteDungeonHandler import DeleteDungeonHandler
-from Server.RequestHandlers.DeleteFileHandler import DeleteFileHandler
-from Server.RequestHandlers.DeletePogHandler import DeletePogHandler
-from Server.RequestHandlers.DeleteSessionHandler import DeleteSessionHandler
-from Server.RequestHandlers.DungeonListHandler import DungeonListHandler
-from Server.RequestHandlers.FileListerHandler import FileListerHandler
-from Server.RequestHandlers.FileUploadHandler import FileUploadHandler
-from Server.RequestHandlers.LoadJsonDataHandler import LoadJsonDataHandler
-from Server.RequestHandlers.LoadSessionHandler import LoadSessionHandler
-from Server.RequestHandlers.LoginRequestHandler import LoginRequestHandler
-from Server.RequestHandlers.SaveJsonDataHandler import SaveJsonDataHandler
-from Server.RequestHandlers.SessionListHandler import SessionListHandler
-from Server.RequestHandlers.UpdateFOWHandler import UpdateFOWHandler
 from Server.ServerDataManager import ServerDataManager
+from Server.Utilities import ClassLoader
 
 
 class BattleMatServer(SimpleHTTPRequestHandler):
@@ -40,24 +25,6 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 	# Following is a list of all services and their corresponding handler
 	# noinspection SpellCheckingInspection
 	handler = {}
-	handlerA = {
-		'LOGIN': LoginRequestHandler(),
-		'GETDUNGEONLIST': DungeonListHandler(),
-		'GETSESSIONLIST': SessionListHandler(),
-		'LOADJSONFILE': LoadJsonDataHandler(),
-		'FILELISTER': FileListerHandler(),
-		'CREATENEWDUNGEON': CreateNewDungeonHandler(),
-		'DELETEDUNGEON': DeleteDungeonHandler(),
-		'SAVEJSONFILE': SaveJsonDataHandler(),
-		'DELETEFILE': DeleteFileHandler(),
-		'FILEUPLOAD': FileUploadHandler(),
-		'CREATENEWSESSION': CreateNewSessionHandler(),
-		'DELETESESSION': DeleteSessionHandler(),
-		'LOADSESSION': LoadSessionHandler(),
-		'UPDATEFOW': UpdateFOWHandler(),
-		'ADDORUPDATEPOG': AddOrUpdatePogHandler(),
-		'DELETEPOG': DeletePogHandler()
-	}
 
 	webAppDirectory = None
 	topDirectory = './webApp/'  # path to top of file tree
@@ -118,54 +85,12 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 	@staticmethod
 	def setupService():
 		path = './Server/RequestHandlers'
-		classes = BattleMatServer.getListOfClassesFromDirectory(path)
+		
+		classes = ClassLoader().loadClasses(path, RequestHandler)
 		for cls in classes:
 			BattleMatServer.handler[cls.serviceName()] = cls
 			pass
 		pass
-
-	@staticmethod
-	def getListOfClassesFromDirectory(path):
-		foundScripts = []
-		files = os.listdir(path)
-		for file in files:
-			fullPath = path + '/' + file
-			if os.path.isfile(fullPath):
-				fullPath = re.sub("/", ".", fullPath)
-				fullPath = re.sub("\.\.", "", fullPath)
-				fullPath = re.sub("\.py", "", fullPath)
-				foundScripts.append(fullPath)
-
-		classes = {}
-		BattleMatServer.getClassesFromScripts(foundScripts, classes)
-		return list(classes.values())
-
-	@staticmethod
-	def getClassesFromScripts(listOfScripts, classes):
-		for script in listOfScripts:
-			BattleMatServer.getClassesFromScript(script, classes)
-
-	@staticmethod
-	def getClassesFromScript(scriptName, classes):
-		module = importlib.import_module(scriptName)
-		BattleMatServer.getClassesFromModule(module, classes)
-
-	@staticmethod
-	def getClassesFromModule(module, classes):
-		members = inspect.getmembers(module)
-		for member in members:
-			name, item = member
-			if inspect.isclass(item) and issubclass(item, RequestHandler):
-				if not classes.get(name):
-					if module.__name__ == item.__module__:
-						classes[name] = BattleMatServer.createInstanceFromClass(
-							getattr(module, name))
-
-	@staticmethod
-	def createInstanceFromClass(classToCreate):
-		# magic to create instance of class
-		alias = "SomeAlias"
-		return eval(alias + '()', {alias: classToCreate})
 
 def run(server_class=HTTPServer, handler_class=BattleMatServer, host=None, port=8080, hostDirectory='./webApp'):
 	if not host:
