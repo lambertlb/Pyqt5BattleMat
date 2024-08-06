@@ -57,17 +57,17 @@ class PogManager:
     def togglePlayerFlagOfSelectedPog(self, flag):
         if self.selectedPog is not None:
             self.selectedPog.togglePlayerFlag(flag)
-            ServicesManager.getDungeonManager().addOrUpdatePog(self.selectedPog)
+            ServicesManager.getDungeonManager().addOrUpdatePogWithoutPlace(self.selectedPog)
 
     def toggleDmFlagOfSelectedPog(self, flag):
         if self.selectedPog is not None:
             self.selectedPog.toggleDmFlag(flag)
-            ServicesManager.getDungeonManager().addOrUpdatePog(self.selectedPog)
+            ServicesManager.getDungeonManager().addOrUpdatePogWithoutPlace(self.selectedPog)
 
     def updateNumberOfSelectedPog(self, newPogNumber):
         if self.selectedPog is not None:
             self.selectedPog.setPogNumber(newPogNumber)
-            ServicesManager.getDungeonManager().addOrUpdatePog(self.selectedPog)
+            ServicesManager.getDungeonManager().addOrUpdatePogWithoutPlace(self.selectedPog)
 
     # noinspection PyMethodMayBeStatic
     def createTemplatePog(self, pogType):

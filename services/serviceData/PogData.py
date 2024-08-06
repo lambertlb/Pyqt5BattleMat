@@ -73,10 +73,10 @@ class PogData:
         return PogData._IsFlagSet(self.dungeonMasterFlags, flagToTest)
 
     def clearDmFlags(self, flagToClear):
-        self.playerFlags = PogData._ClearFlag(self.dungeonMasterFlags, flagToClear)
+        self.dungeonMasterFlags = PogData._ClearFlag(self.dungeonMasterFlags, flagToClear)
 
     def setDmFlags(self, flagToSet):
-        self.playerFlags = PogData._SetFlag(self.dungeonMasterFlags, flagToSet)
+        self.dungeonMasterFlags = PogData._SetFlag(self.dungeonMasterFlags, flagToSet)
 
     @staticmethod
     def _IsFlagSet(flags, flag):

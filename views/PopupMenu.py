@@ -58,13 +58,13 @@ class PopupMenu(QtWidgets.QMenu):
 
     # noinspection PyMethodMayBeStatic
     # noinspection PyUnusedLocal
-    def toggleFlag(self, flag, state):
+    def toggleFlag(self, flag):
         ServicesManager.getDungeonManager().togglePlayerFlagOfSelectedPog(flag)
 
     # noinspection PyMethodMayBeStatic
     # noinspection PyUnusedLocal
-    def toggleDMFlag(self, flag, state):
-        ServicesManager.getDungeonManager().toggleDmFlagOfSelectedPog(PlayerFlag.INVISIBLE)
+    def toggleDMFlag(self, flag):
+        ServicesManager.getDungeonManager().toggleDmFlagOfSelectedPog(flag)
 
     def setupMenuData(self, pogData):
         self.setupPlayerFlagMenus(pogData)
@@ -106,5 +106,9 @@ class PopupMenu(QtWidgets.QMenu):
 
     def showMe(self, pos, pogData):
         self.pogData = pogData
-        self.setupMenuData(pogData)
+        self.setupMenuData(self.pogData)
         self.exec_(pos)
+    
+    def updateData(self, pogData):
+       if (pogData == self.pogData):
+           self.setupMenuData(self.pogData)
