@@ -11,6 +11,7 @@ from services.ServicesManager import ServicesManager
 from services.serviceData.DataVersions import DataVersions
 from services.serviceData.PogPlace import PogPlace
 from services.serviceData.VersionedItem import VersionedItem
+from services.DungeonMasterFlag import DungeonMasterFlag
 from views.BattleMatCanvas import BattleMatCanvas
 from views.PogCanvas import PogCanvas
 
@@ -310,7 +311,11 @@ class BattleMatScene(QtWidgets.QGraphicsScene):
 
     def computePogPosition(self, pogData):
         x = self.columnToPixel(pogData.pogColumn)
+        if pogData.isDmFlagSet(DungeonMasterFlag.SHIFT_RIGHT):
+            x += self._gridSpacing / 2
         y = self.rowToPixel(pogData.pogRow)
+        if pogData.isDmFlagSet(DungeonMasterFlag.SHIFT_TOP):
+            y -= self._gridSpacing / 2
         return QtCore.QPointF(x, y)
 
     def computeSelectedColumnAndRow(self, clientX, clientY):
