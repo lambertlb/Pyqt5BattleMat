@@ -49,11 +49,13 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		returnData = ''
 		rawData = ''
 		try:
+#			print(f'Handling request')
 			content_type = self.headers['content-type']
 			if 'multi' not in content_type:  # if not multipart then just read the data for the handlers
 				content_length = int(self.headers["Content-Length"])
 				rawData = self.rfile.read(content_length)
 			requestType = parameters['request'][0]
+#			print(f'    Request type {requestType}')
 			# look up proper handler for request
 			requestHandler = BattleMatServer.handler.get(requestType)
 			if requestHandler is not None:
@@ -67,6 +69,9 @@ class BattleMatServer(SimpleHTTPRequestHandler):
 		self.send_response(returnCode)
 		self.end_headers()
 		self.wfile.write(bytes(returnData, 'utf-8'))
+
+	def log_message(self, format, *args):
+		pass
 
 	@staticmethod
 	def startTimer():
@@ -101,6 +106,7 @@ def run(server_class=HTTPServer, handler_class=BattleMatServer, host=None, port=
 	print(f'Starting battle mat server http://{host}:{port}')
 	BattleMatServer.setupService()
 	BattleMatServer.startTimer()
+	print(f'Run Forever')
 	httpd.serve_forever()
 
 
