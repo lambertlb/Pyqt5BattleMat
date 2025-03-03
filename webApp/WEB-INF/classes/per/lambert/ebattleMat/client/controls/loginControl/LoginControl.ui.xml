@@ -1,0 +1,161 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder' xmlns:gwt="urn:import:com.google.gwt.user.client.ui" ui:generateFormat="com.google.gwt.i18n.rebind.format.PropertiesFormat"
+	ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator" ui:generateLocales="default">
+	
+	<ui:style field="myStyle">
+	.hidden {
+		visibility: hidden;
+	}
+	
+	.flexrow {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		height: 40px;
+		justify-content: center;
+		align-items: center;
+		z-index: 10;
+	}
+	
+	.flexgrid {
+		display: flex;
+		flex-direction: column;
+		width: 347px;
+		height: 203px;
+		border: thin solid black;
+		z-index: 10;
+	}
+	
+	.col-0 {
+		width: 33%;
+		display: flex;
+		z-index: 10;
+	}
+	
+	.col-1 {
+		width: 67%;
+		display: flex;
+		z-index: 10;
+	}
+	
+	.dialogTitle {
+		text-shadow: 2px 2px #2d2727;
+		margin-top: 70px;
+		font-family: arial;
+		font-size: 10pt;
+		color: white;
+		width: 100%;
+		align-self: center;
+		display: flex;
+	}
+	
+	.loginLabel {
+		width: 100%;
+		height: 23px;
+		margin-right: 4px;
+		margin-top: 8px;
+		justify-content: flex-end;
+		vertical-align: middle;
+		color: white;
+		font-family: arial;
+		font-size: 9pt;
+		display: flex;
+	}
+	
+	.loginError {
+		color: red;
+		background-color: #cfcfcf;
+		height: 23px;
+		line-height: 23px;
+		text-indent: 4px;
+		font-family: arial;
+		font-size: 9pt;
+		display: flex;
+		visibility: hidden;
+	}
+	
+	.loginBackground {
+		z-index: 0;
+		position: absolute;
+		left: 1px;
+		top: 1px;
+		right: 0;
+		bottom: 0;
+	}
+	
+	.loginButton {
+		z-index: 10;
+		align-self: center;
+		background: linear-gradient(#e0e0e0, #808080, #808080, #bebebe);
+		border: 1px solid #172d6e;
+		border-bottom: 1px solid #0e1d45;
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		border-radius: 5px;
+		-webkit-box-shadow: inset 0 1px 0 0 #b1b9cb;
+		-moz-box-shadow: inset 0 1px 0 0 #b1b9cb;
+		box-shadow: inset 0 1px 0 0 #b1b9cb;
+		color: #fff;
+		font-family: arial;
+		text-decoration: none;
+		text-align: center;
+		text-shadow: 0 -1px 1px #000f4d;
+		width: 80px;
+		height: 25px;
+	}
+	</ui:style>
+
+	<gwt:HTMLPanel>
+		<body>
+			<div class="{myStyle.loginBackground}">
+				<svg width="400" height="203">
+					<defs>
+						<linearGradient y2="100%" x2="0%" y1="0%" x1="0%" id="rect_BG_Cnew_grad">
+							<stop offset="0%" style="stop-color:rgba(255,255,255,0);stop-opacity:.25" />
+							<stop offset="100%" style="stop-color:rgb(255,255,255);stop-opacity:.25" />
+						</linearGradient>
+						<linearGradient y2="100%" x2="0%" y1="0%" x1="0%" id="rect_BG_grad">
+							<stop offset="0%" style="stop-color:#727272;stop-opacity:.75" />
+							<stop offset="100%" style="stop-color:#A0A0A0;stop-opacity:.75" />
+						</linearGradient>
+					</defs>
+					<g>
+						<rect id="rect_BG" x="0" y="0" width="347" height="203" rx="6" ry="6" stroke="#FFFFFF" fill="url(#rect_BG_grad)" />
+					</g>
+					<g transform="translate(0,80) scale(1,-1)">
+						<path
+							d="m346.5,0.5l0,72.53629c0,3.31371 -2.68628,6 -6,6l-334,0c-3.31371,0 -6,-2.68629 -6,-6l0,-71.39949l5.99134,1.30215c48.44424,10.24059 104.61597,16.09734 164.50868,16.09734c62.74475,0 121.40565,-6.42781 171.37627,-17.58996l4.12372,-0.94633z"
+							id="rect_BG_Cnew" fill="url(#rect_BG_Cnew_grad)" />
+					</g>
+				</svg>
+			</div>
+
+			<div class="{myStyle.flexgrid}">
+				<div class="{myStyle.flexrow}">
+					<h1 class="{myStyle.dialogTitle}" style="width:80px;align-self:center" ui:field="headerTitle" />
+				</div>
+				<div class="{myStyle.flexrow}">
+					<div class="{myStyle.col-0}">
+						<label class="{myStyle.loginLabel}" ui:field="labelUserName" />
+					</div>
+					<div class="{myStyle.col-1}">
+						<gwt:TextBox ui:field="txtUserName" />
+					</div>
+				</div>
+				<div class="{myStyle.flexrow}">
+					<div class="{myStyle.col-0}">
+						<label class="{myStyle.loginLabel}" ui:field="labelPassword" />
+					</div>
+					<div class="{myStyle.col-1}">
+						<gwt:TextBox ui:field="txtPassword" />
+					</div>
+				</div>
+				<div class="{myStyle.flexrow}">
+					<label class="{myStyle.loginError}" ui:field="loginError" />
+				</div>
+				<gwt:Button ui:field="btnLogin" styleName="{myStyle.loginButton}" />
+			</div>
+		</body>
+	</gwt:HTMLPanel>
+</ui:UiBinder>
+
+

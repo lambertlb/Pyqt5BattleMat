@@ -1,27 +1,440 @@
-function electronicbattlemat(){var O='bootstrap',P='begin',Q='gwt.codesvr.electronicbattlemat=',R='gwt.codesvr=',S='electronicbattlemat',T='startup',U='DUMMY',V=0,W=1,X='iframe',Y='position:absolute; width:0; height:0; border:none; left: -1000px;',Z=' top: -1000px;',$='CSS1Compat',_='<!doctype html>',ab='',bb='<html><head><\/head><body><\/body><\/html>',cb='undefined',db='readystatechange',eb=10,fb='Chrome',gb='eval("',hb='");',ib='script',jb='javascript',kb='moduleStartup',lb='moduleRequested',mb='Failed to load ',nb='head',ob='meta',pb='name',qb='electronicbattlemat::',rb='::',sb='gwt:property',tb='content',ub='=',vb='gwt:onPropertyErrorFn',wb='Bad handler "',xb='" for "gwt:onPropertyErrorFn"',yb='gwt:onLoadErrorFn',zb='" for "gwt:onLoadErrorFn"',Ab='#',Bb='?',Cb='/',Db='img',Eb='clear.cache.gif',Fb='baseUrl',Gb='electronicbattlemat.nocache.js',Hb='base',Ib='//',Jb='user.agent',Kb='webkit',Lb='safari',Mb='gecko',Nb=11,Ob='gecko1_8',Pb='selectingPermutation',Qb='electronicbattlemat.devmode.js',Rb='31230EF791DD36AE6120038CFC63871C',Sb='575FEEC460C06E5EA8098373AA4534BB',Tb=':',Ub='.cache.js',Vb='link',Wb='rel',Xb='stylesheet',Yb='href',Zb='loadExternalRefs',$b='gwt/standard/standard.css',_b='end',ac='http:',bc='file:',cc='_gwt_dummy_',dc='__gwtDevModeHook:electronicbattlemat',ec='Ignoring non-whitelisted Dev Mode URL: ',fc=':moduleBase';var o=window;var p=document;r(O,P);function q(){var a=o.location.search;return a.indexOf(Q)!=-1||a.indexOf(R)!=-1}
-function r(a,b){if(o.__gwtStatsEvent){o.__gwtStatsEvent({moduleName:S,sessionId:o.__gwtStatsSessionId,subSystem:T,evtGroup:a,millis:(new Date).getTime(),type:b})}}
-electronicbattlemat.__sendStats=r;electronicbattlemat.__moduleName=S;electronicbattlemat.__errFn=null;electronicbattlemat.__moduleBase=U;electronicbattlemat.__softPermutationId=V;electronicbattlemat.__computePropValue=null;electronicbattlemat.__getPropMap=null;electronicbattlemat.__installRunAsyncCode=function(){};electronicbattlemat.__gwtStartLoadingFragment=function(){return null};electronicbattlemat.__gwt_isKnownPropertyValue=function(){return false};electronicbattlemat.__gwt_getMetaProperty=function(){return null};var s=null;var t=o.__gwt_activeModules=o.__gwt_activeModules||{};t[S]={moduleName:S};electronicbattlemat.__moduleStartupDone=function(e){var f=t[S].bindings;t[S].bindings=function(){var a=f?f():{};var b=e[electronicbattlemat.__softPermutationId];for(var c=V;c<b.length;c++){var d=b[c];a[d[V]]=d[W]}return a}};var u;function v(){w();return u}
-function w(){if(u){return}var a=p.createElement(X);a.id=S;a.style.cssText=Y+Z;a.tabIndex=-1;p.body.appendChild(a);u=a.contentWindow.document;u.open();var b=document.compatMode==$?_:ab;u.write(b+bb);u.close()}
-function A(k){function l(a){function b(){if(typeof p.readyState==cb){return typeof p.body!=cb&&p.body!=null}return /loaded|complete/.test(p.readyState)}
-var c=b();if(c){a();return}function d(){if(!c){if(!b()){return}c=true;a();if(p.removeEventListener){p.removeEventListener(db,d,false)}if(e){clearInterval(e)}}}
-if(p.addEventListener){p.addEventListener(db,d,false)}var e=setInterval(function(){d()},eb)}
-function m(c){function d(a,b){a.removeChild(b)}
-var e=v();var f=e.body;var g;if(navigator.userAgent.indexOf(fb)>-1&&window.JSON){var h=e.createDocumentFragment();h.appendChild(e.createTextNode(gb));for(var i=V;i<c.length;i++){var j=window.JSON.stringify(c[i]);h.appendChild(e.createTextNode(j.substring(W,j.length-W)))}h.appendChild(e.createTextNode(hb));g=e.createElement(ib);g.language=jb;g.appendChild(h);f.appendChild(g);d(f,g)}else{for(var i=V;i<c.length;i++){g=e.createElement(ib);g.language=jb;g.text=c[i];f.appendChild(g);d(f,g)}}}
-electronicbattlemat.onScriptDownloaded=function(a){l(function(){m(a)})};r(kb,lb);var n=p.createElement(ib);n.src=k;if(electronicbattlemat.__errFn){n.onerror=function(){electronicbattlemat.__errFn(S,new Error(mb+code))}}p.getElementsByTagName(nb)[V].appendChild(n)}
-electronicbattlemat.__startLoadingFragment=function(a){return D(a)};electronicbattlemat.__installRunAsyncCode=function(a){var b=v();var c=b.body;var d=b.createElement(ib);d.language=jb;d.text=a;c.appendChild(d);c.removeChild(d)};function B(){var c={};var d;var e;var f=p.getElementsByTagName(ob);for(var g=V,h=f.length;g<h;++g){var i=f[g],j=i.getAttribute(pb),k;if(j){j=j.replace(qb,ab);if(j.indexOf(rb)>=V){continue}if(j==sb){k=i.getAttribute(tb);if(k){var l,m=k.indexOf(ub);if(m>=V){j=k.substring(V,m);l=k.substring(m+W)}else{j=k;l=ab}c[j]=l}}else if(j==vb){k=i.getAttribute(tb);if(k){try{d=eval(k)}catch(a){alert(wb+k+xb)}}}else if(j==yb){k=i.getAttribute(tb);if(k){try{e=eval(k)}catch(a){alert(wb+k+zb)}}}}}__gwt_getMetaProperty=function(a){var b=c[a];return b==null?null:b};s=d;electronicbattlemat.__errFn=e}
-function C(){function e(a){var b=a.lastIndexOf(Ab);if(b==-1){b=a.length}var c=a.indexOf(Bb);if(c==-1){c=a.length}var d=a.lastIndexOf(Cb,Math.min(c,b));return d>=V?a.substring(V,d+W):ab}
-function f(a){if(a.match(/^\w+:\/\//)){}else{var b=p.createElement(Db);b.src=a+Eb;a=e(b.src)}return a}
-function g(){var a=__gwt_getMetaProperty(Fb);if(a!=null){return a}return ab}
-function h(){var a=p.getElementsByTagName(ib);for(var b=V;b<a.length;++b){if(a[b].src.indexOf(Gb)!=-1){return e(a[b].src)}}return ab}
-function i(){var a=p.getElementsByTagName(Hb);if(a.length>V){return a[a.length-W].href}return ab}
-function j(){var a=p.location;return a.href==a.protocol+Ib+a.host+a.pathname+a.search+a.hash}
-var k=g();if(k==ab){k=h()}if(k==ab){k=i()}if(k==ab&&j()){k=e(p.location.href)}k=f(k);return k}
-function D(a){if(a.match(/^\//)){return a}if(a.match(/^[a-zA-Z]+:\/\//)){return a}return electronicbattlemat.__moduleBase+a}
-function F(){var f=[];var g=V;function h(a,b){var c=f;for(var d=V,e=a.length-W;d<e;++d){c=c[a[d]]||(c[a[d]]=[])}c[a[e]]=b}
-var i=[];var j=[];function k(a){var b=j[a](),c=i[a];if(b in c){return b}var d=[];for(var e in c){d[c[e]]=e}if(s){s(a,d,b)}throw null}
-j[Jb]=function(){var a=navigator.userAgent.toLowerCase();var b=p.documentMode;if(function(){return a.indexOf(Kb)!=-1}())return Lb;if(function(){return a.indexOf(Mb)!=-1||b>=Nb}())return Ob;return ab};i[Jb]={'gecko1_8':V,'safari':W};__gwt_isKnownPropertyValue=function(a,b){return b in i[a]};electronicbattlemat.__getPropMap=function(){var a={};for(var b in i){if(i.hasOwnProperty(b)){a[b]=k(b)}}return a};electronicbattlemat.__computePropValue=k;o.__gwt_activeModules[S].bindings=electronicbattlemat.__getPropMap;r(O,Pb);if(q()){return D(Qb)}var l;try{h([Ob],Rb);h([Lb],Sb);l=f[k(Jb)];var m=l.indexOf(Tb);if(m!=-1){g=parseInt(l.substring(m+W),eb);l=l.substring(V,m)}}catch(a){}electronicbattlemat.__softPermutationId=g;return D(l+Ub)}
-function G(){if(!o.__gwt_stylesLoaded){o.__gwt_stylesLoaded={}}function c(a){if(!__gwt_stylesLoaded[a]){var b=p.createElement(Vb);b.setAttribute(Wb,Xb);b.setAttribute(Yb,D(a));p.getElementsByTagName(nb)[V].appendChild(b);__gwt_stylesLoaded[a]=true}}
-r(Zb,P);c($b);r(Zb,_b)}
-B();electronicbattlemat.__moduleBase=C();t[S].moduleBase=electronicbattlemat.__moduleBase;var H=F();if(o){var I=!!(o.location.protocol==ac||o.location.protocol==bc);o.__gwt_activeModules[S].canRedirect=I;function J(){var b=cc;try{o.sessionStorage.setItem(b,b);o.sessionStorage.removeItem(b);return true}catch(a){return false}}
-if(I&&J()){var K=dc;var L=o.sessionStorage[K];if(!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/.*$/.test(L)){if(L&&(window.console&&console.log)){console.log(ec+L)}L=ab}if(L&&!o[K]){o[K]=true;o[K+fc]=C();var M=p.createElement(ib);M.src=L;var N=p.getElementsByTagName(nb)[V];N.insertBefore(M,N.firstElementChild||N.children[V]);return false}}}G();r(O,_b);A(H);return true}
-electronicbattlemat.succeeded=electronicbattlemat();
+function electronicbattlemat(){
+  var $intern_0 = 'bootstrap', $intern_1 = 'begin', $intern_2 = 'gwt.codesvr.electronicbattlemat=', $intern_3 = 'gwt.codesvr=', $intern_4 = 'electronicbattlemat', $intern_5 = 'startup', $intern_6 = 'DUMMY', $intern_7 = 0, $intern_8 = 1, $intern_9 = 'iframe', $intern_10 = 'position:absolute; width:0; height:0; border:none; left: -1000px;', $intern_11 = ' top: -1000px;', $intern_12 = 'CSS1Compat', $intern_13 = '<!doctype html>', $intern_14 = '', $intern_15 = '<html><head><\/head><body><\/body><\/html>', $intern_16 = 'undefined', $intern_17 = 'readystatechange', $intern_18 = 10, $intern_19 = 'script', $intern_20 = 'javascript', $intern_21 = 'Failed to load ', $intern_22 = 'moduleStartup', $intern_23 = 'scriptTagAdded', $intern_24 = 'moduleRequested', $intern_25 = 'meta', $intern_26 = 'name', $intern_27 = 'electronicbattlemat::', $intern_28 = '::', $intern_29 = 'gwt:property', $intern_30 = 'content', $intern_31 = '=', $intern_32 = 'gwt:onPropertyErrorFn', $intern_33 = 'Bad handler "', $intern_34 = '" for "gwt:onPropertyErrorFn"', $intern_35 = 'gwt:onLoadErrorFn', $intern_36 = '" for "gwt:onLoadErrorFn"', $intern_37 = '#', $intern_38 = '?', $intern_39 = '/', $intern_40 = 'img', $intern_41 = 'clear.cache.gif', $intern_42 = 'baseUrl', $intern_43 = 'electronicbattlemat.nocache.js', $intern_44 = 'base', $intern_45 = '//', $intern_46 = 'user.agent', $intern_47 = 'webkit', $intern_48 = 'safari', $intern_49 = 'gecko', $intern_50 = 11, $intern_51 = 'gecko1_8', $intern_52 = 'selectingPermutation', $intern_53 = 'electronicbattlemat.devmode.js', $intern_54 = '7AEA4C9D56FE336BAFDA5D3531AC5E47', $intern_55 = '986801A6CB52F113B4EABEDE4743E98E', $intern_56 = ':', $intern_57 = '.cache.js', $intern_58 = 'link', $intern_59 = 'rel', $intern_60 = 'stylesheet', $intern_61 = 'href', $intern_62 = 'head', $intern_63 = 'loadExternalRefs', $intern_64 = 'gwt/standard/standard.css', $intern_65 = 'end', $intern_66 = 'http:', $intern_67 = 'file:', $intern_68 = '_gwt_dummy_', $intern_69 = '__gwtDevModeHook:electronicbattlemat', $intern_70 = 'Ignoring non-whitelisted Dev Mode URL: ', $intern_71 = ':moduleBase';
+  var $wnd = window;
+  var $doc = document;
+  sendStats($intern_0, $intern_1);
+  function isHostedMode(){
+    var query = $wnd.location.search;
+    return query.indexOf($intern_2) != -1 || query.indexOf($intern_3) != -1;
+  }
+
+  function sendStats(evtGroupString, typeString){
+    if ($wnd.__gwtStatsEvent) {
+      $wnd.__gwtStatsEvent({moduleName:$intern_4, sessionId:$wnd.__gwtStatsSessionId, subSystem:$intern_5, evtGroup:evtGroupString, millis:(new Date).getTime(), type:typeString});
+    }
+  }
+
+  electronicbattlemat.__sendStats = sendStats;
+  electronicbattlemat.__moduleName = $intern_4;
+  electronicbattlemat.__errFn = null;
+  electronicbattlemat.__moduleBase = $intern_6;
+  electronicbattlemat.__softPermutationId = $intern_7;
+  electronicbattlemat.__computePropValue = null;
+  electronicbattlemat.__getPropMap = null;
+  electronicbattlemat.__installRunAsyncCode = function(){
+  }
+  ;
+  electronicbattlemat.__gwtStartLoadingFragment = function(){
+    return null;
+  }
+  ;
+  electronicbattlemat.__gwt_isKnownPropertyValue = function(){
+    return false;
+  }
+  ;
+  electronicbattlemat.__gwt_getMetaProperty = function(){
+    return null;
+  }
+  ;
+  var __propertyErrorFunction = null;
+  var activeModules = $wnd.__gwt_activeModules = $wnd.__gwt_activeModules || {};
+  activeModules[$intern_4] = {moduleName:$intern_4};
+  electronicbattlemat.__moduleStartupDone = function(permProps){
+    var oldBindings = activeModules[$intern_4].bindings;
+    activeModules[$intern_4].bindings = function(){
+      var props = oldBindings?oldBindings():{};
+      var embeddedProps = permProps[electronicbattlemat.__softPermutationId];
+      for (var i = $intern_7; i < embeddedProps.length; i++) {
+        var pair = embeddedProps[i];
+        props[pair[$intern_7]] = pair[$intern_8];
+      }
+      return props;
+    }
+    ;
+  }
+  ;
+  var frameDoc;
+  function getInstallLocationDoc(){
+    setupInstallLocation();
+    return frameDoc;
+  }
+
+  function setupInstallLocation(){
+    if (frameDoc) {
+      return;
+    }
+    var scriptFrame = $doc.createElement($intern_9);
+    scriptFrame.id = $intern_4;
+    scriptFrame.style.cssText = $intern_10 + $intern_11;
+    scriptFrame.tabIndex = -1;
+    $doc.body.appendChild(scriptFrame);
+    frameDoc = scriptFrame.contentWindow.document;
+    frameDoc.open();
+    var doctype = document.compatMode == $intern_12?$intern_13:$intern_14;
+    frameDoc.write(doctype + $intern_15);
+    frameDoc.close();
+  }
+
+  function installScript(filename){
+    function setupWaitForBodyLoad(callback){
+      function isBodyLoaded(){
+        if (typeof $doc.readyState == $intern_16) {
+          return typeof $doc.body != $intern_16 && $doc.body != null;
+        }
+        return /loaded|complete/.test($doc.readyState);
+      }
+
+      var bodyDone = isBodyLoaded();
+      if (bodyDone) {
+        callback();
+        return;
+      }
+      function checkBodyDone(){
+        if (!bodyDone) {
+          if (!isBodyLoaded()) {
+            return;
+          }
+          bodyDone = true;
+          callback();
+          if ($doc.removeEventListener) {
+            $doc.removeEventListener($intern_17, checkBodyDone, false);
+          }
+          if (onBodyDoneTimerId) {
+            clearInterval(onBodyDoneTimerId);
+          }
+        }
+      }
+
+      if ($doc.addEventListener) {
+        $doc.addEventListener($intern_17, checkBodyDone, false);
+      }
+      var onBodyDoneTimerId = setInterval(function(){
+        checkBodyDone();
+      }
+      , $intern_18);
+    }
+
+    function installCode(code_0){
+      var doc = getInstallLocationDoc();
+      var docbody = doc.body;
+      var script = doc.createElement($intern_19);
+      script.language = $intern_20;
+      script.crossOrigin = $intern_14;
+      script.src = code_0;
+      if (electronicbattlemat.__errFn) {
+        script.onerror = function(){
+          electronicbattlemat.__errFn($intern_4, new Error($intern_21 + code_0));
+        }
+        ;
+      }
+      docbody.appendChild(script);
+      sendStats($intern_22, $intern_23);
+    }
+
+    sendStats($intern_22, $intern_24);
+    setupWaitForBodyLoad(function(){
+      installCode(filename);
+    }
+    );
+  }
+
+  electronicbattlemat.__startLoadingFragment = function(fragmentFile){
+    return computeUrlForResource(fragmentFile);
+  }
+  ;
+  electronicbattlemat.__installRunAsyncCode = function(code_0){
+    var doc = getInstallLocationDoc();
+    var docbody = doc.body;
+    var script = doc.createElement($intern_19);
+    script.language = $intern_20;
+    script.text = code_0;
+    docbody.appendChild(script);
+  }
+  ;
+  function processMetas(){
+    var metaProps = {};
+    var propertyErrorFunc;
+    var onLoadErrorFunc;
+    var metas = $doc.getElementsByTagName($intern_25);
+    for (var i = $intern_7, n = metas.length; i < n; ++i) {
+      var meta = metas[i], name_0 = meta.getAttribute($intern_26), content_0;
+      if (name_0) {
+        name_0 = name_0.replace($intern_27, $intern_14);
+        if (name_0.indexOf($intern_28) >= $intern_7) {
+          continue;
+        }
+        if (name_0 == $intern_29) {
+          content_0 = meta.getAttribute($intern_30);
+          if (content_0) {
+            var value_0, eq = content_0.indexOf($intern_31);
+            if (eq >= $intern_7) {
+              name_0 = content_0.substring($intern_7, eq);
+              value_0 = content_0.substring(eq + $intern_8);
+            }
+             else {
+              name_0 = content_0;
+              value_0 = $intern_14;
+            }
+            metaProps[name_0] = value_0;
+          }
+        }
+         else if (name_0 == $intern_32) {
+          content_0 = meta.getAttribute($intern_30);
+          if (content_0) {
+            try {
+              propertyErrorFunc = eval(content_0);
+            }
+             catch (e) {
+              alert($intern_33 + content_0 + $intern_34);
+            }
+          }
+        }
+         else if (name_0 == $intern_35) {
+          content_0 = meta.getAttribute($intern_30);
+          if (content_0) {
+            try {
+              onLoadErrorFunc = eval(content_0);
+            }
+             catch (e) {
+              alert($intern_33 + content_0 + $intern_36);
+            }
+          }
+        }
+      }
+    }
+    __gwt_getMetaProperty = function(name_0){
+      var value_0 = metaProps[name_0];
+      return value_0 == null?null:value_0;
+    }
+    ;
+    __propertyErrorFunction = propertyErrorFunc;
+    electronicbattlemat.__errFn = onLoadErrorFunc;
+  }
+
+  function computeScriptBase(){
+    function getDirectoryOfFile(path){
+      var hashIndex = path.lastIndexOf($intern_37);
+      if (hashIndex == -1) {
+        hashIndex = path.length;
+      }
+      var queryIndex = path.indexOf($intern_38);
+      if (queryIndex == -1) {
+        queryIndex = path.length;
+      }
+      var slashIndex = path.lastIndexOf($intern_39, Math.min(queryIndex, hashIndex));
+      return slashIndex >= $intern_7?path.substring($intern_7, slashIndex + $intern_8):$intern_14;
+    }
+
+    function ensureAbsoluteUrl(url_0){
+      if (url_0.match(/^\w+:\/\//)) {
+      }
+       else {
+        var img = $doc.createElement($intern_40);
+        img.src = url_0 + $intern_41;
+        url_0 = getDirectoryOfFile(img.src);
+      }
+      return url_0;
+    }
+
+    function tryMetaTag(){
+      var metaVal = __gwt_getMetaProperty($intern_42);
+      if (metaVal != null) {
+        return metaVal;
+      }
+      return $intern_14;
+    }
+
+    function tryNocacheJsTag(){
+      var scriptTags = $doc.getElementsByTagName($intern_19);
+      for (var i = $intern_7; i < scriptTags.length; ++i) {
+        if (scriptTags[i].src.indexOf($intern_43) != -1) {
+          return getDirectoryOfFile(scriptTags[i].src);
+        }
+      }
+      return $intern_14;
+    }
+
+    function tryBaseTag(){
+      var baseElements = $doc.getElementsByTagName($intern_44);
+      if (baseElements.length > $intern_7) {
+        return baseElements[baseElements.length - $intern_8].href;
+      }
+      return $intern_14;
+    }
+
+    function isLocationOk(){
+      var loc = $doc.location;
+      return loc.href == loc.protocol + $intern_45 + loc.host + loc.pathname + loc.search + loc.hash;
+    }
+
+    var tempBase = tryMetaTag();
+    if (tempBase == $intern_14) {
+      tempBase = tryNocacheJsTag();
+    }
+    if (tempBase == $intern_14) {
+      tempBase = tryBaseTag();
+    }
+    if (tempBase == $intern_14 && isLocationOk()) {
+      tempBase = getDirectoryOfFile($doc.location.href);
+    }
+    tempBase = ensureAbsoluteUrl(tempBase);
+    return tempBase;
+  }
+
+  function computeUrlForResource(resource){
+    if (resource.match(/^\//)) {
+      return resource;
+    }
+    if (resource.match(/^[a-zA-Z]+:\/\//)) {
+      return resource;
+    }
+    return electronicbattlemat.__moduleBase + resource;
+  }
+
+  function getCompiledCodeFilename(){
+    var answers = [];
+    var softPermutationId = $intern_7;
+    function unflattenKeylistIntoAnswers(propValArray, value_0){
+      var answer = answers;
+      for (var i = $intern_7, n = propValArray.length - $intern_8; i < n; ++i) {
+        answer = answer[propValArray[i]] || (answer[propValArray[i]] = []);
+      }
+      answer[propValArray[n]] = value_0;
+    }
+
+    var values = [];
+    var providers = [];
+    function computePropValue(propName){
+      var value_0 = providers[propName](), allowedValuesMap = values[propName];
+      if (value_0 in allowedValuesMap) {
+        return value_0;
+      }
+      var allowedValuesList = [];
+      for (var k in allowedValuesMap) {
+        allowedValuesList[allowedValuesMap[k]] = k;
+      }
+      if (__propertyErrorFunction) {
+        __propertyErrorFunction(propName, allowedValuesList, value_0);
+      }
+      throw null;
+    }
+
+    providers[$intern_46] = function(){
+      var ua = navigator.userAgent.toLowerCase();
+      var docMode = $doc.documentMode;
+      if (function(){
+        return ua.indexOf($intern_47) != -1;
+      }
+      ())
+        return $intern_48;
+      if (function(){
+        return ua.indexOf($intern_49) != -1 || docMode >= $intern_50;
+      }
+      ())
+        return $intern_51;
+      return $intern_14;
+    }
+    ;
+    values[$intern_46] = {'gecko1_8':$intern_7, 'safari':$intern_8};
+    __gwt_isKnownPropertyValue = function(propName, propValue){
+      return propValue in values[propName];
+    }
+    ;
+    electronicbattlemat.__getPropMap = function(){
+      var result = {};
+      for (var key in values) {
+        if (values.hasOwnProperty(key)) {
+          result[key] = computePropValue(key);
+        }
+      }
+      return result;
+    }
+    ;
+    electronicbattlemat.__computePropValue = computePropValue;
+    $wnd.__gwt_activeModules[$intern_4].bindings = electronicbattlemat.__getPropMap;
+    sendStats($intern_0, $intern_52);
+    if (isHostedMode()) {
+      return computeUrlForResource($intern_53);
+    }
+    var strongName;
+    try {
+      unflattenKeylistIntoAnswers([$intern_51], $intern_54);
+      unflattenKeylistIntoAnswers([$intern_48], $intern_55);
+      strongName = answers[computePropValue($intern_46)];
+      var idx = strongName.indexOf($intern_56);
+      if (idx != -1) {
+        softPermutationId = parseInt(strongName.substring(idx + $intern_8), $intern_18);
+        strongName = strongName.substring($intern_7, idx);
+      }
+    }
+     catch (e) {
+    }
+    electronicbattlemat.__softPermutationId = softPermutationId;
+    return computeUrlForResource(strongName + $intern_57);
+  }
+
+  function loadExternalStylesheets(){
+    if (!$wnd.__gwt_stylesLoaded) {
+      $wnd.__gwt_stylesLoaded = {};
+    }
+    function installOneStylesheet(stylesheetUrl){
+      if (!__gwt_stylesLoaded[stylesheetUrl]) {
+        var l = $doc.createElement($intern_58);
+        l.setAttribute($intern_59, $intern_60);
+        l.setAttribute($intern_61, computeUrlForResource(stylesheetUrl));
+        $doc.getElementsByTagName($intern_62)[$intern_7].appendChild(l);
+        __gwt_stylesLoaded[stylesheetUrl] = true;
+      }
+    }
+
+    sendStats($intern_63, $intern_1);
+    installOneStylesheet($intern_64);
+    sendStats($intern_63, $intern_65);
+  }
+
+  processMetas();
+  electronicbattlemat.__moduleBase = computeScriptBase();
+  activeModules[$intern_4].moduleBase = electronicbattlemat.__moduleBase;
+  var filename = getCompiledCodeFilename();
+  if ($wnd) {
+    var devModePermitted = !!($wnd.location.protocol == $intern_66 || $wnd.location.protocol == $intern_67);
+    $wnd.__gwt_activeModules[$intern_4].canRedirect = devModePermitted;
+    function supportsSessionStorage(){
+      var key = $intern_68;
+      try {
+        $wnd.sessionStorage.setItem(key, key);
+        $wnd.sessionStorage.removeItem(key);
+        return true;
+      }
+       catch (e) {
+        return false;
+      }
+    }
+
+    if (devModePermitted && supportsSessionStorage()) {
+      var devModeKey = $intern_69;
+      var devModeUrl = $wnd.sessionStorage[devModeKey];
+      if (!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/.*$/.test(devModeUrl)) {
+        if (devModeUrl && (window.console && console.log)) {
+          console.log($intern_70 + devModeUrl);
+        }
+        devModeUrl = $intern_14;
+      }
+      if (devModeUrl && !$wnd[devModeKey]) {
+        $wnd[devModeKey] = true;
+        $wnd[devModeKey + $intern_71] = computeScriptBase();
+        var devModeScript = $doc.createElement($intern_19);
+        devModeScript.src = devModeUrl;
+        var head = $doc.getElementsByTagName($intern_62)[$intern_7];
+        head.insertBefore(devModeScript, head.firstElementChild || head.children[$intern_7]);
+        return false;
+      }
+    }
+  }
+  loadExternalStylesheets();
+  sendStats($intern_0, $intern_65);
+  installScript(filename);
+  return true;
+}
+
+electronicbattlemat.succeeded = electronicbattlemat();

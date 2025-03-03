@@ -24,7 +24,7 @@ class ServerDataManager:
     This class manages all requests from clients.
     It maintains a couple of caches to help speed up some data access
     """
-    lock = threading.RLock()    # lack used to limit access to one client at a time
+    lock = threading.RLock()    # lock used to limit access to one client at a time
     uuidTemplatePathMap = {}    # cache of UUIDs to dungeon paths
     dungeonNameToUUIDMap = {}   # cache of Dungeon Names to UUIDs
     sessionCache = {}           # cache of current sessions that are running
@@ -62,6 +62,8 @@ class ServerDataManager:
         get the name of the dungeon in this folder
         """
         dungeonData = ServerDataManager.getDungeonData(server, folder)
+        if dungeonData is None:
+            return
         dungeonName = dungeonData.dungeonName
         dungeonUUID = dungeonData.uuid
         ServerDataManager.addToDungeonCache(folder, dungeonName, dungeonUUID)
@@ -81,6 +83,8 @@ class ServerDataManager:
         Load in json data for this dungeon
         """
         filePath = folder + '/dungeonData.json'
+        if not os.path.exists(filePath):
+            return None
         jsonData = ServerDataManager.readJsonFile(filePath)
         dungeonData = DungeonData()
         dungeonData.__dict__ = json.loads(jsonData)
