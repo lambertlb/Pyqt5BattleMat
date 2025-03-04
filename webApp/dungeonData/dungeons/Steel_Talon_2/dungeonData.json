@@ -432,7 +432,7 @@
                         "pogClass": "Pirate",
                         "race": "Human",
                         "gender": "Female",
-                        "notes": "Head pirate ",
+                        "notes": "Head pirateÂ ",
                         "dmNotes": "DEFENSE HP 32 EAC 14; KAC 15 Fort +1; Ref +3; Will +5OFFENSE Speed 35 ft.Melee Plasma Sword +6 (2D6+2 S) Ranged semi auto pistol +9 (1d4+2 Kinetic)Fragmentation grenade +8 (1D6) Jump Jets can jump higher, DC 20 DIplomacy to not attack.",
                         "pogNumber": 0
                     }, {
@@ -450,7 +450,7 @@
                         "race": "Grey",
                         "gender": "Neutral",
                         "notes": "",
-                        "dmNotes": "DEFENSE HP 43EAC 15; KAC 15Fort +3; Ref +3; Will +9Defensive Abilities phaseOFFENSESpeed 30 ft.Melee touch +6 (probe)Ranged needler pistol +8 (1d4+4 P plus blue whinnis)Offensive Abilities sleep paralysisSpell-Like Abilities (CL 4th)1/day—deep slumber(DC 18), hold person(DC 17)3/day—detect thoughts (DC 16), mind link (DC 16),mind thrust (1st-level, DC 16)At will—daze (DC 15), detect afflictionGear gray skinsuit (functions as basic lashuntatempweave), needler pistol with 25 darts, 5 doses ofblue whinnisSTATISTICSStr –1; Dex +1; Con +0; Int +5; Wis +0; Cha +3Skills Life Science +15, Medicine +10, Sense Motive +15Languages Aklo (can’t speak); telepathy 100 ft.",
+                        "dmNotes": "DEFENSE HP 43EAC 15; KAC 15Fort +3; Ref +3; Will +9Defensive Abilities phaseOFFENSESpeed 30 ft.Melee touch +6 (probe)Ranged needler pistol +8 (1d4+4 P plus blue whinnis)Offensive Abilities sleep paralysisSpell-Like Abilities (CL 4th)1/dayâ€”deep slumber(DC 18), hold person(DC 17)3/dayâ€”detect thoughts (DC 16), mind link (DC 16),mind thrust (1st-level, DC 16)At willâ€”daze (DC 15), detect afflictionGear gray skinsuit (functions as basic lashuntatempweave), needler pistol with 25 darts, 5 doses ofblue whinnisSTATISTICSStr â€“1; Dex +1; Con +0; Int +5; Wis +0; Cha +3Skills Life Science +15, Medicine +10, Sense Motive +15Languages Aklo (canâ€™t speak); telepathy 100 ft.",
                         "pogNumber": 0
                     }, {
                         "pogName": "Robot Dragon",
@@ -522,7 +522,7 @@
                         "race": "",
                         "gender": "Male",
                         "notes": "You come down the star to a level that is dark, dank and smelly. It smells lightly as rotting bodies mixed with mold and mildew. The lights are very dim as if the power is only half on. The ventilation system seems to be barely working. You can hear sounds of fighting in the far distance. You get the feeling of hate! Something is trying to make you feel like you should kill everything in the area.",
-                        "dmNotes": "There is an aura of hate on this level.  DC 10 will check can over come the feeling.",
+                        "dmNotes": "There is an aura of hate on this level.Â  DC 10 will check can over come the feeling.",
                         "pogNumber": 0
                     }, {
                         "pogName": "Notes",
