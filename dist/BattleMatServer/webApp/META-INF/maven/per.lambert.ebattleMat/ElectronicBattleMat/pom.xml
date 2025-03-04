@@ -22,7 +22,7 @@
 		<!-- <jetty-version>9.2.11.v20150529</jetty-version> -->
 		<jetty-version>10.0.9</jetty-version>
 		<!-- Uncomment the following to see full java script -->
-		 <gwt.style>DETAILED</gwt.style> 
+<!--		 <gwt.style>DETAILED</gwt.style> -->
 	</properties>
 
 	<dependencyManagement>
