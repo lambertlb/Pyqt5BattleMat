@@ -33,6 +33,7 @@ class LoginDialog(QtWidgets.QDialog, Ui_Dialog):
         config.setValue(Constants.Login_Url, self.serverURL.text())
         config.setValue(Constants.Login_USERNAME, self.username.text())
         config.setValue(Constants.Login_PASSWORD, self.password.text())
+        self.failed.setVisible(False)
         ServicesManager.getDungeonManager().login(self.username.text(), self.password.text(),
                                                   self.onSuccess, self.onFailure)
 
