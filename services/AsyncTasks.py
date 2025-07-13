@@ -12,14 +12,14 @@ from PySide6 import QtCore
 from PySide6.QtCore import QRunnable, QThreadPool, QObject
 from PySide6.QtGui import QImage
 
-from services.serviceData.DataRequesterResponse import DataRequesterResponse
+from services.serviceData import DataRequesterResponse
 
 
 class AsyncSignal(QObject):
     """
     Small worker class so QRunnable can call signals
     """
-    finished = QtCore.Signal(DataRequesterResponse)
+    finished = QtCore.Signal(object)
 
 
 # global reference to thread pool
@@ -114,7 +114,7 @@ class AsynchBase(QRunnable):
         return self._returnData.hadException()
 
 
-@QtCore.Slot(DataRequesterResponse)
+@QtCore.Slot(DataRequesterResponse.DataRequesterResponse)
 def taskDone(dataRequesterResponse):
     """
     target for signal and is run after task is finished
@@ -124,7 +124,11 @@ def taskDone(dataRequesterResponse):
         task.onFailure(task.returnData)
     else:
         task.onSuccess(task.returnData)
-    task.signaler.finished.disconnect(taskDone)  # disconnect so object can be garbage collected
+    try:
+        if task.signaler is not None:
+            task.signaler.finished.disconnect(taskDone)  # disconnect so object can be garbage collected
+    except (Exception,):
+        traceback.print_exc()
 
 
 class AsyncImage(AsynchBase):
@@ -146,7 +150,7 @@ class AsyncImage(AsynchBase):
         self.pending = []
         self.saveOnSuccess = onSuccess
         self.saveOnFailure = onFailure
-        super(AsyncImage, self).__init__(onSuccess, onFailure, DataRequesterResponse())
+        super(AsyncImage, self).__init__(onSuccess, onFailure, DataRequesterResponse.DataRequesterResponse())
         AsyncImage.lock.acquire()
         cachedImage = AsyncImage.imageCache.get(self.url)  # is image already loaded?
         try:
@@ -278,7 +282,7 @@ class AsyncDownload(AsynchBase):
     def __init__(self, url, onSuccess, onFailure):
         self.url = url
         self.reply = None
-        super(AsyncDownload, self).__init__(onSuccess, onFailure, DataRequesterResponse())
+        super(AsyncDownload, self).__init__(onSuccess, onFailure, DataRequesterResponse.DataRequesterResponse())
 
     def runTask(self):
         """
